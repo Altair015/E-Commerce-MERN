@@ -1,0 +1,28 @@
+ecomern/
+│
+├── client/                   # Frontend (React.js) folder
+│   ├── public/               # Public assets (HTML, images, etc.)
+│   │   └── images/  
+│   └── src/                  # React application source code
+│       ├── components/       # React components
+│       ├── pages/            # Different pages or route components
+│       ├── styles/           # CSS or other styling files
+│       ├── utils/            # Utility functions
+│       ├── App.js            # Main React component
+│       └── index.js          # Entry point for React app
+│
+├── server/                   # Backend (Node.js with Express.js) folder
+│   ├── config/               # Configuration files (database, environment, etc.)
+│   ├── controllers/          # Request handlers (controller functions)
+│   ├── models/               # Database models (Mongoose schemas)
+│   ├── routes/               # API routes
+│   ├── services/             # Business logic (service functions)
+│   ├── middleware/           # Middleware functions
+│   ├── utils/                # Utility functions
+│   ├── app.js                # Express application setup
+│   └── server.js             # Entry point for Node.js server
+│
+├── node_modules/             # Node.js dependencies (auto-generated)
+│
+├── package.json              # Project metadata and dependencies
+└── README.md                 # Project documentation
