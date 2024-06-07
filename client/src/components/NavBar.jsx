@@ -1,16 +1,23 @@
-import { useState } from "react";
-import { Form, Nav, NavDropdown, Navbar, Offcanvas } from 'react-bootstrap';
+// Cart Icon from fontawesome
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+
+// Font-awesome Component
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { useState } from "react";
+
+// Navigation Components from React Bootstrap
+import { Form, Nav, Navbar, Offcanvas } from 'react-bootstrap';
 import NavigationLinks from './NavigationLinks';
 
-const { Brand, Toggle, Collapse } = Navbar;
+const { Brand, Toggle } = Navbar;
 const { Link } = Nav;
-const { Item, Divider } = NavDropdown;
 
 function MyNavBar() {
+    // state for managing the visibility of search icon in the search bar.
     const [visible, setVisible] = useState("invisible");
 
+    // Making the search icon visible and invisible based on the user input.
     function SearchIconVisibility(event) {
         if (event.target.value) {
             return setVisible("visible");
@@ -21,7 +28,7 @@ function MyNavBar() {
     return (
         <>
             <Navbar bg='info' expand="sm" className="p-2 py-sm-1 d-flex gap-mx-md-x-2">
-                <Brand href="#home" className='fw-bold fs-2 flex-sm-one-third'>PurrStore</Brand>
+                <Brand href="/" className='fw-bold fs-2 flex-sm-one-third'>PurrStore</Brand>
                 {/* Cart Icon for Screen Size < 576 px */}
                 <div className='d-flex flex-fill d-sm-none justify-content-end'>
                     <FontAwesomeIcon icon={faShoppingCart} size='2x' />
@@ -54,7 +61,7 @@ function MyNavBar() {
                     <Link href='#' className={`${visible} position-absolute end-0 align-self-center pe-2`}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" /></svg></Link>
                 </Form>
             </Navbar>
-            <NavigationLinks className={`d-flex bg-light justify-content-center`} />
+            <NavigationLinks className={`d-none d-sm-flex bg-light justify-content-center`} />
         </>
     );
 }
