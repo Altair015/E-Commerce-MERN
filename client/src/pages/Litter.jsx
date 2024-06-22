@@ -1,6 +1,15 @@
+import { catLitter } from "../utils/InitialData.js";
+import MyCard from "../components/MyCard.jsx"
+import { checkQuantity } from "../utils/cardQuantity.js";
+
+
 function Litter() {
+    const catLitterComp = catLitter.map((item, index) => <MyCard key={item.id} image={item.image} title={item.title} details={item.details} quantity={checkQuantity(item.title)} />)
+
     return (
-        <h1> Litter</h1>
+        <div className="d-flex gap-3 flex-wrap">
+            {catLitterComp}
+        </div>
     )
 }
 

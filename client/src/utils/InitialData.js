@@ -1,4 +1,4 @@
-export const catFoodArray = [
+export const catFood = [
     {
         id: 1,
         image: "/images/purefood.webp",
@@ -8,7 +8,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Mixed Flavor",
         feedingDetails: "Feed your adult cat Wholesome Wellness as part of a balanced diet to keep them healthy and happy.",
-        details: "Made with real ingredients and essential nutrients."
+        details: "Made with real ingredients and essential nutrients.",
+        quantity: 0
     },
     {
         id: 2,
@@ -19,7 +20,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Vegetarian Flavor",
         feedingDetails: "Feed your adult cat Healthy Harvest as part of a balanced diet to ensure they receive essential nutrients.",
-        details: "Made with real fruits, vegetables, and essential nutrients."
+        details: "Made with real fruits, vegetables, and essential nutrients.",
+        quantity: 0
     },
     {
         id: 3,
@@ -30,7 +32,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Grain-Free Formula",
         feedingDetails: "Feed your adult cat Grain-Free Gourmet to provide a nutritious and satisfying meal without grains.",
-        details: "Made with real meat and essential nutrients, without grains."
+        details: "Made with real meat and essential nutrients, without grains.",
+        quantity: 0
     },
     {
         id: 4,
@@ -41,7 +44,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Organic Flavor",
         feedingDetails: "Feed your adult cat Organic Oasis as part of a balanced diet to maintain their health and vitality.",
-        details: "Made with certified organic ingredients and essential nutrients."
+        details: "Made with certified organic ingredients and essential nutrients.",
+        quantity: 0
     },
     {
         id: 5,
@@ -52,7 +56,8 @@ export const catFoodArray = [
         lifeStage: "Kitten",
         specialty: "Protein-Rich Formula",
         feedingDetails: "Feed your kitten Premium Protein to support their growth and provide essential nutrients.",
-        details: "Made with premium meat ingredients and essential nutrients."
+        details: "Made with premium meat ingredients and essential nutrients.",
+        quantity: 0
     },
     {
         id: 6,
@@ -63,7 +68,8 @@ export const catFoodArray = [
         lifeStage: "Kitten",
         specialty: "Natural Formula",
         feedingDetails: "Feed your kitten Natural Nourishment to support their growth and development.",
-        details: "Made with real ingredients and essential nutrients."
+        details: "Made with real ingredients and essential nutrients.",
+        quantity: 0
     },
     {
         id: 7,
@@ -74,7 +80,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Superfood Blend",
         feedingDetails: "Feed your adult cat Superfood Selection as part of a balanced diet to keep them healthy and happy.",
-        details: "Made with real superfood ingredients and essential nutrients."
+        details: "Made with real superfood ingredients and essential nutrients.",
+        quantity: 0
     },
     {
         id: 8,
@@ -85,7 +92,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Digestive Health Formula",
         feedingDetails: "Feed your adult cat Digestive Delight to support their digestive health and well-being.",
-        details: "Made with probiotics, fiber, and essential nutrients."
+        details: "Made with probiotics, fiber, and essential nutrients.",
+        quantity: 0
     },
     {
         id: 9,
@@ -96,7 +104,8 @@ export const catFoodArray = [
         lifeStage: "Senior",
         specialty: "Senior Formula",
         feedingDetails: "Feed your senior cat Senior Support as part of a balanced diet to support their health and vitality.",
-        details: "Made with nutrients to support senior cats' health."
+        details: "Made with nutrients to support senior cats' health.",
+        quantity: 0
     },
     {
         id: 10,
@@ -107,7 +116,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Weight Control Formula",
         feedingDetails: "Feed your overweight cat Weight Management to support their weight loss journey and overall well-being.",
-        details: "Made with lean proteins and reduced fat content."
+        details: "Made with lean proteins and reduced fat content.",
+        quantity: 0
     },
     {
         id: 11,
@@ -118,7 +128,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Gourmet Blend",
         feedingDetails: "Feed your adult cat Gourmet Delight as a special treat to indulge their senses.",
-        details: "Made with premium ingredients and essential nutrients."
+        details: "Made with premium ingredients and essential nutrients.",
+        quantity: 0
     },
     {
         id: 12,
@@ -129,7 +140,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Digestive Support Formula",
         feedingDetails: "Feed your cat with a sensitive stomach Sensitive Stomach to support their digestive health.",
-        details: "Made with easily digestible ingredients and essential nutrients."
+        details: "Made with easily digestible ingredients and essential nutrients.",
+        quantity: 0
     },
     {
         id: 13,
@@ -140,7 +152,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Hairball Formula",
         feedingDetails: "Feed your cat Hairball Control to reduce hairballs and support their digestive health.",
-        details: "Made with fiber and essential nutrients to reduce hairball formation."
+        details: "Made with fiber and essential nutrients to reduce hairball formation.",
+        quantity: 0
     },
     {
         id: 14,
@@ -151,7 +164,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Skin & Coat Formula",
         feedingDetails: "Feed your cat Sensitive Skin to support their skin and coat health.",
-        details: "Made with omega-3 fatty acids and antioxidants for healthy skin and coat."
+        details: "Made with omega-3 fatty acids and antioxidants for healthy skin and coat.",
+        quantity: 0
     },
     {
         id: 15,
@@ -162,7 +176,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Indoor Cat Formula",
         feedingDetails: "Feed your indoor cat Indoor Formula to support their health and well-being.",
-        details: "Made with fiber and essential nutrients for indoor cats' unique needs."
+        details: "Made with fiber and essential nutrients for indoor cats' unique needs.",
+        quantity: 0
     },
     {
         id: 16,
@@ -173,7 +188,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Hypoallergenic Formula",
         feedingDetails: "Feed your cat Allergy Relief to provide relief from allergies and support their health.",
-        details: "Made with hypoallergenic ingredients and essential nutrients."
+        details: "Made with hypoallergenic ingredients and essential nutrients.",
+        quantity: 0
     },
     {
         id: 17,
@@ -184,7 +200,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Dental Health Formula",
         feedingDetails: "Feed your cat Sensitive Teeth to support their dental health and oral hygiene.",
-        details: "Made with dental-friendly ingredients and essential nutrients."
+        details: "Made with dental-friendly ingredients and essential nutrients.",
+        quantity: 0
     },
     {
         id: 18,
@@ -195,7 +212,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Immune Support Formula",
         feedingDetails: "Feed your cat Immune Boost to strengthen their immune system and support their health.",
-        details: "Made with antioxidants and vitamins to boost immune health."
+        details: "Made with antioxidants and vitamins to boost immune health.",
+        quantity: 0
     },
     {
         id: 19,
@@ -206,7 +224,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Joint Support Formula",
         feedingDetails: "Feed your cat Joint Health to support their joint health and mobility.",
-        details: "Made with glucosamine and chondroitin to support healthy joints."
+        details: "Made with glucosamine and chondroitin to support healthy joints.",
+        quantity: 0
     },
     {
         id: 20,
@@ -217,7 +236,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Calming Formula",
         feedingDetails: "Feed your cat Stress Relief during stressful times to promote relaxation and calmness.",
-        details: "Made with calming ingredients and essential nutrients to soothe nerves."
+        details: "Made with calming ingredients and essential nutrients to soothe nerves.",
+        quantity: 0
     },
     {
         id: 21,
@@ -228,7 +248,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Digestive Support Formula",
         feedingDetails: "Feed your cat Sensitive Digestion to support their digestive health and reduce digestive issues.",
-        details: "Made with easily digestible ingredients and essential nutrients."
+        details: "Made with easily digestible ingredients and essential nutrients.",
+        quantity: 0
     },
     {
         id: 22,
@@ -239,7 +260,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Hairball Control Formula",
         feedingDetails: "Feed your cat Hairball Prevention to reduce hairballs and support their digestive health.",
-        details: "Made with fiber and essential nutrients to reduce hairball formation."
+        details: "Made with fiber and essential nutrients to reduce hairball formation.",
+        quantity: 0
     },
     {
         id: 23,
@@ -250,7 +272,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Skin & Coat Support Formula",
         feedingDetails: "Feed your cat Sensitive Skin & Coat to support their skin and coat health.",
-        details: "Made with omega-3 fatty acids and antioxidants for healthy skin and coat."
+        details: "Made with omega-3 fatty acids and antioxidants for healthy skin and coat.",
+        quantity: 0
     },
     {
         id: 24,
@@ -261,7 +284,8 @@ export const catFoodArray = [
         lifeStage: "Adult",
         specialty: "Urinary Health Formula",
         feedingDetails: "Feed your cat Urinary Tract Health to support their urinary health and prevent urinary tract infections.",
-        details: "Made with urinary-friendly ingredients and essential nutrients."
+        details: "Made with urinary-friendly ingredients and essential nutrients.",
+        quantity: 0
     },
     {
         id: 25,
@@ -272,11 +296,12 @@ export const catFoodArray = [
         lifeStage: "Senior",
         specialty: "Senior Formula",
         feedingDetails: "Feed your senior cat Senior Wellness as part of a balanced diet to support their health and vitality.",
-        details: "Made with nutrients to support senior cats' health."
+        details: "Made with nutrients to support senior cats' health.",
+        quantity: 0
     }
 ];
 
-export const catLitterArray = [
+export const catLitter = [
     {
         id: 1,
         image: "/images/purelitter.webp",
@@ -286,7 +311,8 @@ export const catLitterArray = [
         specialty: "Clumping Formula",
         material: "Clay",
         features: "99% dust-free, low tracking formula",
-        details: "Ideal for multi-cat households and offers excellent odor control and easy maintenance."
+        details: "Ideal for multi-cat households and offers excellent odor control and easy maintenance.",
+        quantity: 0
     },
     {
         id: 2,
@@ -297,7 +323,8 @@ export const catLitterArray = [
         specialty: "Odor Control",
         material: "Silica Gel Crystals",
         features: "High absorbency, lightweight, non-clumping",
-        details: "Powerful odor neutralization with activated charcoal and natural odor eliminators."
+        details: "Powerful odor neutralization with activated charcoal and natural odor eliminators.",
+        quantity: 0
     },
     {
         id: 3,
@@ -308,7 +335,8 @@ export const catLitterArray = [
         specialty: "Eco-Friendly",
         material: "Wood Pellets",
         features: "Biodegradable, flushable, low dust",
-        details: "Eco-conscious choice with biodegradable and flushable wood pellets for excellent odor control."
+        details: "Eco-conscious choice with biodegradable and flushable wood pellets for excellent odor control.",
+        quantity: 0
     },
     {
         id: 4,
@@ -319,7 +347,8 @@ export const catLitterArray = [
         specialty: "Hypoallergenic",
         material: "Recycled Paper",
         features: "Soft texture, gentle on paws, virtually dust-free",
-        details: "Ideal for cats with allergies, gentle on sensitive skin, and virtually dust-free for easy breathing."
+        details: "Ideal for cats with allergies, gentle on sensitive skin, and virtually dust-free for easy breathing.",
+        quantity: 0
     },
     {
         id: 5,
@@ -330,7 +359,8 @@ export const catLitterArray = [
         specialty: "Multi-Cat Formula",
         material: "Clay",
         features: "Strong clumps, long-lasting odor control, low tracking",
-        details: "Formulated for multi-cat households with strong clumping and long-lasting odor control."
+        details: "Formulated for multi-cat households with strong clumping and long-lasting odor control.",
+        quantity: 0
     },
     {
         id: 6,
@@ -341,7 +371,8 @@ export const catLitterArray = [
         specialty: "Clumping Formula",
         material: "Clay",
         features: "99% dust-free, low tracking formula",
-        details: "Ideal for multi-cat households and offers excellent odor control and easy maintenance."
+        details: "Ideal for multi-cat households and offers excellent odor control and easy maintenance.",
+        quantity: 0
     },
     {
         id: 7,
@@ -352,7 +383,8 @@ export const catLitterArray = [
         specialty: "Odor Control",
         material: "Silica Gel Crystals",
         features: "High absorbency, lightweight, non-clumping",
-        details: "Powerful odor neutralization with activated charcoal and natural odor eliminators."
+        details: "Powerful odor neutralization with activated charcoal and natural odor eliminators.",
+        quantity: 0
     },
     {
         id: 8,
@@ -363,7 +395,8 @@ export const catLitterArray = [
         specialty: "Eco-Friendly",
         material: "Wood Pellets",
         features: "Biodegradable, flushable, low dust",
-        details: "Eco-conscious choice with biodegradable and flushable wood pellets for excellent odor control."
+        details: "Eco-conscious choice with biodegradable and flushable wood pellets for excellent odor control.",
+        quantity: 0
     },
     {
         id: 9,
@@ -374,7 +407,8 @@ export const catLitterArray = [
         specialty: "Hypoallergenic",
         material: "Recycled Paper",
         features: "Soft texture, gentle on paws, virtually dust-free",
-        details: "Ideal for cats with allergies, gentle on sensitive skin, and virtually dust-free for easy breathing."
+        details: "Ideal for cats with allergies, gentle on sensitive skin, and virtually dust-free for easy breathing.",
+        quantity: 0
     },
     {
         id: 10,
@@ -385,7 +419,8 @@ export const catLitterArray = [
         specialty: "Multi-Cat Formula",
         material: "Clay",
         features: "Strong clumps, long-lasting odor control, low tracking",
-        details: "Formulated for multi-cat households with strong clumping and long-lasting odor control."
+        details: "Formulated for multi-cat households with strong clumping and long-lasting odor control.",
+        quantity: 0
     },
     {
         id: 11,
@@ -396,7 +431,8 @@ export const catLitterArray = [
         specialty: "Clumping Formula",
         material: "Clay",
         features: "99% dust-free, low tracking formula",
-        details: "Ideal for multi-cat households and offers excellent odor control and easy maintenance."
+        details: "Ideal for multi-cat households and offers excellent odor control and easy maintenance.",
+        quantity: 0
     },
     {
         id: 12,
@@ -407,7 +443,8 @@ export const catLitterArray = [
         specialty: "Odor Control",
         material: "Silica Gel Crystals",
         features: "High absorbency, lightweight, non-clumping",
-        details: "Powerful odor neutralization with activated charcoal and natural odor eliminators."
+        details: "Powerful odor neutralization with activated charcoal and natural odor eliminators.",
+        quantity: 0
     },
     {
         id: 13,
@@ -418,7 +455,8 @@ export const catLitterArray = [
         specialty: "Eco-Friendly",
         material: "Wood Pellets",
         features: "Biodegradable, flushable, low dust",
-        details: "Eco-conscious choice with biodegradable and flushable wood pellets for excellent odor control."
+        details: "Eco-conscious choice with biodegradable and flushable wood pellets for excellent odor control.",
+        quantity: 0
     },
     {
         id: 14,
@@ -429,7 +467,8 @@ export const catLitterArray = [
         specialty: "Hypoallergenic",
         material: "Recycled Paper",
         features: "Soft texture, gentle on paws, virtually dust-free",
-        details: "Ideal for cats with allergies, gentle on sensitive skin, and virtually dust-free for easy breathing."
+        details: "Ideal for cats with allergies, gentle on sensitive skin, and virtually dust-free for easy breathing.",
+        quantity: 0
     },
     {
         id: 15,
@@ -440,7 +479,8 @@ export const catLitterArray = [
         specialty: "Multi-Cat Formula",
         material: "Clay",
         features: "Strong clumps, long-lasting odor control, low tracking",
-        details: "Formulated for multi-cat households with strong clumping and long-lasting odor control."
+        details: "Formulated for multi-cat households with strong clumping and long-lasting odor control.",
+        quantity: 0
     },
     {
         id: 16,
@@ -451,7 +491,8 @@ export const catLitterArray = [
         specialty: "Clumping Formula",
         material: "Clay",
         features: "99% dust-free, low tracking formula",
-        details: "Ideal for multi-cat households and offers excellent odor control and easy maintenance."
+        details: "Ideal for multi-cat households and offers excellent odor control and easy maintenance.",
+        quantity: 0
     },
     {
         id: 17,
@@ -462,7 +503,8 @@ export const catLitterArray = [
         specialty: "Odor Control",
         material: "Silica Gel Crystals",
         features: "High absorbency, lightweight, non-clumping",
-        details: "Powerful odor neutralization with activated charcoal and natural odor eliminators."
+        details: "Powerful odor neutralization with activated charcoal and natural odor eliminators.",
+        quantity: 0
     },
     {
         id: 18,
@@ -473,7 +515,8 @@ export const catLitterArray = [
         specialty: "Eco-Friendly",
         material: "Wood Pellets",
         features: "Biodegradable, flushable, low dust",
-        details: "Eco-conscious choice with biodegradable and flushable wood pellets for excellent odor control."
+        details: "Eco-conscious choice with biodegradable and flushable wood pellets for excellent odor control.",
+        quantity: 0
     },
     {
         id: 19,
@@ -484,7 +527,8 @@ export const catLitterArray = [
         specialty: "Hypoallergenic",
         material: "Recycled Paper",
         features: "Soft texture, gentle on paws, virtually dust-free",
-        details: "Ideal for cats with allergies, gentle on sensitive skin, and virtually dust-free for easy breathing."
+        details: "Ideal for cats with allergies, gentle on sensitive skin, and virtually dust-free for easy breathing.",
+        quantity: 0
     },
     {
         id: 20,
@@ -495,7 +539,8 @@ export const catLitterArray = [
         specialty: "Multi-Cat Formula",
         material: "Clay",
         features: "Strong clumps, long-lasting odor control, low tracking",
-        details: "Formulated for multi-cat households with strong clumping and long-lasting odor control."
+        details: "Formulated for multi-cat households with strong clumping and long-lasting odor control.",
+        quantity: 0
     },
     {
         id: 21,
@@ -506,7 +551,8 @@ export const catLitterArray = [
         specialty: "Clumping Formula",
         material: "Clay",
         features: "99% dust-free, low tracking formula",
-        details: "Ideal for multi-cat households and offers excellent odor control and easy maintenance."
+        details: "Ideal for multi-cat households and offers excellent odor control and easy maintenance.",
+        quantity: 0
     },
     {
         id: 22,
@@ -517,7 +563,8 @@ export const catLitterArray = [
         specialty: "Odor Control",
         material: "Silica Gel Crystals",
         features: "High absorbency, lightweight, non-clumping",
-        details: "Powerful odor neutralization with activated charcoal and natural odor eliminators."
+        details: "Powerful odor neutralization with activated charcoal and natural odor eliminators.",
+        quantity: 0
     },
     {
         id: 23,
@@ -528,7 +575,8 @@ export const catLitterArray = [
         specialty: "Eco-Friendly",
         material: "Wood Pellets",
         features: "Biodegradable, flushable, low dust",
-        details: "Eco-conscious choice with biodegradable and flushable wood pellets for excellent odor control."
+        details: "Eco-conscious choice with biodegradable and flushable wood pellets for excellent odor control.",
+        quantity: 0
     },
     {
         id: 24,
@@ -539,7 +587,8 @@ export const catLitterArray = [
         specialty: "Hypoallergenic",
         material: "Recycled Paper",
         features: "Soft texture, gentle on paws, virtually dust-free",
-        details: "Ideal for cats with allergies, gentle on sensitive skin, and virtually dust-free for easy breathing."
+        details: "Ideal for cats with allergies, gentle on sensitive skin, and virtually dust-free for easy breathing.",
+        quantity: 0
     },
     {
         id: 25,
@@ -550,10 +599,466 @@ export const catLitterArray = [
         specialty: "Multi-Cat Formula",
         material: "Clay",
         features: "Strong clumps, long-lasting odor control, low tracking",
-        details: "Formulated for multi-cat households with strong clumping and long-lasting odor control."
+        details: "Formulated for multi-cat households with strong clumping and long-lasting odor control.",
+        quantity: 0
     }
 ];
 
+export const catAccessories = [
+    {
+        "id": 1,
+        "title": "Cat Accessory 1",
+        "description": "Stylish collar to keep track of your cat and add flair to their look.",
+        "details": "Adjustable size\nReflective strip for visibility",
+        "image": "/images/accessories.webp",
+        "price": "35.82",
+        "ageLimit": "Kittens and Adult Cats"
+    },
+    {
+        "id": 2,
+        "title": "Cat Accessory 2",
+        "description": "Gentle brush for grooming your cat's fur and keeping it soft and shiny.",
+        "details": "Soft bristles\nErgonomic handle for comfort",
+        "image": "/images/accessories.webp",
+        "price": "27.12",
+        "ageLimit": "Adult Cats"
+    },
+    {
+        "id": 3,
+        "title": "Cat Accessory 3",
+        "description": "Durable scratching post to satisfy your cat's natural instincts.",
+        "details": "Height: 18''\nSturdy base prevents tipping",
+        "image": "/images/accessories.webp",
+        "price": "19.54",
+        "ageLimit": "All Ages"
+    },
+    {
+        "id": 4,
+        "title": "Cat Accessory 4",
+        "description": "Interactive toy to stimulate your cat's mind and body.",
+        "details": "Motion-activated\nHours of entertainment",
+        "image": "/images/accessories.webp",
+        "price": "44.35",
+        "ageLimit": "Senior Cats"
+    },
+    {
+        "id": 5,
+        "title": "Cat Accessory 5",
+        "description": "Soft and plush bed for your cat's comfort.",
+        "details": "Dimensions: 20'' x 16''\nMachine washable cover",
+        "image": "/images/accessories.webp",
+        "price": "32.06",
+        "ageLimit": "Adult Cats"
+    },
+    {
+        "id": 6,
+        "title": "Cat Accessory 6",
+        "description": "Fashionable collar to accessorize your cat's look.",
+        "details": "Adjustable size\nBreakaway design for safety",
+        "image": "/images/accessories.webp",
+        "price": "48.77",
+        "ageLimit": "Senior Cats"
+    },
+    {
+        "id": 7,
+        "title": "Cat Accessory 7",
+        "description": "Convenient litter box for easy cleaning and maintenance.",
+        "details": "Includes scoop and liners\nOdor control",
+        "image": "/images/accessories.webp",
+        "price": "38.43",
+        "ageLimit": "Kittens and Adult Cats"
+    },
+    {
+        "id": 8,
+        "title": "Cat Accessory 8",
+        "description": "Engaging toy to keep your cat entertained and stimulated.",
+        "details": "Includes catnip\nDurable and safe materials",
+        "image": "/images/accessories.webp",
+        "price": "23.69",
+        "ageLimit": "Senior Cats"
+    },
+    {
+        "id": 9,
+        "title": "Cat Accessory 9",
+        "description": "Functional carrier for safe and comfortable travel with your cat.",
+        "details": "Mesh windows\nVentilation and visibility",
+        "image": "/images/accessories.webp",
+        "price": "19.57",
+        "ageLimit": "All Ages"
+    },
+    {
+        "id": 10,
+        "title": "Cat Accessory 10",
+        "description": "Comfortable bed for your cat to relax in.",
+        "details": "Dimensions: 24'' x 20''\nRemovable hood for easy cleaning",
+        "image": "/images/accessories.webp",
+        "price": "20.34",
+        "ageLimit": "All Ages"
+    },
+    {
+        "id": 11,
+        "title": "Cat Accessory 11",
+        "description": "Engaging toy to keep your cat entertained and stimulated.",
+        "details": "Includes catnip\nDurable and safe materials",
+        "image": "/images/accessories.webp",
+        "price": "21.89",
+        "ageLimit": "All Ages"
+    },
+    {
+        "id": 12,
+        "title": "Cat Accessory 12",
+        "description": "Convenient litter box for easy cleaning and maintenance.",
+        "details": "Includes scoop and liners\nOdor control",
+        "image": "/images/accessories.webp",
+        "price": "44.71",
+        "ageLimit": "Adult Cats"
+    },
+    {
+        "id": 13,
+        "title": "Cat Accessory 13",
+        "description": "Soft and plush bed for your cat's comfort.",
+        "details": "Dimensions: 20'' x 16''\nMachine washable cover",
+        "image": "/images/accessories.webp",
+        "price": "37.58",
+        "ageLimit": "Senior Cats"
+    },
+    {
+        "id": 14,
+        "title": "Cat Accessory 14",
+        "description": "Durable scratching post to satisfy your cat's natural instincts.",
+        "details": "Height: 18''\nSturdy base prevents tipping",
+        "image": "/images/accessories.webp",
+        "price": "29.62",
+        "ageLimit": "Kittens and Adult Cats"
+    },
+    {
+        "id": 15,
+        "title": "Cat Accessory 15",
+        "description": "Gentle brush for grooming your cat's fur and keeping it soft and shiny.",
+        "details": "Soft bristles\nErgonomic handle for comfort",
+        "image": "/images/accessories.webp",
+        "price": "47.77",
+        "ageLimit": "All Ages"
+    },
+    {
+        "id": 16,
+        "title": "Cat Accessory 16",
+        "description": "Interactive toy to stimulate your cat's mind and body.",
+        "details": "Motion-activated\nHours of entertainment",
+        "image": "/images/accessories.webp",
+        "price": "29.13",
+        "ageLimit": "Kittens and Adult Cats"
+    },
+    {
+        "id": 17,
+        "title": "Cat Accessory 17",
+        "description": "Stylish collar to keep track of your cat and add flair to their look.",
+        "details": "Adjustable size\nReflective strip for visibility",
+        "image": "/images/accessories.webp",
+        "price": "18.69",
+        "ageLimit": "Adult Cats"
+    },
+    {
+        "id": 18,
+        "title": "Cat Accessory 18",
+        "description": "Fashionable collar to accessorize your cat's look.",
+        "details": "Adjustable size\nBreakaway design for safety",
+        "image": "/images/accessories.webp",
+        "price": "46.78",
+        "ageLimit": "Senior Cats"
+    },
+    {
+        "id": 19,
+        "title": "Cat Accessory 19",
+        "description": "Gentle brush for grooming your cat's fur and keeping it soft and shiny.",
+        "details": "Soft bristles\nErgonomic handle for comfort",
+        "image": "/images/accessories.webp",
+        "price": "29.33",
+        "ageLimit": "Adult Cats"
+    },
+    {
+        "id": 20,
+        "title": "Cat Accessory 20",
+        "description": "Comfortable bed for your cat to relax in.",
+        "details": "Dimensions: 24'' x 20''\nRemovable hood for easy cleaning",
+        "image": "/images/accessories.webp",
+        "price": "34.66",
+        "ageLimit": "Senior Cats"
+    },
+    {
+        "id": 21,
+        "title": "Cat Accessory 21",
+        "description": "Interactive toy to stimulate your cat's mind and body.",
+        "details": "Motion-activated\nHours of entertainment",
+        "image": "/images/accessories.webp",
+        "price": "23.45",
+        "ageLimit": "Kittens and Adult Cats"
+    },
+    {
+        "id": 22,
+        "title": "Cat Accessory 22",
+        "description": "Stylish collar to keep track of your cat and add flair to their look.",
+        "details": "Adjustable size\nReflective strip for visibility",
+        "image": "/images/accessories.webp",
+        "price": "17.89",
+        "ageLimit": "Senior Cats"
+    },
+    {
+        "id": 23,
+        "title": "Cat Accessory 23",
+        "description": "Durable scratching post to satisfy your cat's natural instincts.",
+        "details": "Height: 18''\nSturdy base prevents tipping",
+        "image": "/images/accessories.webp",
+        "price": "29.72",
+        "ageLimit": "All Ages"
+    },
+    {
+        "id": 24,
+        "title": "Cat Accessory 24",
+        "description": "Gentle brush for grooming your cat's fur and keeping it soft and shiny.",
+        "details": "Soft bristles\nErgonomic handle for comfort",
+        "image": "/images/accessories.webp",
+        "price": "21.89",
+        "ageLimit": "Adult Cats"
+    },
+    {
+        "id": 25,
+        "title": "Cat Accessory 25",
+        "description": "Soft and plush bed for your cat's comfort.",
+        "details": "Dimensions: 20'' x 16''\nMachine washable cover",
+        "image": "/images/accessories.webp",
+        "price": "32.45",
+        "ageLimit": "All Ages"
+    },
+    {
+        "id": 26,
+        "title": "Cat Accessory 26",
+        "description": "Fashionable collar to accessorize your cat's look.",
+        "details": "Adjustable size\nBreakaway design for safety",
+        "image": "/images/accessories.webp",
+        "price": "48.99",
+        "ageLimit": "Kittens and Adult Cats"
+    },
+    {
+        "id": 27,
+        "title": "Cat Accessory 27",
+        "description": "Comfortable bed for your cat to relax in.",
+        "details": "Dimensions: 24'' x 20''\nRemovable hood for easy cleaning",
+        "image": "/images/accessories.webp",
+        "price": "27.89",
+        "ageLimit": "Senior Cats"
+    },
+    {
+        "id": 28,
+        "title": "Cat Accessory 28",
+        "description": "Engaging toy to keep your cat entertained and stimulated.",
+        "details": "Includes catnip\nDurable and safe materials",
+        "image": "/images/accessories.webp",
+        "price": "22.45",
+        "ageLimit": "All Ages"
+    },
+    {
+        "id": 29,
+        "title": "Cat Accessory 29",
+        "description": "Durable scratching post to satisfy your cat's natural instincts.",
+        "details": "Height: 18''\nSturdy base prevents tipping",
+        "image": "/images/accessories.webp",
+        "price": "34.56",
+        "ageLimit": "Adult Cats"
+    },
+    {
+        "id": 30,
+        "title": "Cat Accessory 30",
+        "description": "Gentle brush for grooming your cat's fur and keeping it soft and shiny.",
+        "details": "Soft bristles\nErgonomic handle for comfort",
+        "image": "/images/accessories.webp",
+        "price": "25.99",
+        "ageLimit": "Kittens and Adult Cats"
+    }
+]
+
+export const catToys = [
+    {
+        "id": 1,
+        "title": "Cat Toy 1",
+        "description": "Interactive toy to stimulate your cat's mind and body.",
+        "details": "Motion-activated\nHours of entertainment",
+        "image": "/images/toys.webp",
+        "price": "12.99",
+        "ageLimit": "Kittens and Adult Cats"
+    },
+    {
+        "id": 2,
+        "title": "Cat Toy 2",
+        "description": "Engaging toy to keep your cat entertained and stimulated.",
+        "details": "Includes catnip\nDurable and safe materials",
+        "image": "/images/toys.webp",
+        "price": "9.99",
+        "ageLimit": "Adult Cats"
+    },
+    {
+        "id": 3,
+        "title": "Cat Toy 3",
+        "description": "Interactive toy to keep your cat entertained and active.",
+        "details": "Battery operated\nInteractive design",
+        "image": "/images/toys.webp",
+        "price": "15.99",
+        "ageLimit": "All Ages"
+    },
+    {
+        "id": 4,
+        "title": "Cat Toy 4",
+        "description": "Chewable toy to satisfy your cat's natural instincts.",
+        "details": "Made from durable materials\nTextured surface for chewing",
+        "image": "/images/toys.webp",
+        "price": "8.99",
+        "ageLimit": "Senior Cats"
+    },
+    {
+        "id": 5,
+        "title": "Cat Toy 5",
+        "description": "Interactive toy to engage your cat's senses.",
+        "details": "Lights up and makes sounds\nEncourages play",
+        "image": "/images/toys.webp",
+        "price": "19.99",
+        "ageLimit": "Adult Cats"
+    },
+    {
+        "id": 6,
+        "title": "Cat Toy 6",
+        "description": "Stimulating toy to keep your cat entertained for hours.",
+        "details": "Includes feathers and bells\nPromotes exercise",
+        "image": "/images/toys.webp",
+        "price": "14.99",
+        "ageLimit": "Kittens and Adult Cats"
+    },
+    {
+        "id": 7,
+        "title": "Cat Toy 7",
+        "description": "Interactive toy to encourage your cat's natural hunting instincts.",
+        "details": "Mimics the movement of prey\nKeeps your cat engaged",
+        "image": "/images/toys.webp",
+        "price": "11.99",
+        "ageLimit": "Adult Cats"
+    },
+    {
+        "id": 8,
+        "title": "Cat Toy 8",
+        "description": "Chaseable toy to provide exercise and entertainment for your cat.",
+        "details": "Rolls unpredictably\nEncourages chasing",
+        "image": "/images/toys.webp",
+        "price": "13.99",
+        "ageLimit": "All Ages"
+    },
+    {
+        "id": 9,
+        "title": "Cat Toy 9",
+        "description": "Feathered toy to engage your cat's hunting instincts.",
+        "details": "Realistic bird design\nFeathers for added excitement",
+        "image": "/images/toys.webp",
+        "price": "10.99",
+        "ageLimit": "Senior Cats"
+    },
+    {
+        "id": 10,
+        "title": "Cat Toy 10",
+        "description": "Interactive toy to keep your cat mentally and physically active.",
+        "details": "Provides mental stimulation\nEncourages exercise",
+        "image": "/images/toys.webp",
+        "price": "16.99",
+        "ageLimit": "Kittens and Adult Cats"
+    },
+    {
+        "id": 11,
+        "title": "Cat Toy 11",
+        "description": "Feathered toy to stimulate your cat's natural instincts.",
+        "details": "Colorful feathers for added attraction\nEncourages play",
+        "image": "/images/toys.webp",
+        "price": "9.99",
+        "ageLimit": "Senior Cats"
+    },
+    {
+        "id": 12,
+        "title": "Cat Toy 12",
+        "description": "Interactive toy to keep your cat entertained and active.",
+        "details": "Battery operated\nInteractive design",
+        "image": "/images/toys.webp",
+        "price": "14.99",
+        "ageLimit": "All Ages"
+    },
+    {
+        "id": 13,
+        "title": "Cat Toy 13",
+        "description": "Chewable toy to satisfy your cat's natural instincts.",
+        "details": "Made from durable materials\nTextured surface for chewing",
+        "image": "/images/toys.webp",
+        "price": "8.99",
+        "ageLimit": "Adult Cats"
+    },
+    {
+        "id": 14,
+        "title": "Cat Toy 14",
+        "description": "Interactive toy to engage your cat's senses.",
+        "details": "Lights up and makes sounds\nEncourages play",
+        "image": "/images/toys.webp",
+        "price": "19.99",
+        "ageLimit": "Kittens and Adult Cats"
+    },
+    {
+        "id": 15,
+        "title": "Cat Toy 15",
+        "description": "Stimulating toy to keep your cat entertained for hours.",
+        "details": "Includes feathers and bells\nPromotes exercise",
+        "image": "/images/toys.webp",
+        "price": "14.99",
+        "ageLimit": "Senior Cats"
+    },
+    {
+        "id": 16,
+        "title": "Cat Toy 16",
+        "description": "Interactive toy to encourage your cat's natural hunting instincts.",
+        "details": "Mimics the movement of prey\nKeeps your cat engaged",
+        "image": "/images/toys.webp",
+        "price": "11.99",
+        "ageLimit": "Adult Cats"
+    },
+    {
+        "id": 17,
+        "title": "Cat Toy 17",
+        "description": "Chaseable toy to provide exercise and entertainment for your cat.",
+        "details": "Rolls unpredictably\nEncourages chasing",
+        "image": "/images/toys.webp",
+        "price": "13.99",
+        "ageLimit": "All Ages"
+    },
+    {
+        "id": 18,
+        "title": "Cat Toy 18",
+        "description": "Feathered toy to engage your cat's hunting instincts.",
+        "details": "Realistic bird design\nFeathers for added excitement",
+        "image": "/images/toys.webp",
+        "price": "10.99",
+        "ageLimit": "Senior Cats"
+    },
+    {
+        "id": 19,
+        "title": "Cat Toy 19",
+        "description": "Interactive toy to keep your cat mentally and physically active.",
+        "details": "Provides mental stimulation\nEncourages exercise",
+        "image": "/images/toys.webp",
+        "price": "16.99",
+        "ageLimit": "Kittens and Adult Cats"
+    },
+    {
+        "id": 20,
+        "title": "Cat Toy 20",
+        "description": "Feathered toy to stimulate your cat's natural instincts.",
+        "details": "Colorful feathers for added attraction\nEncourages play",
+        "image": "/images/toys.webp",
+        "price": "9.99",
+        "ageLimit": "Senior Cats"
+    }
+]
 
 export const navigationLinks = [
     { id: 1, name: "Home", url: "/" },
