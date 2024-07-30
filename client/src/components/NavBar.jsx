@@ -1,60 +1,138 @@
-import { useState } from "react";
-import { Form, Nav, NavDropdown, Navbar, Offcanvas } from 'react-bootstrap';
-import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+// Cart Icon from fontawesome
+import { faBars, faSearch, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+
+// Font-awesome Component
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { useContext, useEffect, useReducer } from "react";
+
+// Navigation Components from React Bootstrap
+import { Button, Form, Navbar, NavDropdown, Offcanvas } from 'react-bootstrap';
 import NavigationLinks from './NavigationLinks';
 
-const { Brand, Toggle, Collapse } = Navbar;
-const { Link } = Nav;
-const { Item, Divider } = NavDropdown;
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { contextStore } from "../context";
+import { useStateReducer } from "../reducers/reducerFunctions";
 
-function MyNavBar() {
-    const [visible, setVisible] = useState("invisible");
+const { Brand, Toggle } = Navbar;
+const { Divider } = NavDropdown;
 
-    function SearchIconVisibility(event) {
-        if (event.target.value) {
-            return setVisible("visible");
+function MyNavBar({ handleToken, search, searchDispatch, sideShow, sideShowDispatch }) {
+    const store = useContext(contextStore);
+
+    const dropdownItemClass = "dropdown-item d-block text-decoration-none fw-normal text-dark py-1 px-3";
+
+    const token = localStorage.getItem("token")
+
+    const { userId, userType, firstName } = store.userStore.userData;
+
+    const [searchValue, searchValueDispatch] = useReducer(useStateReducer, "");
+
+    const navigate = useNavigate();
+
+    // State to handle the Women Dropdown in the Navigation Bar.
+    const [show, showDispatch] = useReducer(useStateReducer, false);
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        console.log("searchSubmit")
+        const searchValue = event.target[0].value.trim().toLowerCase();
+
+        async function getProducts() {
+            try {
+                const response = await axios.get(`/api/getitems/${userType}/${userId}/${searchValue}`);
+                console.log(response)
+                if (response.status === 201) {
+                    searchDispatch({ type: "SEARCHED_PRODUCTS", payload: response.data.products });
+                    navigate("search")
+                }
+            }
+            catch (error) {
+                console.log(error)
+            }
         }
-        setVisible("invisible");
+
+        if (searchValue) {
+            getProducts()
+        }
+    }
+    function handleLogout() {
+        localStorage.clear()
+        searchDispatch({})
+        navigate(`/login/${userType}`);
+        getToken()
+    }
+
+    function handleSideShowClick(event) {
+        event.stopPropagation();
+        sideShowDispatch({ type: "SET_SHOW", payload: !sideShow })
+    }
+
+    function handleSearchChange(event) {
+        searchValueDispatch(event.target.value);
+        if (!event.target.value) {
+            searchDispatch({ type: 'SEARCHED_PRODUCTS', payload: [] })
+        }
     }
 
     return (
         <>
-            <Navbar bg='info' expand="sm" className="p-2 py-sm-1 d-flex gap-mx-md-x-2">
-                <Brand href="#home" className='fw-bold fs-2 flex-sm-one-third'>PurrStore</Brand>
+            <Navbar bg='info' sticky="top" expand="sm" className="p-2 py-sm-2 d-flex gap-mx-md-x-2">
+                <FontAwesomeIcon icon={faBars} size="xl" className="d-none p-2 d-sm-block cursor-pointer" onClick={handleSideShowClick} />
+                <Link to="/" className='fw-bold fs-2 flex-one-third text-decoration-none text-dark'>PurrStore</Link>
                 {/* Cart Icon for Screen Size < 576 px */}
                 <div className='d-flex flex-fill d-sm-none justify-content-end'>
-                    <FontAwesomeIcon icon={faShoppingCart} size='2x' />
+                    <FontAwesomeIcon onClick={() => navigate('/cart')} icon={faShoppingCart} size='2x' />
                 </div>
-                <Toggle id='offcanvasNavbar' />
-                <Navbar.Offcanvas id="offcanvasNavbar" placement="end" className="w-50">
+                <div className='d-sm-flex order-sm-1 flex-sm-one-third'>
+                    {/* Cart Icon for Screen Size > 576 px */}
+                    <div className='d-none d-sm-flex justify-content-sm-center fs-5 flex-fill align-self-end fw-medium pb-3 pb-sm-0'>
+                        <NavDropdown title={`${userId ? firstName : "Sign In"}`} show={show} onMouseEnter={() => { showDispatch(true) }} onMouseLeave={() => { showDispatch(false) }} onClick={() => { showDispatch(!show) }}>
+                            {userId
+                                ?
+                                <>
+                                    <Link to="/profile" className={`${dropdownItemClass}`}>Profile</Link>
+                                    {userType === "user"
+                                        ?
+                                        <Link to="/orders" className={`${dropdownItemClass}`}>Order History</Link>
+                                        :
+                                        ""
+                                    }
+                                    <Divider />
+                                    <Link onClick={handleLogout} className={`${dropdownItemClass}`}>Logout</Link>
+                                </>
+                                :
+                                <>
+                                    <Link to="/login/user" className={`${dropdownItemClass}`}>User</Link>
+                                    <Link to="/login/admin" className={`${dropdownItemClass}`}>Admin</Link>
+                                    <Link to="/login/seller" className={`${dropdownItemClass}`}>Seller</Link>
+                                </>
+                            }
+                        </NavDropdown>
+                    </div>
+                    {
+                        (userType === "admin" || userType === "seller")
+                            ?
+                            ""
+                            :
+                            <FontAwesomeIcon onClick={() => navigate('/cart')} icon={faShoppingCart} size='xl' className='d-none d-sm-flex order-sm-2 pb-3 pb-sm-0 flex-sm-one-third align-self-center cursor-pointer' />
+                    }
+                </div>
+                <Form onSubmit={handleSubmit} className="d-flex w-100 flex-sm-two-third flex-md-three-quarters position-relative order-1 order-sm-0 py-0 pt-2 pt-sm-0 ">
+                    <Form.Control type="search" placeholder="Search Products" className="flex-1 search-input rounded-1" onChange={handleSearchChange} />
+                    <Button variant="dark" type="submit" className={`position-absolute end-0 align-self-center rounded-1 rounded-start-0`}><FontAwesomeIcon icon={faSearch} color="#0dcaf0" /></Button>
+                </Form>
+                <Toggle id='offcanvasNavbar' className="d-sm-none" />
+                <Navbar.Offcanvas id="offcanvasNavbar" placement="start" className="w-50 bg-dark d-sm-none">
+                    {/* Search Bar Screen Size > 576 px */}
                     {/* Greeting Text for Screen Size < 576 px */}
-                    <Offcanvas.Header closeButton>
-                        <Link href='#' className='d-sm-none fs-5'>Hi Parent!</Link>
-                    </Offcanvas.Header>
-                    <Offcanvas.Body className='justify-content-sm-between'>
-                        <div className='d-sm-flex order-sm-1 flex-sm-one-third'>
-                            {/* Cart Icon for Screen Size > 576 px */}
-                            <Link href='#' className='d-none d-sm-flex justify-content-sm-center fs-5 flex-fill align-self-end fw-medium pb-3 pb-sm-0'>Hi Parent!</Link>
-                            <FontAwesomeIcon icon={faShoppingCart} size='xl' className='d-none d-sm-flex order-sm-2 pb-3 pb-sm-0 flex-sm-one-third align-self-center cursor-pointer' />
-                        </div>
-                        {/* Search Bar Screen Size > 576 px */}
-                        <Form className="d-none d-sm-flex flex-two-third flex-md-three-quarters position-relative order-sm-0 py-0 ">
-                            <Form.Control onChange={SearchIconVisibility} type="search" placeholder="Search" className="flex-1 search-input rounded-1 " />
-                            <Link href='#' className={`${visible} position-absolute end-0 align-self-center pe-2`}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" /></svg></Link>
-                        </Form>
-                        <NavigationLinks className={`d-flex d-sm-none`} />
+                    <Offcanvas.Header closeButton closeVariant="white" />
+                    <Offcanvas.Body className='d-sm-none justify-content-sm-between'>
+                        <NavigationLinks handleLogout={handleLogout} className={`d-flex d-sm-none`} dropdownItemClass={dropdownItemClass} />
                     </Offcanvas.Body>
                 </Navbar.Offcanvas>
             </Navbar >
-            <Navbar bg='info' className="d-flex d-sm-none flex-sm-column justify-content-center px-2 flex-wrap">
-                {/* Search Bar Screen Size > 768 px */}
-                <Form className="d-flex d-sm-none flex-fill position-relative order-sm-0 py-0 ">
-                    <Form.Control onChange={SearchIconVisibility} type="search" placeholder="Search" className="flex-fill search-input rounded-1 " />
-                    <Link href='#' className={`${visible} position-absolute end-0 align-self-center pe-2`}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" /></svg></Link>
-                </Form>
-            </Navbar>
-            <NavigationLinks className={`d-flex bg-light justify-content-center`} />
         </>
     );
 }

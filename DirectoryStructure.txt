@@ -9,7 +9,7 @@ ecomern/
 │       ├── styles/           # CSS or other styling files
 │       ├── utils/            # Utility functions
 │       ├── App.js            # Main React component
-│       └── index.js          # Entry point for React app
+│       └── main.js          # Entry point for React app
 │
 ├── server/                   # Backend (Node.js with Express.js) folder
 │   ├── config/               # Configuration files (database, environment, etc.)
@@ -20,7 +20,7 @@ ecomern/
 │   ├── middleware/           # Middleware functions
 │   ├── utils/                # Utility functions
 │   ├── app.js                # Express application setup
-│   └── server.js             # Entry point for Node.js server
+│   └── index.js             # Entry point for Node.js server
 │
 ├── node_modules/             # Node.js dependencies (auto-generated)
 │

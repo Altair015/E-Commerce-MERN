@@ -1,0 +1,39 @@
+.side-bar-container {
+    width: 0;
+    transition-property: width;
+    transition-duration: 300ms;
+    transition-timing-function: ease;
+}
+
+.side-bar-expanded {
+    width: 15%;
+    transition-property: width;
+    transition-duration: 300ms;
+    transition-timing-function: ease;
+}
+
+.textVisible {
+    transform: translateX(0px);
+    transition-property: transform;
+    transition-duration: 300ms;
+    transition-timing-function: ease;
+}
+
+.textHide {
+    transform: translateX(-250px);
+    transition-property: transform;
+    transition-duration: 300ms;
+    transition-timing-function: ease;
+}
+
+@media screen and (min-width: 576px) and (max-width:768px) {
+    .side-bar-expanded {
+        width: 26% !important;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width:1024px) {
+    .side-bar-expanded {
+        width: 25% !important;
+    }
+}

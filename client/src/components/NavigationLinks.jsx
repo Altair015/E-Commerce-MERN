@@ -1,24 +1,53 @@
-import { Nav, NavDropdown, Navbar } from 'react-bootstrap';
+import { useContext } from 'react';
+import { Nav } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { contextStore } from '../context';
+import { adminOptions, productsOptions, signInOptions, signUpOptions } from '../utils/InitialData';
+import AccordionDropdown from './AccordionDropdown';
 
-const { Link } = Nav;
-const { Item, Divider } = NavDropdown;
+// const { Link } = Nav;
+// const { Item, Divider } = NavDropdown;
 
-function NavigationLinks({ componentId, bg, className }) {
+function NavigationLinks({ handleLogout, componentId, bg, className, dropdownItemClass }) {
+    const store = useContext(contextStore);
+    const { userId, userType } = store.userStore.userData;
+
     return (
-        <Nav id={componentId} bg={bg} className={`${className}`} >
-            <Link href="#home" className='text-black'>Home</Link>
-            <Link href="#link" className='text-black'>Link</Link>
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown" >
-                <Item href="#action/3.1">Action</Item>
-                <Item href="#action/3.2">
-                    Another action
-                </Item>
-                <Item href="#action/3.3">Something</Item>
-                <Divider />
-                <Item href="#action/3.4">
-                    Separated link
-                </Item>
-            </NavDropdown>
+        <Nav id={componentId} className={`${className} d-sm-none`} >
+            <Link to="/" className='text-light fw-medium py-2 text-decoration-none px-0 px-sm-3'>Home</Link>
+            {
+                (userType === "admin")
+                    ?
+                    <AccordionDropdown options={adminOptions} heading="Categories" />
+                    :
+                    (userType !== "seller")
+                        ?
+                        <AccordionDropdown options={productsOptions} heading="Categories" />
+                        :
+                        ""
+            }
+            {userId
+                ?
+                <>
+                    <Link to="/profile" className='text-light fw-medium py-2 text-decoration-none px-0 px-sm-3'>User Profile</Link>
+                    {userType === "user"
+                        ?
+                        <>
+                            <Link to="/orders" className='text-light fw-medium py-2 text-decoration-none px-0 px-sm-3'>Order History</Link>
+                        </>
+                        :
+                        ""
+                    }
+                </>
+                :
+                <>
+                    <AccordionDropdown options={signInOptions} heading="Sign In" />
+                    <AccordionDropdown options={signUpOptions} heading="Sign Up" />
+                </>
+            }
+            {userId ? <Link onClick={handleLogout} className='text-light fw-medium py-2 text-decoration-none px-0 px-sm-3'>Logout</Link> : ""}
+            <Link to="/contact" className='text-light fw-medium py-2 text-decoration-none px-0 px-sm-3'>Contact Us</Link>
+            <Link to="/about" className='text-light fw-medium py-2 text-decoration-none px-0 px-sm-3'>About Us</Link>
         </Nav >
     )
 }
