@@ -13,12 +13,7 @@ import orderRouter from "./routes/orderRoutes.js";
 
 export const server = express();
 
-// Port number on which the Backend Server is running.
 const PORT = 4000;
-
-// Setup the host name to access the Express Server from different computer rather than localhost
-// const hostName = "10.0.0.1";
-// const hostName = "192.168.0.105";
 
 const hostNames = ["10.0.0.1", "192.168.0.105"];
 
