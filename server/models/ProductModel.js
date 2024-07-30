@@ -3,16 +3,16 @@ import UserModel from "./UserModel.js"
 
 const productSchema = new Schema(
     {
-        imageUrl: {
+        image: {
             type: String,
-            required: true,
+            default: null
         },
         title: {
             type: String,
             required: true
         },
         age: {
-            type: Number,
+            type: String,
             required: true
         },
         description: {
@@ -22,10 +22,6 @@ const productSchema = new Schema(
         price: {
             type: Number
         },
-        // rating: {
-        //     type: Number,
-        //     default: 0
-        // },
         reviews: {
             type: [
                 {

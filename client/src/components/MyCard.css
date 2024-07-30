@@ -1,3 +1,20 @@
 .card-image {
     height: 450px !important;
 }
+
+.my-card-width {
+    width: 15em;
+}
+
+@media screen and (max-width:768px) {
+    .my-card-width {
+        width: 14em;
+    }
+}
+
+@media screen and (max-width:576px) {
+    .my-card-width {
+        width: 17em;
+        margin: auto;
+    }
+}

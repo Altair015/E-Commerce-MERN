@@ -1,30 +1,53 @@
-import { useState } from 'react';
-import { Nav, NavDropdown, Navbar } from 'react-bootstrap';
-
+import { useContext } from 'react';
+import { Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { contextStore } from '../context';
+import { adminOptions, productsOptions, signInOptions, signUpOptions } from '../utils/InitialData';
+import AccordionDropdown from './AccordionDropdown';
 
 // const { Link } = Nav;
 // const { Item, Divider } = NavDropdown;
 
-function NavigationLinks({ componentId, bg, className, dropdownItemClass }) {
-
-    // State to handle the Women Dropdown in the Navigation Bar.
-    const [show, setShow] = useState(false);
-
-    // State to handle the Men Dropdown in the Navigation Bar.
-    const [showMan, setShowMan] = useState("");
+function NavigationLinks({ handleLogout, componentId, bg, className, dropdownItemClass }) {
+    const store = useContext(contextStore);
+    const { userId, userType } = store.userStore.userData;
 
     return (
-        <Nav id={componentId} bg={bg} className={`${className}`} >
-            <Link to="/" className='text-black py-2 text-decoration-none px-0 px-sm-3' >Home</Link>
-            <NavDropdown title="Products" id="basic-nav-dropdown" show={showMan} onMouseEnter={() => { setShowMan(true) }} onMouseLeave={() => { setShowMan(false) }} onClick={() => { setShowMan(!showMan) }}>
-                <Link to="/food" className={`${dropdownItemClass}`} >Food</Link>
-                <Link to="/litter" className={`${dropdownItemClass} `}>Litter</Link>
-                <Link to="/accessories" className={`${dropdownItemClass} `}>Accessories</Link>
-                <Link to="/toys" className={`${dropdownItemClass} `}>Toys</Link>
-            </NavDropdown>
-            <Link to="/contact" className='text-black py-2 text-decoration-none px-0 px-sm-3'>Contact Us</Link>
-            <Link to="/about" className='text-black py-2 text-decoration-none px-0 px-sm-3'>About Us</Link>
+        <Nav id={componentId} className={`${className} d-sm-none`} >
+            <Link to="/" className='text-light fw-medium py-2 text-decoration-none px-0 px-sm-3'>Home</Link>
+            {
+                (userType === "admin")
+                    ?
+                    <AccordionDropdown options={adminOptions} heading="Categories" />
+                    :
+                    (userType !== "seller")
+                        ?
+                        <AccordionDropdown options={productsOptions} heading="Categories" />
+                        :
+                        ""
+            }
+            {userId
+                ?
+                <>
+                    <Link to="/profile" className='text-light fw-medium py-2 text-decoration-none px-0 px-sm-3'>User Profile</Link>
+                    {userType === "user"
+                        ?
+                        <>
+                            <Link to="/orders" className='text-light fw-medium py-2 text-decoration-none px-0 px-sm-3'>Order History</Link>
+                        </>
+                        :
+                        ""
+                    }
+                </>
+                :
+                <>
+                    <AccordionDropdown options={signInOptions} heading="Sign In" />
+                    <AccordionDropdown options={signUpOptions} heading="Sign Up" />
+                </>
+            }
+            {userId ? <Link onClick={handleLogout} className='text-light fw-medium py-2 text-decoration-none px-0 px-sm-3'>Logout</Link> : ""}
+            <Link to="/contact" className='text-light fw-medium py-2 text-decoration-none px-0 px-sm-3'>Contact Us</Link>
+            <Link to="/about" className='text-light fw-medium py-2 text-decoration-none px-0 px-sm-3'>About Us</Link>
         </Nav >
     )
 }

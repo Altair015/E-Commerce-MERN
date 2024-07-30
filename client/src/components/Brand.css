@@ -1,0 +1,10 @@
+.cover-page {
+    background-image: url(../../public/images/PurrStoreBanner.webp);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.text-shadow {
+    text-shadow: grey 3px 2px 2px;
+}

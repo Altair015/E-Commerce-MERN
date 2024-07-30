@@ -1,78 +1,115 @@
-import { Col, Container, ListGroup, Row, DropdownDivider } from 'react-bootstrap';
+import { useContext } from 'react';
+import { Accordion, Col, Container, ListGroup, Row, useAccordionButton } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { contextStore } from '../context';
 
 // Footer
+function CustomToggle({ eventKey }) {
+    const decoratedOnClick = useAccordionButton(eventKey, () =>
+        console.log('totally custom!'),
+    );
+
+    return <p onClick={decoratedOnClick} className='cursor-pointer fw-bold text-center text-light m-0 p-0'>. . . .</p>
+}
+
 const Footer = () => {
+    const store = useContext(contextStore);
+    const { userId } = store.userStore.userData;
+
     return (
-        <footer className="bg-dark py-2">
-            <Container>
-                <Row className="justify-content-center">
-                    {/* Women Options in the footer */}
-                    <Col md={3}>
-                        <ListGroup className="text-center">
-                            <ListGroup.Item className="bg-dark text-white fs-5 border-0 pt-3" action href="#">
-                                Women
-                            </ListGroup.Item>
-                            <ListGroup.Item className="bg-dark text-white border-0" action href="#">
-                                Dresses
-                            </ListGroup.Item>
-                            <ListGroup.Item className="bg-dark text-white border-0" action href="#">
-                                Pants
-                            </ListGroup.Item>
-                            <ListGroup.Item className="bg-dark text-white border-0" action href="#">
-                                Skirts
-                            </ListGroup.Item>
-                        </ListGroup>
-                    </Col>
-                    {/* Men Options in the footer */}
-                    <Col md={3}>
-                        <ListGroup className="text-center">
-                            <ListGroup.Item className="bg-dark text-white fs-5 border-0 pt-3" action href="#">
-                                Men
-                            </ListGroup.Item>
-                            <ListGroup.Item className="bg-dark text-white border-0" action href="#">
-                                Shirts
-                            </ListGroup.Item>
-                            <ListGroup.Item className="bg-dark text-white border-0" action href="#">
-                                Pants
-                            </ListGroup.Item>
-                            <ListGroup.Item className="bg-dark text-white border-0" action href="#">
-                                Hoodies
-                            </ListGroup.Item>
-                        </ListGroup>
-                    </Col>
-                    {/* Kid Option in the footer */}
-                    <Col md={3}>
-                        <ListGroup className="text-center">
-                            <ListGroup.Item className="bg-dark text-white fs-5 border-0 pt-3" action href="#">
-                                Kids
-                            </ListGroup.Item>
-                        </ListGroup>
-                    </Col>
-                    {/* Links, Home, Login and Contact Option in the footer */}
-                    <Col md={3}>
-                        <ListGroup className="text-center">
-                            <ListGroup.Item className="bg-dark text-white fs-5 border-0 pt-3">
-                                Links
-                            </ListGroup.Item>
-                            <ListGroup.Item className="bg-dark text-white border-0" action href="#">
-                                Home
-                            </ListGroup.Item>
-                            <ListGroup.Item className="bg-dark text-white border-0" action href="#">
-                                Login
-                            </ListGroup.Item>
-                            <ListGroup.Item className="bg-dark text-white border-0" action href="#">
-                                Contact
-                            </ListGroup.Item>
-                        </ListGroup>
-                    </Col>
-                </Row>
-                <DropdownDivider />
-            </Container>
-            <hr className="border border-light p-0 my-2" />
-            <p className="m-0 bg-dark text-white fs-5 border-0 text-center">
-                Copyright © PurrStore 2024
-            </p>
-        </footer>
+        < Accordion className='bg-dark text-center' defaultActiveKey="1" >
+            <CustomToggle eventKey="0" />
+            <Accordion.Collapse eventKey="0">
+                <Container fluid className='py-2 '>
+                    <hr className="border border-light p-0 my-2 mt-0" />
+                    <Row className="d-sm-flex justify-content-evenly">
+                        <Col sm={3} className="text-center">
+                            <ListGroup variant="flush">
+                                <ListGroup.Item className="bg-dark text-white text-sm-start border-0">
+                                    <Link className='fs-5 fw-medium text-decoration-none text-light text-nowrap' to={'/products'}>Products</Link>
+                                </ListGroup.Item>
+                                <ListGroup.Item className="bg-dark text-sm-start text-white border-0">
+                                    <Link className='text-decoration-none text-light text-nowrap' to={'/food'}>Food</Link>
+                                </ListGroup.Item>
+                                <ListGroup.Item className="bg-dark text-sm-start text-white border-0">
+                                    <Link className='text-decoration-none text-light text-nowrap' to={'/litter'}>Litter</Link>
+                                </ListGroup.Item>
+                                <ListGroup.Item className="bg-dark text-sm-start text-white border-0">
+                                    <Link className='text-decoration-none text-light text-nowrap' to={'/toys'}>Toys</Link>
+                                </ListGroup.Item>
+                                <ListGroup.Item className="bg-dark text-sm-start text-white border-0">
+                                    <Link className='text-decoration-none text-light text-nowrap' to={'/accessories'}>Accessory</Link>
+                                </ListGroup.Item>
+                            </ListGroup>
+                        </Col>
+                        <Col sm={3} className="text-center">
+                            <ListGroup variant="flush">
+                                <ListGroup.Item className="bg-dark text-white text-sm-start border-0">
+                                    <Link className='fs-5 fw-medium text-decoration-none text-light text-nowrap' >Links</Link>
+                                </ListGroup.Item>
+                                <ListGroup.Item className="bg-dark text-sm-start text-white border-0">
+                                    <Link className='text-decoration-none text-light text-nowrap' to={'/'}>Home</Link>
+                                </ListGroup.Item>
+                                <ListGroup.Item className="bg-dark text-sm-start text-white border-0">
+                                    <Link className='text-decoration-none text-light text-nowrap' to={'/contact'}>Contact Us</Link>
+                                </ListGroup.Item>
+                                <ListGroup.Item className="bg-dark text-sm-start text-white border-0">
+                                    <Link className='text-decoration-none text-light text-nowrap' to={'/about'}>About Us</Link>
+                                </ListGroup.Item>
+                            </ListGroup>
+                        </Col>
+                        {
+                            userId
+                                ?
+                                ""
+                                :
+                                <>
+                                    <Col sm={3} className="text-center">
+                                        <ListGroup variant="flush">
+                                            <ListGroup.Item className="bg-dark text-white text-sm-start border-0">
+                                                <Link className='fs-5 fw-medium text-decoration-none text-light text-nowrap' >Sign Up</Link>
+                                            </ListGroup.Item>
+                                            <ListGroup.Item className="bg-dark text-sm-start text-white border-0">
+                                                <Link className='text-decoration-none text-light text-nowrap' to={'/signup/user'}>User</Link>
+                                            </ListGroup.Item>
+                                            <ListGroup.Item className="bg-dark text-sm-start text-white border-0">
+                                                <Link className='text-decoration-none text-light text-nowrap' to={'/signup/seller'}>Seller</Link>
+                                            </ListGroup.Item>
+                                            <ListGroup.Item className="bg-dark text-sm-start text-white border-0">
+                                                <Link className='text-decoration-none text-light text-nowrap' to={'/signup/admin'}>Admin</Link>
+                                            </ListGroup.Item>
+                                        </ListGroup>
+                                    </Col>
+                                    <Col sm={3} className="text-center">
+                                        <ListGroup variant="flush">
+                                            <ListGroup.Item className="bg-dark text-white text-sm-start border-0">
+                                                <Link className='fs-5 fw-medium text-decoration-none text-light text-nowrap' >Sign In</Link>
+                                            </ListGroup.Item>
+                                            <ListGroup.Item className="bg-dark text-sm-start text-white border-0">
+                                                <Link className='text-decoration-none text-light text-nowrap' to={'/login/user'}>User</Link>
+                                            </ListGroup.Item>
+                                            <ListGroup.Item className="bg-dark text-sm-start text-white border-0">
+                                                <Link className='text-decoration-none text-light text-nowrap' to={'/login/seller'}>Seller</Link>
+                                            </ListGroup.Item>
+                                            <ListGroup.Item className="bg-dark text-sm-start text-white border-0">
+                                                <Link className='text-decoration-none text-light text-nowrap' to={'/login/admin'}>Admin</Link>
+                                            </ListGroup.Item>
+                                        </ListGroup>
+                                    </Col>
+                                </>
+                        }
+                    </Row>
+                    <hr className="border border-light p-0 my-0" />
+                    {/* <hr className="border border-light p-0 my-0" /> */}
+                    <p className="m-0 bg-dark text-white fs-5 border-0 text-center pt-2">
+                        Copyright © PurrStore 2024
+                    </p>
+                    <div className='d-sm-none'>
+                        <CustomToggle eventKey="0" />
+                    </div>
+                </Container>
+            </Accordion.Collapse>
+        </Accordion >
     )
 }
 

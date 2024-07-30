@@ -1,92 +1,43 @@
 import ProductModel from "../models/ProductModel.js";
+import { averageRating } from "../utilities/utilities.js";
 
-export async function uploadProductImage(req, res) {
-    console.log("After", req.body, req.file);
-    const { sellerId, productName, productFor, productDescription, productPrice, productCategory, productQuantity } = req.body
-    console.log(!req.file)
-    const imageUrl = req.file;
-    if (!imageUrl) {
-        console.log("not image")
-        // imageUrl = "public/images/default.web"
-        console.log(imageUrl)
+// Creating the product.
+export async function createProduct(req, res) {
+    const { title, age, description, price, category, quantity, sellerId } = req.body
+
+    let image = req.file;
+    if (image) {
+        image = req.file.filename
     }
     else {
-        console.log("else", imageUrl)
+        image = null;
     }
 
     if (!sellerId ||
-        !productName ||
-        !productFor ||
-        !productDescription ||
-        !productPrice ||
-        !productCategory ||
-        !productQuantity) {
+        !title ||
+        !age ||
+        !description ||
+        !price ||
+        !category ||
+        !quantity) {
         return res.status(401).json({ Entries: "Fields cannot be empty." })
     }
 
-
-    return res.status(201).json({ msg: "File Uploaded SuccessFully", file: req.file })
-}
-
-export async function createProduct(req, res) {
-    console.log(req.body)
-    const { image, productName, age, description, price, category, quantity, sellerId } = req.body;
-    // a = {
-    //     productName: 'sdfdfdfdfdfdff',
-    //     productFor: 'Kitten',
-    //     productDescription: 'dfdfdfdfdf',
-    //     productPrice: '59595',
-    //     productCategory: 'Food',
-    //     productQuantity: '59'
-    // }
-    if (!sellerId ||
-        !productName ||
-        !productFor ||
-        !productDescription ||
-        !productPrice ||
-        !productCategory ||
-        !productQuantity) {
-        return res.status(401).json({ Entries: "Fields cannot be empty." })
-    }
-
-    const addProduct = new ProductModel(
-        {
-            imageUrl: image,
-            title: productName,
-            age,
-            description,
-            price,
-            category,
-            quantity,
-            sellerId,
-        }
-    )
+    const addProduct = new ProductModel({ image, title, age, description, price, category, quantity, sellerId, })
 
     try {
         // To check if the product already exist.
-        const productFound = await ProductModel.findOne(
-            {
-                imageUrl: image,
-                title: productName,
-                age,
-                description,
-                price,
-                category,
-                sellerId
-            }
-        );
+        const productFound = await ProductModel.findOne({ image, title, age, description, price, category, quantity, sellerId, });
         if (productFound) {
-            // Updating the product Quantity if the product already exist
-            const productUpdated = await productFound.updateOne({ quantity: productFound.quantity + quantity })
-            if (productUpdated) {
-                return res.status(208).json({ "message": "Product Updated Successfully." })
-            }
+            return res.status(208).json({ "message": "Product already exists." })
         }
         else {
-            // Creating a new sales record if the product does not exist.
             const productSaved = await addProduct.save();
             if (productSaved) {
-                return res.status(201).json({ Created: "Product added successfully." })
+                const productFound = await ProductModel.findOne({ image, title, age, description, price, category, quantity, sellerId, });
+                if (productFound) {
+                    return res.status(201).json({ Created: "Product added successfully.", product: productFound.toJSON() })
+                }
             }
             else {
                 return res.status(400).json({ Failure: "Something went wrong." })
@@ -98,85 +49,131 @@ export async function createProduct(req, res) {
     }
 }
 
+// Controller to return all products for admin and user and seller specific products for seller
 export const getProducts = async (req, res) => {
     // for now must be replaced with the data send through the request over axiso
-    const { userType, email } = req.body;
+    const { userId, userType, filter } = req.params;
     try {
         const products = await ProductModel.find().populate("sellerId").populate("reviews.ratedBy");
+        if (products) {
+            let alteredProducts = products;
 
-        if (products && userType === "seller") {
-            const sellerProducts = products.filter(
-                (product) => {
-                    return product.sellerId.email === email && product.sellerId.userType === userType;
-                }
-            )
-            return res.status(201).json({ products: sellerProducts });
-        }
-        else if (products) {
-            const userProducts = products.map(
-                (product) => {
-                    // variable to store the average of rating
-                    let avgReview = 0;
-                    if (product.reviews.length > 1) {
-                        product.reviews.map(
-                            ({ rating }) => {
-                                avgReview += rating
-                            }
-                        )
-                        avgReview = avgReview / product.reviews.length
+            if (userType === "seller") {
+                alteredProducts = products.filter(
+                    (product) => {
+                        product = product.toJSON();
+                        return product.sellerId.userId === userId;
                     }
-                    else if (product.reviews.length === 1) {
-                        avgReview += product.reviews[0].rating
+                )
+            }
+            else {
+                alteredProducts = products.map(
+                    (product) => {
+                        // variable to store the average of rating
+                        let avgReview = 0;
+                        if (product.reviews.length > 1) {
+                            product.reviews.map(
+                                ({ rating }) => {
+                                    avgReview += rating
+                                }
+                            )
+                            avgReview = avgReview / product.reviews.length
+                        }
+                        else if (product.reviews.length === 1) {
+                            avgReview += product.reviews[0].rating
+                        }
+                        const tempProduct = product.toJSON();
+                        tempProduct.rating = avgReview
+                        return tempProduct
                     }
+                )
+            }
+            if (filter !== "null") {
+                const searchProducts = alteredProducts;
+                alteredProducts = searchProducts.filter(
+                    (product) => {
+                        return product.title.toUpperCase().includes(filter.trim().toUpperCase());
+                    }
+                )
+            }
 
-                    const tempProduct = product.toJSON();
-                    tempProduct.rating = avgReview
-                    return tempProduct
-                }
-            )
-            return res.status(201).json({ products: userProducts });
+            return res.status(201).json({ products: alteredProducts });
         }
         else {
             return res.status(404).json({ Failure: "No Record Found." })
         }
     }
     catch (error) {
-        console.log(error)
         return res.status(500).send({ error: error, message: "Internal Server Error." })
     }
 }
 
-export const updateProduct = async (req, res) => {
+// Controller to return specific product.
+export const getProduct = async (req, res) => {
     // for now must be replaced with the data send through the request over axiso
-    const { user, image } = req.body;
+    const { productId } = req.params;
     try {
-        const productUpdated = await ProductModel.findOneAndUpdate(
-            {
-                _id: req.params.id,
-                sellerId: user
-            },
-            {
-                imageUrl: image,
-                title: productName,
-                description: description,
-                age: age,
+        const productFound = await ProductModel.findById({ _id: productId }).populate("sellerId").populate("reviews.ratedBy");
+
+        if (productFound) {
+            // variable to store the average of rating
+            const product = productFound.toJSON();
+            let avgReview = 0;
+            if (product.reviews.length > 1) {
+                product.reviews.map(
+                    ({ rating }) => {
+                        avgReview += rating
+                    }
+                )
+                avgReview = avgReview / product.reviews.length
             }
-        );
-        if (productUpdated) {
-            return res.status(201).json({ "Success": "Product Updated Successfully" });
+            else if (product.reviews.length === 1) {
+                avgReview += product.reviews[0].rating
+            }
+            product.rating = avgReview
+            return res.status(201).json({ ...product });
         }
         else {
-            console.log("error")
             return res.status(404).json({ Failure: "No Record Found." })
         }
     }
     catch (error) {
-        console.log(error)
         return res.status(500).send({ message: "Internal Server Error." })
     }
 }
 
-// controller function to delete specific product
+// Updating the product details.
+export const updateProduct = async (req, res) => {
+    const { productId, sellerId, ...rest } = req.body;
+
+    if (req.file) {
+        rest.image = req.file.filename
+    }
+    if (Object.keys(rest).length === 0) {
+        return res.status(208).json({ "Info": "No changes performed" });
+    }
+
+    try {
+        const productUpdated = await ProductModel.findOneAndUpdate(
+            {
+                _id: productId,
+                sellerId
+            },
+            rest
+        ).populate("sellerId").populate("reviews.ratedBy");
+        if (productUpdated) {
+            return res.status(201).json({ "Success": "Product Updated Successfully", product: productUpdated.toJSON() });
+        }
+        else {
+            return res.status(404).json({ Failure: "No Record Found." })
+        }
+    }
+    catch (error) {
+        return res.status(500).send({ message: "Internal Server Error." })
+    }
+}
+
+// Controller function to delete specific product
 export async function deleteProduct(req, res) {
     const { user } = req.body;
 
@@ -192,9 +189,9 @@ export async function deleteProduct(req, res) {
     }
 }
 
+// Controller to add rating to a product.
 export async function addProductRating(req, res) {
     const { productId, review } = req.body;
-    console.log(productId, review)
 
     try {
         const ratingFound = await ProductModel.findOne(
@@ -203,7 +200,6 @@ export async function addProductRating(req, res) {
                 "reviews.ratedBy": review.ratedBy
             }
         )
-        console.log(ratingFound)
         if (ratingFound) {
             return res.status(208).json({ message: "You have already rated this product", ratingFound })
         }
@@ -218,9 +214,23 @@ export async function addProductRating(req, res) {
                     new: true,                                      // It ensures that the updated document is returned
                     useFindAndModify: false
                 }
-            ).populate("reviews.ratedBy")
+            )
+                .populate("sellerId")
+                .populate(
+                    {
+                        path: 'reviews',
+                        populate: { path: 'ratedBy' }
+                    }
+                )
             if (productFoundAndRatingUpdated) {
-                return res.status(201).json({ message: "You review is submitted successfully.", productFoundAndRatingUpdated })
+                let product = productFoundAndRatingUpdated.toJSON()
+
+                // variable to store the average of rating
+
+                let avgReview = averageRating(product)
+
+                product.rating = avgReview
+                return res.status(201).json({ message: "You review is submitted successfully.", ratedProduct: product })
             }
             else {
                 return res.status(404).json({ ProductNotFound: "Product Not Found" })
@@ -230,5 +240,18 @@ export async function addProductRating(req, res) {
 
     catch (error) {
         return res.status(500).send({ message: "Internal Server Error.", error })
+    }
+}
+
+// Controller to save sample Products.
+export async function sampleProducts(req, res) {
+    const { sampleProducts } = req.body;
+    try {
+        // Save products to the database using Mongoose's create() method
+        const createdProducts = await ProductModel.create(sampleProducts);
+        return res.status(201).json({ message: "Sample products inserted successfully." });
+    } catch (error) {
+        console.error('Error inserting sample products:', error.message);
+        return res.status(500).json({ message: "Internal Server Error." });
     }
 }

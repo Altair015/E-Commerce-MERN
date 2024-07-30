@@ -1,0 +1,12 @@
+.width-transition {
+    flex: 100% !important;
+    transition-property: width;
+    transition-duration: 300ms;
+    transition-timing-function: ease;
+}
+
+/* @media screen and (max-width:576px) {
+    .flex-container-reduced {
+        flex: 1 !important;
+    }
+} */

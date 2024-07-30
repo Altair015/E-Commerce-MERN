@@ -3,7 +3,7 @@ export function checkQuantity(cardProductId, cartItems) {
     if (cartItems.length > 0) {
         const foundItem = cartItems.find(
             (element) => {
-                console.log(element)
+                // console.log(element)
                 const cartProductId = element.productId;
                 return cartProductId === cardProductId;
             }
@@ -31,4 +31,8 @@ export function rating(value) {
         overallRating -= 1
     }
     return ratingValues;
+}
+
+export function navigateTo(hookName, endPoint, userType = "user") {
+    hookName(endPoint)
 }

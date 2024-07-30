@@ -1,9 +1,24 @@
 import multer, { diskStorage } from "multer";
+import { existsSync, mkdirSync } from "node:fs";
 
 const fileStorage = diskStorage(
     {
         destination: (req, file, next) => {
-            next(null, "public/images/")
+            // console.log("diskstoreage", req.body, file)
+            const { sellerId } = req.body;
+
+            // Creating the directory for the seller to save the images
+            const sellerPath = `public/images/${sellerId}`
+            try {
+                if (!existsSync(sellerPath)) {
+                    mkdirSync(sellerPath);
+                }
+            }
+            catch (error) {
+                console.error(error);
+            }
+
+            next(null, sellerPath)
         },
         filename: (req, file, next) => {
             next(null, file.originalname)
@@ -18,7 +33,7 @@ const uploadImage = multer(
             fileSize: 1920 * 1080 * 1
         },
         fileFilter: (req, file, next) => {
-            console.log("imageUpload", req.body, file)
+            // console.log("imageUpload", req.body, file)
             // If file is of png, jpeg, or jpg accept the file
             if (file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg" || file.mimetype === "image/webp") {
                 next(null, true);

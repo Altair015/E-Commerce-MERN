@@ -1,8 +1,12 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { Button, Container, Form } from 'react-bootstrap';
+import { useContext, useEffect, useReducer } from "react";
+import { Button, Form } from 'react-bootstrap';
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { contextStore } from '../context';
+import { useStateReducer } from "../reducers/reducerFunctions";
+import { stringCapitalize } from "../utils/InitialData";
+
+const { Group, Label, Control, Text } = Form;
 
 function Login() {
     const store = useContext(contextStore);
@@ -11,44 +15,63 @@ function Login() {
 
     // Extracting the path and usertype from the URL
     const params = useParams();
-    const { path, usertype } = params
-
-    const [phone, setPhone] = useState(null);
-
-    // Sign Up
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-
-    // Sign In
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    // Sign In
-
-    const [confirmPassword, setConfirmPassword] = useState("");
-    // Sign Up
+    const { usertype } = params
 
     const navigate = useNavigate()
 
-    const [fieldError, setFieldError] = useState("");
+    const [fieldError, fieldErrorDispatch] = useReducer(useStateReducer, {});
 
-    const [show, setShow] = useState(true);
+    const [show, showDispatch] = useReducer(useStateReducer, true);
 
-    useEffect(
-        () => {
-            if (currentLocation.pathname === `/signup/${usertype}`) {
-                setShow(false);
+    const [userData, userDataDispatch] = useReducer(useStateReducer, {})
+    console.log(userData)
+    const { cartItems, cartDispatch } = store.cart;
 
+    async function getOrUpdateCart(userId) {
+        try {
+            let cartResponse = null;
+            if (cartItems.length > 0) {
+                const existingCart = cartItems.reduce(
+                    (newCart, { productId, quantity }) => {
+                        newCart.push(
+                            {
+                                productId,
+                                quantity
+                            }
+                        )
+                        return newCart
+                    }, []
+                )
+
+                cartResponse = await axios.put(
+                    `/api/updatingcart`,
+                    {
+                        userId,
+                        existingCart
+                    }
+                )
             }
-            if (currentLocation.pathname === `/login/${usertype}`) {
-                setShow(true)
+            else {
+                cartResponse = await axios.get(
+                    `/api/getcart/${userId}`
+                )
             }
-            localStorage.clear()
-        }, [currentLocation]
-    )
+
+            if (cartResponse.status === 201) {
+                const { existingCart } = cartResponse.data
+                console.log(existingCart)
+                cartDispatch(existingCart)
+            }
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        // sending the data to the Backend Api to login.
+        delete userData.confirmPassword
+        console.log("SIGNIN", userData, event)
 
         // Sign In
         if (event.target["6"].textContent === "Sign In") {
@@ -57,103 +80,166 @@ function Login() {
                 const loginResponse = await axios.post(
                     "/api/signin",
                     {
-                        email: email,
-                        password: password,
+                        ...userData,
                         userType: usertype
                     }
                 )
                 const { data } = loginResponse;
+
                 const responseData = Object.values(data);
 
                 if (loginResponse.status === 201) {
-                    localStorage.setItem("token", responseData[1])
-                    store.tokenStore.getToken(localStorage.getItem("token"));
-                    store.storeUserData.setUserData(responseData[2])
-                    navigate("/")
+                    if (responseData[2].isActive) {
+                        localStorage.setItem("token", responseData[1]);
+                        localStorage.setItem("userType", responseData[2].userType);
+                        store.tokenStore.getToken(localStorage.getItem("token"));
+                        store.userStore.userDispatch({ type: "LOAD_USER_DATA", payload: responseData[2] })
+                        const { userId, userType } = responseData[2];
+                        getOrUpdateCart(userId)
+                    }
+                    else {
+                        fieldErrorDispatch({ general: "Inactive Account. Contact Support." })
+                    }
                 }
             }
             catch (error) {
                 const err = { ...error.response.data }
-                setFieldError(Object.values(err)[0])
+                fieldErrorDispatch({ general: Object.values(err)[0] })
             }
         }
         // Sign Up
         else if (event.target["6"].textContent === "Sign Up") {
-
             try {
                 const loginResponse = await axios.post(
                     `/api/signup`,
                     {
-                        firstName: firstName,
-                        lastName: lastName,
-                        email: email,
-                        password: password,
+                        ...userData,
                         userType: usertype,
-                        phone: phone
                     }
                 )
                 const status = { ...loginResponse.data }
-
+                console.log(loginResponse)
                 if (loginResponse.status === 201) {
                     navigate(`/login/${usertype}`)
+                    fieldErrorDispatch({ general: Object.values(status)[0] })
                 }
                 else if (loginResponse.status === 208) {
-                    setFieldError(Object.values(status)[0])
+                    fieldError["general"] = Object.values(status)[0];
+                    fieldErrorDispatch({ general: Object.values(status)[0] })
                 }
             }
             catch (error) {
-
                 const err = { ...error.response.data }
-                setFieldError(Object.values(err)[0])
+                fieldErrorDispatch({ general: Object.values(err)[0] })
             }
         }
     }
+
+
+    function recordChange(event) {
+        const key = event.target.id
+        const value = event.target.value;
+
+        if (fieldError["general"]) {
+            delete fieldError["general"]
+        }
+
+        if (!value.trim()) {
+            delete userData[key]
+        }
+        else {
+            userData[key] = value.trim();
+        }
+
+        userDataDispatch({ ...userData })
+
+        if (!userData[key]) {
+            fieldError[key] = `${stringCapitalize(key)} field cannot be empty.`
+            fieldErrorDispatch({ ...fieldError })
+
+        }
+        else {
+            if ((userData["password"] && userData["confirmPassword"])) {
+                if ((userData["password"] !== userData["confirmPassword"])) {
+                    fieldError["password"] = "Password and Confirm Password do not match."
+                    fieldError["confirmPassword"] = "Password and Confirm Password do not match."
+                }
+                else {
+                    delete fieldError["password"]
+                    delete fieldError["confirmPassword"]
+                }
+            }
+            else {
+                delete fieldError[key]
+            }
+            fieldErrorDispatch({ ...fieldError })
+        }
+    }
+
+    function handlelinkClick() {
+        showDispatch(!show);
+        // userDataDispatch({});
+        fieldErrorDispatch({});
+    }
+
+    useEffect(
+        () => {
+            if (currentLocation.pathname === `/signup/${usertype}`) {
+                showDispatch(false);
+            }
+            if (currentLocation.pathname === `/login/${usertype}`) {
+                showDispatch(true)
+            }
+            localStorage.clear()
+        }, [currentLocation]
+    )
 
     return (
         <Form onSubmit={handleSubmit} className='w-min-sm-75 w-min-md-50 m-auto py-4 px-4 px-sm-0'>
             <h1>{show ? "Sign In" : "Sign Up"}</h1>
             <hr className="pb-3" />
             {/* First and Last Name */}
-            <Form.Group className="mb-3" hidden={show}>
-                <Form.Label className="fw-medium">First Name</Form.Label>
-                <Form.Control type="text" placeholder="Enter email" onChange={(event) => setFirstName(event.target.value)} />
-            </Form.Group>
-            <Form.Group className="mb-3" hidden={show}>
-                <Form.Label className="fw-medium">Last Name</Form.Label>
-                <Form.Control type="text" placeholder="Enter email" onChange={(event) => setLastName(event.target.value)} />
-            </Form.Group>
-            <Form.Group className="mb-3" hidden={show}>
-                <Form.Label className="fw-medium">Phone</Form.Label>
-                <Form.Control type="number" placeholder="e.g. +91 8794651232" onChange={(event) => setPhone(event.target.value)} />
-            </Form.Group>
-            <Form.Group className="mb-3" >
-                <Form.Label className="fw-medium">Email</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" onChange={(event) => setEmail(event.target.value)} />
-            </Form.Group>
-            <Form.Group className="mb-3">
-                <Form.Label className="fw-medium">Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" onChange={(event) => setPassword(event.target.value)} />
-            </Form.Group>
-            <Form.Group className="mb-3" hidden={show}>
-                <Form.Label className="fw-medium">Confirm Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" onChange={(event) => setConfirmPassword(event.target.value)} />
-            </Form.Group>
-
-            <Form.Group className="mb-2">
-                <Form.Text className="text-danger">{fieldError}</Form.Text>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-                <Form.Text>
-                    {!show && <> Already have an account? <Link to={`/login/${usertype}`} onClick={() => setShow(!show)}>SignIn</Link>. </>}
-                    {show && <>  Dont't have an account? <Link to={`/signup/${usertype}`} onClick={() => setShow(!show)}>SignUp</Link>. </>}
-                </Form.Text>
-            </Form.Group >
-
-
-            {!show && <> <Button variant="primary" type="submit">Sign Up</Button></>
-            }
-            {show && <> <Button variant="primary" type="submit">Sign In</Button></>}
+            <Group className={fieldError["firstName"] ? "mb-2" : "mb-3"} hidden={show} controlId="firstName">
+                <Label className="fw-medium">First Name</Label>
+                <Control className="rounded-1 mb-2" type="text" placeholder="Enter email" onChange={recordChange} />
+                <Text className="text-danger">{fieldError["firstName"]}</Text>
+            </Group>
+            <Group className={fieldError["lastName"] ? "mb-2" : "mb-3"} hidden={show} controlId="lastName">
+                <Label className="fw-medium">Last Name</Label>
+                <Control className="rounded-1 mb-2" type="text" placeholder="Enter email" onChange={recordChange} />
+                <Text className="text-danger">{fieldError["lastName"]}</Text>
+            </Group>
+            <Group className={fieldError["phone"] ? "mb-2" : "mb-3"} hidden={show} controlId="phone">
+                <Label className="fw-medium">Phone</Label>
+                <Control className="rounded-1 mb-2" type="number" placeholder="e.g. +91 8794651232" onChange={recordChange} />
+                <Text className="text-danger">{fieldError["phone"]}</Text>
+            </Group>
+            <Group className={fieldError["email"] ? "mb-2" : "mb-3"} controlId="email">
+                <Label className="fw-medium" >Email</Label>
+                <Control className="rounded-1 mb-2" type="email" placeholder="Enter email" onChange={recordChange} />
+                <Text className="text-danger">{fieldError["email"]}</Text>            </Group>
+            <Group className={fieldError["password"] ? "mb-2" : "mb-3"} controlId="password">
+                <Label className="fw-medium" >Password</Label>
+                <Control className="rounded-1 mb-2" type="password" placeholder="Password" onChange={recordChange} />
+                <Text className="text-danger">{fieldError["password"]}</Text>
+            </Group>
+            <Group className={fieldError["confirmPassword"] ? "mb-2" : "mb-3"} hidden={show} controlId="confirmPassword">
+                <Label className="fw-medium">Confirm Password</Label>
+                <Control className="rounded-1 mb-2" type="password" placeholder="Password" onChange={recordChange} />
+                <Text className="text-danger">{fieldError["confirmPassword"]}</Text>
+            </Group>
+            <Group className={fieldError["general"] ? "mb-2" : "mb-2"} controlId="general">
+                <Text className="text-danger">{fieldError["general"]}</Text>
+            </Group>
+            <Group className="mb-3">
+                <Text>
+                    {!show && <> Already have an account? <Link className="fw-semibold text-info text-decoration-none" to={`/login/${usertype}`} onClick={handlelinkClick}>SignIn</Link> . </>}
+                    {show && <>  Dont't have an account? <Link className="fw-semibold text-info text-decoration-none" to={`/signup/${usertype}`} onClick={handlelinkClick}>SignUp</Link> . </>}
+                </Text>
+            </Group >
+            <Button className="fw-medium rounded-1" variant="info" type="submit" disabled={(!Object.values(userData).length && Object.values(fieldError).length) ? true : false}>
+                {!show ? "Sign Up" : "Sign In"}
+            </Button>
         </Form >
     );
 }

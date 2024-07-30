@@ -8,6 +8,8 @@ import morgan from "morgan";
 import userRouter from "./routes/UserRoutes.js";
 import productRouter from "./routes/productRoutes.js";
 import cartRouter from "./routes/cartRoutes.js";
+import payPalRouter from "./routes/payPalRoutes.js";
+import orderRouter from "./routes/orderRoutes.js";
 
 export const server = express();
 
@@ -15,7 +17,10 @@ export const server = express();
 const PORT = 4000;
 
 // Setup the host name to access the Express Server from different computer rather than localhost
-const hostName = "10.0.0.1";
+// const hostName = "10.0.0.1";
+// const hostName = "192.168.0.105";
+
+const hostNames = ["10.0.0.1", "192.168.0.105"];
 
 try {
     const db = connect(SETTINGS.MONGODB_URL);
@@ -44,4 +49,16 @@ server.use('/api', productRouter);
 // Connecting the carttRoutes to Express Application
 server.use('/api', cartRouter);
 
-server.listen(PORT, hostName, () => console.log("Express Server is started."))
+// Connecting the carttRoutes to Express Application
+server.use('/api', orderRouter);
+
+// Connecting the payPalRouter to Express Application
+server.use('/api', payPalRouter);
+
+// server.listen(PORT, hostName, () => console.log("Express Server is started."))
+
+hostNames.forEach(hostname => {
+    server.listen(PORT, hostname, () => {
+        console.log(`Express Server is started on ${hostname}:${PORT}`);
+    });
+});
