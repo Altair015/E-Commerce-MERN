@@ -1,8 +1,10 @@
 import jwt from "jsonwebtoken";
+import UserModel from "../models/UserModel.js";
+import { config } from "dotenv";
 
-import SETTINGS from "../config.js"
+config()
 
-import UserModel from "../models/UserModel.js"
+const { JWT_SECRET} = process.env;
 
 function authJwt(req, res, next) {
     const token = req.headers.authorization.split(" ");
@@ -10,7 +12,7 @@ function authJwt(req, res, next) {
     if (token[0] === "JWT") {
         jwt.verify(
             token[1],
-            SETTINGS.JWT_SECRET,
+            JWT_SECRET,
             async (err, verifiedToken) => {
                 if (err) {
                     return res.status(401).json({ failure: "Invalid Token" })

@@ -3,18 +3,22 @@ import mongoose, { connect } from 'mongoose';
 import morgan from 'morgan';
 import path from 'path';
 import serverless from 'serverless-http';
-import SETTINGS from '../../config.js';
 import userRouter from '../../routes/UserRoutes.js';
 import cartRouter from '../../routes/cartRoutes.js';
 import orderRouter from '../../routes/orderRoutes.js';
 import payPalRouter from '../../routes/payPalRoutes.js';
 import productRouter from '../../routes/productRoutes.js';
+import { config } from "dotenv";
+
+config()
+
+const { ATLAS_URL } = process.env;
 
 const app = express();
 
 // Setup MongoDB connection
 try {
-    const db = connect(SETTINGS.MONGODB_URL);
+    const db = connect(ATLAS_URL);
     if (db) {
         const { connection } = mongoose;
         connection.on('connected', () => console.log('MongoDB is connected'));

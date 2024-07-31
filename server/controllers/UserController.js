@@ -1,7 +1,10 @@
-import UserModel from "../models/UserModel.js";
 import { compareSync, hash, hashSync } from "bcrypt";
+import { config } from "dotenv";
 import jwt from "jsonwebtoken";
-import SETTINGS from "../config.js";
+import UserModel from "../models/UserModel.js";
+config()
+
+const { JWT_SECRET, JWT_EXPIRY } = process.env;
 
 // Contoroller for creating new user.
 export const signUp = async (req, res) => {
@@ -69,7 +72,7 @@ export const signIn = async (req, res) => {
         if (userExist) {
             const passwordMatched = compareSync(password, userExist.password);
             if (passwordMatched) {
-                const JWT_TOKEN = jwt.sign({ id: userExist._id }, SETTINGS.JWT_SECRET, { expiresIn: SETTINGS.JWT_EXPIRY })
+                const JWT_TOKEN = jwt.sign({ id: userExist._id }, JWT_SECRET, { expiresIn: JWT_EXPIRY })
                 return res.status(201).json(
                     {
                         Success: "You have logged in successfully.",
