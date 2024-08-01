@@ -5,7 +5,7 @@ import { useContext, useEffect, useReducer } from "react";
 import { Button, Col, Container, ListGroup, ProgressBar, Row } from 'react-bootstrap';
 import MyCartProduct from "../components/MyCartProduct";
 import SETTINGS from "../config";
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
 import { showReducer, useStateReducer } from "../reducers/reducerFunctions";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
@@ -14,6 +14,7 @@ import Loading from "../components/Loading";
 
 function OrderSummary() {
     const store = useContext(contextStore);
+
     const { userData } = store.userStore;
     const { cartItems } = store.cart;
     const { shippingAddress } = store.userStore.userData;

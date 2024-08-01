@@ -3,14 +3,14 @@ import { useContext, useEffect, useReducer } from "react";
 import { Button, Container, Form, ProgressBar } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
 import { useStateReducer } from "../reducers/reducerFunctions";
 
 const { Group, Label, Control } = Form;
 const { Feedback } = Control;
 
 function Shipping() {
-    const store = useContext(contextStore)
+    const store = useContext(contextStore);
     const { userData, userDispatch } = store.userStore;
     const { userId, userType } = userData;
     const { shipName, addressLine1, addressLine2, city, state, country, pincode, shipPhone } = userData.shippingAddress;

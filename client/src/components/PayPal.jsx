@@ -2,10 +2,11 @@ import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { useContext } from 'react';
 import { useNavigate } from "react-router-dom";
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
 
 function PayPalApp({ show, cartTotal }) {
     const store = useContext(contextStore);
+
 
     const [{ isPending, isResolved, isInitial, isRejected, options }] = usePayPalScriptReducer();
 

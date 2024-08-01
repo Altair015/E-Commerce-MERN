@@ -73,7 +73,7 @@ export const signIn = async (req, res) => {
         if (userExist) {
             const passwordMatched = compareSync(password, userExist.password);
             if (passwordMatched) {
-                const JWT_TOKEN = jwt.sign({ id: userExist._id }, JWT_SECRET, { expiresIn: JWT_EXPIRY })
+                const JWT_TOKEN = jwt.sign({ id: userExist._id }, JWT_SECRET, { expiresIn: 300 })
                 return res.status(201).json(
                     {
                         Success: "You have logged in successfully.",

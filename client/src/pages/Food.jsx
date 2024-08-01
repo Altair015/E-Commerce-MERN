@@ -1,19 +1,18 @@
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useContext, useEffect, useReducer } from "react";
-import { Container, Table } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
-import MyCard from "../components/MyCard";
-import { contextStore } from "../context";
-import { productReducer } from "../reducers/productReducer";
-import ProductsComponent from "../components/Products";
-import { useStateReducer } from "../reducers/reducerFunctions";
-import Message from "../components/Message";
+import { useLocation } from "react-router-dom";
 import Loading from "../components/Loading";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import Message from "../components/Message";
+import ProductsComponent from "../components/Products";
+import { contextStore } from "../context/ContextStore";
+import { productReducer } from "../reducers/productReducer";
+import { useStateReducer } from "../reducers/reducerFunctions";
 
 
 function Products() {
     const store = useContext(contextStore);
+
     const { userId, userType } = store.userStore.userData;
     const { cartItems } = store.cart
 

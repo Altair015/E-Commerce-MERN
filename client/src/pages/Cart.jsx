@@ -1,18 +1,16 @@
+import { faCartArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { useContext } from 'react';
 import { Button, Col, Container, ProgressBar, Row } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
-import MyCard from '../components/MyCard';
-import { contextStore } from '../context';
-import SETTINGS from '../config';
-import MyCartProduct from '../components/MyCartProduct';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 import Message from '../components/Message';
+import MyCartProduct from '../components/MyCartProduct';
+import { contextStore } from "../context/ContextStore";
 
 
 function Cart() {
     const navigate = useNavigate();
     const store = useContext(contextStore);
+
 
     const { cartItems } = store.cart;
 

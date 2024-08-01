@@ -9,7 +9,7 @@ import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { useStateReducer } from "../reducers/reducerFunctions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import CSS for toastify
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
 import { stringCapitalize } from "../utils/functions";
 
 const { Group, Control, Label, Feedback, Select } = Form;

@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useReducer } from "react";
 import { Container, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
 import { useStateReducer } from "../reducers/reducerFunctions";
 import Message from "../components/Message";
 import Loading from "../components/Loading";
@@ -10,6 +10,7 @@ import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 function Users() {
     const store = useContext(contextStore);
+
     const { userId, userType } = store.userStore.userData;
     const [users, usersDispatch] = useReducer(useStateReducer, []);
     const [error, errorDispatch] = useReducer(useStateReducer, "")

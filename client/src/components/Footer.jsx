@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Accordion, Col, Container, ListGroup, Row, useAccordionButton } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { contextStore } from '../context';
+import { contextStore } from "../context/ContextStore";
 
 // Footer
 function CustomToggle({ eventKey }) {
@@ -15,6 +15,7 @@ function CustomToggle({ eventKey }) {
 
 const Footer = () => {
     const store = useContext(contextStore);
+
     const { userId, userType } = store.userStore.userData;
 
     return (

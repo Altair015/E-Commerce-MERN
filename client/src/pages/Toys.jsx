@@ -5,13 +5,14 @@ import { useLocation } from "react-router-dom";
 import Loading from "../components/Loading";
 import Message from "../components/Message";
 import ProductsComponent from "../components/Products";
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
 import { productReducer } from "../reducers/productReducer";
 import { useStateReducer } from "../reducers/reducerFunctions";
 
 
 function Products() {
     const store = useContext(contextStore);
+
     const { userId, userType } = store.userStore.userData;
     const { cartItems } = store.cart
 

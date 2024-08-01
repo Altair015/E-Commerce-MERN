@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useContext } from 'react';
 import { Button, ButtonGroup, Card, Container, Form } from 'react-bootstrap';
-import { contextStore } from '../context';
+import { contextStore } from "../context/ContextStore";
 import "./MyCard.css";
 
 import StarRating from './StarRating';
@@ -13,6 +13,7 @@ import { checkQuantity } from '../utils/functions';
 function MyProduct({ productId, image, title, description, quantity, age, price, rating, category, sellerId, reviews, productDispatch }) {
     console.log(sellerId)
     const store = useContext(contextStore);
+
 
     const { userId } = store.userStore.userData;
 

@@ -4,7 +4,7 @@ import AddProduct from "../components/AddProduct";
 import MyProduct from "../components/MyProduct";
 import UserReview from "../components/UserReview";
 import SETTINGS from "../config";
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
 import { productReducer } from "../reducers/productReducer";
 import axios from "axios";
 import { useStateReducer } from "../reducers/reducerFunctions";
@@ -14,6 +14,7 @@ import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 function Product() {
     const store = useContext(contextStore);
+
     const { cartItems } = store.cart;
     const { userId, userType } = store.userStore.userData
 

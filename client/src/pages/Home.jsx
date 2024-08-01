@@ -1,14 +1,15 @@
+import axios from "axios";
 import { useContext, useEffect, useReducer } from "react";
 import AdSeller from "../components/AdSeller.jsx";
 import Brand from "../components/Brand.jsx";
 import Crousel from "../components/Crousel.jsx";
-import { contextStore } from "../context.js";
 import { productReducer } from "../reducers/productReducer.js";
 import { useStateReducer } from "../reducers/reducerFunctions.js";
-import axios from "axios";
+import { contextStore } from "../context/ContextStore.js";
 
 function Home() {
     const store = useContext(contextStore);
+
 
     const { userId, userType } = store.userStore.userData;
 

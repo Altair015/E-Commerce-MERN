@@ -1,10 +1,11 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
 import "./SideBar.css";
 
 function SideBar({ sideShow, sideShowDispatch }) {
     const store = useContext(contextStore);
+
     const { userId, userType } = store.userStore.userData;
 
     let visibilityClass = "side-bar-container";

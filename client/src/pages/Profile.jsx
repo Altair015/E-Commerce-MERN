@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useContext, useEffect, useReducer } from 'react';
 import { Button, Container, Form } from "react-bootstrap";
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
 
 import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
@@ -12,7 +12,7 @@ import Message from "../components/Message";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 function Profile() {
-    const store = useContext(contextStore)
+    const store = useContext(contextStore);
     const { userData, userDispatch } = store.userStore;
     const { userType } = userData;
 

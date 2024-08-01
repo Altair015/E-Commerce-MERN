@@ -12,7 +12,7 @@ import NavigationLinks from './NavigationLinks';
 
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
 import { useStateReducer } from "../reducers/reducerFunctions";
 
 const { Brand, Toggle } = Navbar;
@@ -20,6 +20,7 @@ const { Divider } = NavDropdown;
 
 function MyNavBar({ handleToken, search, searchDispatch, sideShow, sideShowDispatch }) {
     const store = useContext(contextStore);
+
 
     const dropdownItemClass = "dropdown-item d-block text-decoration-none fw-normal text-dark py-1 px-3";
 

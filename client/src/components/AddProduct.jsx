@@ -6,7 +6,7 @@ import { Button, Col, Container, Form, Image, Row } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SETTINGS from "../config";
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
 import { useStateReducer } from "../reducers/reducerFunctions";
 
 function AddProduct({ productId, image, title, description, quantity,

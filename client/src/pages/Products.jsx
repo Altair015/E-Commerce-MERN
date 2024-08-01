@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useReducer } from "react";
 import { useLocation } from "react-router-dom";
 import ProductsComponent from "../components/Products";
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
 import { productReducer } from "../reducers/productReducer";
 import { useStateReducer } from "../reducers/reducerFunctions";
 import { Container } from "react-bootstrap";
@@ -13,6 +13,7 @@ import Message from "../components/Message";
 
 function Products() {
     const store = useContext(contextStore);
+
     const { userId, userType } = store.userStore.userData;
 
     const getLocation = useLocation();

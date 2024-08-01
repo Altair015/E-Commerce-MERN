@@ -7,10 +7,11 @@ import Message from "../components/Message";
 import { faCircleExclamation, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Loading from "../components/Loading";
 import ProductsComponent from "../components/Products";
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
 
 function Search() {
     const store = useContext(contextStore);
+
     const { userId, userType } = store.userStore.userData;
     const { Label, Select, Group } = Form;
     let [search, searchDispatch] = useOutletContext();

@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
 import { useContext } from "react";
 
 function AdSeller() {
     const store = useContext(contextStore);
+
     const { userType } = store.userStore.userData;
     return (
         <>

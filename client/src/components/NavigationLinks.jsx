@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { contextStore } from '../context';
+import { contextStore } from "../context/ContextStore";
 import { adminOptions, productsOptions, sellerOptions, signInOptions, signUpOptions } from '../utils/InitialData';
 import AccordionDropdown from './AccordionDropdown';
 
@@ -10,6 +10,7 @@ import AccordionDropdown from './AccordionDropdown';
 
 function NavigationLinks({ handleLogout, componentId, bg, className, dropdownItemClass }) {
     const store = useContext(contextStore);
+
     const { userId, userType } = store.userStore.userData;
 
     return (

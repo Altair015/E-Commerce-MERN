@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Button, ButtonGroup, Card, Form } from 'react-bootstrap';
-import { contextStore } from '../context';
+import { contextStore } from "../context/ContextStore";
 import "./MyCard.css";
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
@@ -13,6 +13,7 @@ import { checkQuantity } from '../utils/functions';
 function MyCard({ productId, image, title, description, quantity, age, price, rating, category, reviews, sellerId }) {
 
     const store = useContext(contextStore);
+
 
     const { Img, Body, Title, Text } = Card;
 

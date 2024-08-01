@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useReducer } from "react";
 import { Button, Form } from 'react-bootstrap';
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { contextStore } from '../context';
+import { contextStore } from "../context/ContextStore";
 import { useStateReducer } from "../reducers/reducerFunctions";
 import { stringCapitalize } from "../utils/functions";
 
@@ -10,6 +10,7 @@ const { Group, Label, Control, Text } = Form;
 
 function Login() {
     const store = useContext(contextStore);
+
 
     const currentLocation = useLocation();
 

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useContext } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
-import { contextStore } from '../context';
+import { contextStore } from "../context/ContextStore";
 import "./MyCard.css";
 
 import { faCircleMinus, faCirclePlus, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -13,6 +13,7 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
     cartProductQuantity = quantity;
 
     const store = useContext(contextStore);
+
 
     const { userId } = store.userStore.userData;
 
