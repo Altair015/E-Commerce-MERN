@@ -1,9 +1,9 @@
 import { Router } from "express";
-// import { placeOrder, capturedOrder } from "../controllers/PayPalController.js";
+import { getPayPalId } from "../controllers/PayPalController.js";
+import authJwt from "../middlewares/authJwt.js"
 
 const payPalRouter = Router();
 
-// payPalRouter.post("/orders", placeOrder)
-// payPalRouter.post("/orders/:orderID/capture", capturedOrder)
+payPalRouter.get("/getpaypalid", authJwt, getPayPalId)
 
 export default payPalRouter;

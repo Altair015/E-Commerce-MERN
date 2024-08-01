@@ -1,4 +1,9 @@
-import "dotenv/config";
+import { config } from "dotenv";
 
-const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_BASE_URI } = process.env;
+config()
 
+const { PAYPAL_CLIENT_ID } = process.env;
+
+export function getPayPalId(req, res) {
+    return res.status(201).json({ payPalClientId: PAYPAL_CLIENT_ID })
+}

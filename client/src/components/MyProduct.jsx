@@ -8,7 +8,7 @@ import StarRating from './StarRating';
 import SETTINGS from '../config';
 import { faMinus, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { checkQuantity } from '../utils/cardQuantity';
+import { checkQuantity } from '../utils/functions';
 
 function MyProduct({ productId, image, title, description, quantity, age, price, rating, category, sellerId, reviews, productDispatch }) {
     console.log(sellerId)

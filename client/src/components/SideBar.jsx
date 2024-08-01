@@ -5,7 +5,7 @@ import "./SideBar.css";
 
 function SideBar({ sideShow, sideShowDispatch }) {
     const store = useContext(contextStore);
-    const { userId } = store.userStore.userData;
+    const { userId, userType } = store.userStore.userData;
 
     let visibilityClass = "side-bar-container";
     const commmonClass = "text-decoration-none text-info fw-medium";
@@ -23,12 +23,35 @@ function SideBar({ sideShow, sideShowDispatch }) {
             </div>
             <div className={`${textDisplay} d-sm-flex flex-column px-2`}>
                 <h5 className={`${commmonClass} cursor-none fs-5 px-1 pt-1 text-light`}>Categories</h5>
-                <Link to="/products" className={`${commmonClass} px-2`}>All Products</Link>
-                <Link to="/food" className={`${commmonClass} px-3 py-1`}>Food</Link>
-                <Link to="/litter" className={`${commmonClass} px-3`}>Litter</Link>
-                <Link to="/toys" className={`${commmonClass} px-3 py-1`}>Toys</Link>
-                <Link to="/accessories" className={`${commmonClass} px-3`}>Accessories</Link>
+
+                {
+                    (userType === "admin")
+                        ?
+                        <>
+                            <Link to="/product" className={`${commmonClass} px-2`}>Add Product</Link>
+                            <Link to="/products" className={`${commmonClass} px-2 py-1`}>Manage Products</Link>
+                            <Link to="/orders" className={`${commmonClass} px-2`}>Manage Orders</Link>
+                            <Link to="/users" className={`${commmonClass} px-2`}>Manage Users</Link>
+                        </>
+                        :
+                        (userType === "seller")
+                            ?
+                            <>
+                                <Link to="/product" className={`${commmonClass} px-2`}>Add Product</Link>
+                                <Link to="/products" className={`${commmonClass} px-2 py-1`}>Manage Products</Link>
+                            </>
+                            :
+                            <>
+                                <Link to="/products" className={`${commmonClass} px-2`}>All Products</Link>
+                                <Link to="/food" className={`${commmonClass} px-3 py-1`}>Food</Link>
+                                <Link to="/litter" className={`${commmonClass} px-3`}>Litter</Link>
+                                <Link to="/toys" className={`${commmonClass} px-3 py-1`}>Toys</Link>
+                                <Link to="/accessories" className={`${commmonClass} px-3`}>Accessories</Link>
+                            </>
+                }
+
             </div>
+
             {userId
                 ?
                 ""
@@ -48,6 +71,7 @@ function SideBar({ sideShow, sideShowDispatch }) {
                     </div>
                 </>
             }
+
             <div className={`${textDisplay} d-sm-flex flex-column px-2`}>
                 <Link to="/contact" className={`${commmonClass} fs-5 px-1 pt-1 text-light`}>Contact Us</Link>
             </div>

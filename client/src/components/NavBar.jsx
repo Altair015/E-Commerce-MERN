@@ -4,7 +4,7 @@ import { faBars, faSearch, faShoppingCart } from "@fortawesome/free-solid-svg-ic
 // Font-awesome Component
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { useContext, useEffect, useReducer } from "react";
+import { useContext, useReducer } from "react";
 
 // Navigation Components from React Bootstrap
 import { Button, Form, Navbar, NavDropdown, Offcanvas } from 'react-bootstrap';
@@ -23,11 +23,9 @@ function MyNavBar({ handleToken, search, searchDispatch, sideShow, sideShowDispa
 
     const dropdownItemClass = "dropdown-item d-block text-decoration-none fw-normal text-dark py-1 px-3";
 
-    const token = localStorage.getItem("token")
-
     const { userId, userType, firstName } = store.userStore.userData;
 
-    const [searchValue, searchValueDispatch] = useReducer(useStateReducer, "");
+    const [searchValueDispatch] = useReducer(useStateReducer, "");
 
     const navigate = useNavigate();
 

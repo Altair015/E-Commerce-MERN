@@ -6,7 +6,7 @@
 }
 
 .side-bar-expanded {
-    width: 15%;
+    width: 180px;
     transition-property: width;
     transition-duration: 300ms;
     transition-timing-function: ease;
@@ -24,16 +24,4 @@
     transition-property: transform;
     transition-duration: 300ms;
     transition-timing-function: ease;
-}
-
-@media screen and (min-width: 576px) and (max-width:768px) {
-    .side-bar-expanded {
-        width: 26% !important;
-    }
-}
-
-@media screen and (min-width: 768px) and (max-width:1024px) {
-    .side-bar-expanded {
-        width: 25% !important;
-    }
 }

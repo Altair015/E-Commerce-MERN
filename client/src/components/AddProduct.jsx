@@ -1,13 +1,13 @@
+import { faCloudUpload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useContext, useReducer } from "react";
-import { Alert, Button, Col, Container, Form, Image, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Image, Row } from "react-bootstrap";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import SETTINGS from "../config";
 import { contextStore } from "../context";
 import { useStateReducer } from "../reducers/reducerFunctions";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCloud, faCloudArrowUp, faCloudUpload, faUpload } from "@fortawesome/free-solid-svg-icons";
-import { Icons, toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 function AddProduct({ productId, image, title, description, quantity,
     age, price, category, sellerId, sellerEmail, productDispatch }) {
@@ -22,27 +22,6 @@ function AddProduct({ productId, image, title, description, quantity,
     }
     else if (userType === "seller" || userType === "admin") {
         sellerId = userId;
-    }
-
-    const [alert, altertDispatch] = useReducer(useStateReducer,
-        {
-            variant: "",
-            message: "",
-            display: true
-        }
-    )
-
-    function alertValue(variant = "", message = "", display = true) {
-        altertDispatch(
-            {
-                variant: variant,
-                message: message,
-                display: display
-            }
-        )
-        setTimeout(() => {
-            altertDispatch(alert)
-        }, 4000);
     }
 
     function handleSubmit(event) {
@@ -240,9 +219,6 @@ function AddProduct({ productId, image, title, description, quantity,
                     </Row>
                 </Container>
             </Form >
-            <Alert variant={alert.variant} className="m-3 fw-semibold" hidden={alert.display}>
-                {alert.message}
-            </Alert>
         </>
     )
 }

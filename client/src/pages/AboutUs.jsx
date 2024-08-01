@@ -10,9 +10,9 @@ function AboutUs() {
             <hr className="pb-2" />
             {
                 aboutData.map(
-                    ({ cardTitle, cardText }) => {
+                    ({ cardTitle, cardText }, index) => {
                         return (
-                            <Row className="mb-4">
+                            <Row key={index} className="mb-4">
                                 <Col>
                                     <Card>
                                         <Card.Body>

@@ -25,10 +25,6 @@ function Shipping() {
 
     console.log(feedBack)
 
-    function navigateTo(endPoint = "/placeorder", userType = "user") {
-        navigate(endPoint)
-    }
-
     function recordChange(event) {
         const key = event.target.id;
         const value = event.target.value;
@@ -63,8 +59,6 @@ function Shipping() {
         event.preventDefault()
         console.log(event.target)
 
-        let navigate = true;
-
         const dataToBeUpdated = { userId, shippingAddress: { ...newShipData } }
         console.log(dataToBeUpdated, Object.keys(dataToBeUpdated.shippingAddress).length)
 
@@ -85,7 +79,6 @@ function Shipping() {
                         position: "bottom-center"
                     });
                     userDispatch({ type: "UPDATE_USER_DATA", payload: Object.values(response.data)[1] })
-                    // navigate to next screen
                 }
                 else if (response.status === 208) {
                     toast.info(Object.values(response.data)[0], {
@@ -93,7 +86,7 @@ function Shipping() {
                     });
                 }
                 setTimeout(() => {
-                    navigateTo("/pay")
+                    navigate("/pay")
                 }, 2000);
             }
             catch (error) {

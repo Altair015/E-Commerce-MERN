@@ -13,11 +13,9 @@ import productRouter from "./routes/productRoutes.js";
 
 config()
 
-const { ATLAS_URL, PORT } = process.env;
+const { ATLAS_URL, PORT, HOST_NAMES } = process.env;
 
-export const server = express();
-
-const hostNames = ["10.0.0.1", "192.168.0.105"];
+const server = express();
 
 try {
     const db = connect(ATLAS_URL);
@@ -54,7 +52,7 @@ server.use('/api', payPalRouter);
 
 // server.listen(PORT, hostName, () => console.log("Express Server is started."))
 
-hostNames.forEach(hostname => {
+HOST_NAMES.split(",").forEach(hostname => {
     server.listen(PORT, hostname, () => {
         console.log(`Express Server is started on ${hostname}:${PORT}`);
     });

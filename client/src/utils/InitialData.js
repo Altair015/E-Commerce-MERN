@@ -1,16 +1,3 @@
-export const navigationLinks = [
-    { id: 1, name: "Home", url: "/" },
-    { id: 2, name: "Shop", url: "/shop" },
-    { id: 3, name: "About Us", url: "/about" },
-    { id: 4, name: "Blog", url: "/blog" },
-    { id: 5, name: "Contact", url: "/contact" },
-    { id: 6, name: "FAQ", url: "/faq" },
-    { id: 7, name: "Cat Care", url: "/cat-care" },
-    { id: 8, name: "Specials", url: "/specials" },
-    { id: 9, name: "Reviews", url: "/reviews" },
-    { id: 10, name: "Account", url: "/account" }
-];
-
 export const aboutData = [
     {
         cardTitle: "Purrstore: Where Feline Dreams Come True",
@@ -120,12 +107,13 @@ export const adminOptions = [
     }
 ]
 
-export function stringCapitalize(stRing1) {
-    let parts = stRing1.split(/(?=[A-Z0-9])/);
-    parts[0] = titleCase(parts[0])
-    return parts.join(' ');
-}
-
-export function titleCase(string) {
-    return string.slice(0, 1).toUpperCase() + string.slice(1)
-}
+export const sellerOptions = [
+    {
+        title: "Add Product",
+        to: "/product"
+    },
+    {
+        title: "Manage Products",
+        to: "/products"
+    }
+]

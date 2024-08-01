@@ -6,7 +6,6 @@ import UserReview from "../components/UserReview";
 import SETTINGS from "../config";
 import { contextStore } from "../context";
 import { productReducer } from "../reducers/productReducer";
-import { checkQuantity } from "../utils/cardQuantity";
 import axios from "axios";
 import { useStateReducer } from "../reducers/reducerFunctions";
 import Loading from "../components/Loading";

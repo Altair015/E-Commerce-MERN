@@ -4,13 +4,13 @@ import { Button, Col, Container, Form, Row, Table } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import Loading from "../components/Loading";
 import { orderReducer } from "../reducers/orderReducer";
-import { stringCapitalize } from "../utils/InitialData";
 import Message from "../components/Message";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { useStateReducer } from "../reducers/reducerFunctions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import CSS for toastify
 import { contextStore } from "../context";
+import { stringCapitalize } from "../utils/functions";
 
 const { Group, Control, Label, Feedback, Select } = Form;
 

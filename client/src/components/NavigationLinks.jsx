@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { contextStore } from '../context';
-import { adminOptions, productsOptions, signInOptions, signUpOptions } from '../utils/InitialData';
+import { adminOptions, productsOptions, sellerOptions, signInOptions, signUpOptions } from '../utils/InitialData';
 import AccordionDropdown from './AccordionDropdown';
 
 // const { Link } = Nav;
@@ -20,11 +20,11 @@ function NavigationLinks({ handleLogout, componentId, bg, className, dropdownIte
                     ?
                     <AccordionDropdown options={adminOptions} heading="Categories" />
                     :
-                    (userType !== "seller")
+                    (userType === "seller")
                         ?
-                        <AccordionDropdown options={productsOptions} heading="Categories" />
+                        <AccordionDropdown options={sellerOptions} heading="Categories" />
                         :
-                        ""
+                        <AccordionDropdown options={productsOptions} heading="Categories" />
             }
             {userId
                 ?

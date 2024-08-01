@@ -16,7 +16,7 @@ function OrderHistory() {
     const { userId, userType } = store.userStore.userData;
 
     const [orders, orderDispatch] = useReducer(orderReducer, []);
-
+    console.log(orders)
     const [error, errorDispatch] = useReducer(useStateReducer, "")
 
     async function getOrders(userId, userType) {
@@ -36,9 +36,9 @@ function OrderHistory() {
                     if (orderResponse.data.ordersFound.length) {
                         orderDispatch({ type: "LOAD_ORDERS", payload: orderResponse.data.ordersFound })
                     }
-                }
-                else {
-                    errorDispatch("No orders found.")
+                    else {
+                        errorDispatch("No orders found.")
+                    }
                 }
             }
         }

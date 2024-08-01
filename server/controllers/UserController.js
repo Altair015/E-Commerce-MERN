@@ -5,7 +5,6 @@ import UserModel from "../models/UserModel.js";
 config()
 
 const { JWT_SECRET, JWT_EXPIRY } = process.env;
-
 // Contoroller for creating new user.
 export const signUp = async (req, res) => {
     const { firstName, lastName, phone, email, password, userType } = req.body;
@@ -56,6 +55,8 @@ export const signUp = async (req, res) => {
 // Controller for loggin in of user and return auto token.
 export const signIn = async (req, res) => {
     const { email, password, userType } = req.body;
+    console.log(req.body)
+    console.log(JWT_SECRET, JWT_EXPIRY)
 
     if (!email || !password) {
         return res.status(401).json({ Entries: "Email or Password field cannot be empty." })
@@ -90,6 +91,7 @@ export const signIn = async (req, res) => {
         }
     }
     catch (error) {
+        console.log(error)
         return res.status(500).send({ message: "Internal Server Error." })
     }
 }

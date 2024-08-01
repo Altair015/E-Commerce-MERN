@@ -72,7 +72,6 @@ function Order() {
 
     return (
         <>
-            {/* {order || error ? showAlert() : ""} */}
             {
                 order.products
                     ?

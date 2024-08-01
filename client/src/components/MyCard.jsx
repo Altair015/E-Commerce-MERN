@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus, faMinus, faPlus, faStar, faTrash } from '@fortawesome/free-solid-svg-icons';
 import StarRating from './StarRating';
 import SETTINGS from '../config';
-import { checkQuantity } from '../utils/cardQuantity';
+import { checkQuantity } from '../utils/functions';
 
 function MyCard({ productId, image, title, description, quantity, age, price, rating, category, reviews, sellerId }) {
 

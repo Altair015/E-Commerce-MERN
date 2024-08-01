@@ -4,7 +4,7 @@ import { Button, Form } from 'react-bootstrap';
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { contextStore } from '../context';
 import { useStateReducer } from "../reducers/reducerFunctions";
-import { stringCapitalize } from "../utils/InitialData";
+import { stringCapitalize } from "../utils/functions";
 
 const { Group, Label, Control, Text } = Form;
 
