@@ -25,7 +25,6 @@ function OrderHistory() {
                     headers: { 'Authorization': `JWT ${token}` }
                 }
             )
-            console.log(orderResponse)
             if (orderResponse.status === 201) {
                 if (userType === "user") {
                     if (orderResponse.data.userId) {
@@ -43,7 +42,6 @@ function OrderHistory() {
             }
         }
         catch (error) {
-            console.log(error)
             if (Object.values(error.response.data)[0]) {
                 errorDispatch(Object.values(error.response.data)[0])
             }

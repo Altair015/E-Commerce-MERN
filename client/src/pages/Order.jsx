@@ -29,7 +29,6 @@ function Order() {
                     headers: { 'Authorization': `JWT ${token}` }
                 }
             )
-            console.log(51, orderResponse)
             if (orderResponse.status === 201) {
                 if (Object.values(orderResponse.data).length) {
                     orderDispatch({ type: "UPDATE_ORDER", payload: orderResponse.data });
@@ -40,7 +39,6 @@ function Order() {
             }
         }
         catch (error) {
-            console.log(error)
             if (Object.values(error.response.data)[0].length) {
                 errorDispatch(Object.values(error.response.data)[0])
             }
@@ -57,7 +55,6 @@ function Order() {
     if (order.shippingAddress) {
         const { shippingAddress } = order;
         for (let item of Object.keys(shippingAddress)) {
-            console.log(item, shippingAddress[item])
             if (!address) {
                 address += shippingAddress[item]
             }

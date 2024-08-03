@@ -47,7 +47,6 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
                     cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
                 }
             } catch (error) {
-                console.log(error)
                 if (Object.values(error.response.data)[0].length) {
                     errorDispatch(Object.values(error.response.data)[0])
                 }
@@ -71,13 +70,11 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
                     }
                 }
             )
-            console.log(response)
             if (response.status === 201) {
                 const { updatedCart, productQuantity } = response.data;
                 cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
             }
         } catch (error) {
-            console.log(error)
             if (Object.values(error.response.data)[0].length) {
                 errorDispatch(Object.values(error.response.data)[0])
             }
@@ -101,13 +98,12 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
                     }
                 }
             )
-            console.log(response)
             if (response.status === 201) {
                 const { updatedCart, productQuantity } = response.data;
                 cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
             }
-        } catch (error) {
-            console.log(error)
+        }
+        catch (error) {
             if (Object.values(error.response.data)[0].length) {
                 errorDispatch(Object.values(error.response.data)[0])
             }
@@ -168,6 +164,23 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
         }
     }
 
+    const removeProductFromLocalCart = async () => {
+        const findProductInCart = cartItems.find(
+            (cartProduct) => {
+                return cartProduct.productId === productId
+            }
+        )
+
+        if (findProductInCart && cartProductQuantity) {
+            cartDispatch(
+                {
+                    type: "REMOVE_PRODUCT_FROM_CART",
+                    payload: { productId, productQuantity: productQuantity + cartProductQuantity }
+                }
+            )
+        }
+    }
+
     function handleCardClick(event) {
         navigate(`/product/${productId}`)
     }
@@ -191,7 +204,7 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
                 <p className='m-0'>₹ {price}</p>
             </Col>
             <Col className={`d-flex align-items-center justify-content-center p-0 ${displayActions}`}>
-                <FontAwesomeIcon icon={faTrash} size='lg' onClick={userId ? removeProductFromServerCart : removerFromLocalCart} />
+                <FontAwesomeIcon icon={faTrash} size='lg' onClick={userId ? removeProductFromServerCart : removeProductFromLocalCart} />
             </Col>
         </Row >
     );

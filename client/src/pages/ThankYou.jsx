@@ -11,7 +11,6 @@ function ThankYou() {
 
     const { userId } = store.userStore.userData
     const { orderId } = useParams();
-    console.log(orderId)
 
     const failure = "Your Order Could Not be placed. Please try again later or contact support."
     const success = "You have Successfully placed the order."

@@ -17,7 +17,6 @@ function AddProduct({ productId, image, title, description, quantity,
     const { userId, userType } = store.userStore.userData;
     const { token } = store.tokenStore;
     const [uploadImage, uploadImageDispatch] = useReducer(useStateReducer, { preview: "", data: "" });
-    console.log(uploadImage)
 
     if (sellerId) {
         sellerId = sellerId._id;

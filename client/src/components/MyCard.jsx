@@ -14,10 +14,9 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
 
     const store = useContext(contextStore);
 
-    const { Img, Body, Title, Text } = Card;
+    const { Img, Body, Text } = Card;
 
-    const { token, getToken } = store.tokenStore;
-    console.log(token)
+    const { token } = store.tokenStore;
 
     const { cartItems, cartDispatch } = store.cart;
 
@@ -50,13 +49,11 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
                         headers: { 'Authorization': `JWT ${token}` }
                     }
                 );
-                console.log(response)
                 if (response.status === 201) {
                     const { newCart } = response.data
                     cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: newCart })
                 }
             } catch (error) {
-                console.log(error)
                 if (Object.values(error.response.data)[0].length) {
                     errorDispatch(Object.values(error.response.data)[0])
                 }
@@ -83,7 +80,6 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
                     cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
                 }
             } catch (error) {
-                console.log(error)
                 if (Object.values(error.response.data)[0].length) {
                     errorDispatch(Object.values(error.response.data)[0])
                 }
@@ -111,7 +107,6 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
                 cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
             }
         } catch (error) {
-            console.log(error)
             if (Object.values(error.response.data)[0].length) {
                 errorDispatch(Object.values(error.response.data)[0])
             }

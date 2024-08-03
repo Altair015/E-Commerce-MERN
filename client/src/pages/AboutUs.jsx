@@ -3,7 +3,6 @@ import { Container, Row, Col, Card } from 'react-bootstrap';
 import { aboutData } from '../utils/InitialData';
 
 function AboutUs() {
-
     return (
         <Container className="py-3">
             <h1>About Us</h1>

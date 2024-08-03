@@ -3,7 +3,6 @@ import MyCard from "./MyCard";
 import { Link } from "react-router-dom";
 
 function ProductsComponent({ products, category, userType, errorDispatch }) {
-    console.log("CATEGORY", category)
     return (
         <>
             {

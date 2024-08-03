@@ -23,7 +23,6 @@ function Product() {
     async function getProduct() {
         try {
             const response = await axios.get(`/api/getproduct/${productId}`);
-            console.log(25, response)
             if (response.status === 201) {
                 if (Object.values(response.data).length) {
                     productDispatch({ type: "LOAD_PRODUCT", payload: response.data })

@@ -11,7 +11,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { checkQuantity } from '../utils/functions';
 
 function MyProduct({ productId, image, title, description, quantity, age, price, rating, category, sellerId, reviews, productDispatch, errorDispatch }) {
-    console.log(sellerId)
     const store = useContext(contextStore);
     const { token, getToken } = store.tokenStore;
 
@@ -51,8 +50,8 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
                     cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: newCart })
                     productDispatch({ type: "UPDATE_PRODUCT_QUANTITY", payload: { productId, productQuantity } })
                 }
-            } catch (error) {
-                console.log(error)
+            }
+            catch (error) {
                 if (Object.values(error.response.data)[0].length) {
                     errorDispatch(Object.values(error.response.data)[0])
                 }
@@ -80,8 +79,8 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
                     cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
                     productDispatch({ type: "UPDATE_PRODUCT_QUANTITY", payload: { productId, productQuantity } })
                 }
-            } catch (error) {
-                console.log(error)
+            }
+            catch (error) {
                 if (Object.values(error.response.data)[0].length) {
                     errorDispatch(Object.values(error.response.data)[0])
                 }
@@ -109,8 +108,8 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
                 cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
                 productDispatch({ type: "UPDATE_PRODUCT_QUANTITY", payload: { productId, productQuantity } })
             }
-        } catch (error) {
-            console.log(error)
+        }
+        catch (error) {
             if (Object.values(error.response.data)[0].length) {
                 errorDispatch(Object.values(error.response.data)[0])
             }

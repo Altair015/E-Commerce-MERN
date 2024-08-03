@@ -27,21 +27,15 @@ function Shipping() {
     function recordChange(event) {
         const key = event.target.id;
         const value = event.target.value;
-        console.log(key, value)
         const temp = {};
         temp[key] = value
 
         if (temp[key] != userData.shippingAddress[key]) {
-            console.log("ship", temp[key], userData.shippingAddress[key])
             newShipDataDispatch({ ...newShipData, ...temp })
         }
-
-        console.log(key, value, userData.shippingAddress[key], newShipData[key])
         if (userData.shippingAddress[key] == value) {
-            console.log(newShipData)
             delete newShipData[key]
             newShipDataDispatch({ ...newShipData })
-            console.log(newShipData)
         }
 
         delete feedBack[key];
@@ -114,7 +108,6 @@ function Shipping() {
             for (const key of Object.keys(userData.shippingAddress)) {
                 if (!userData.shippingAddress[key]) {
                     feedBack[key] = "Field Cannot be empty";
-                    console.log(key, feedBack)
                     feedBackDispatch({ ...feedBack })
                 }
             }

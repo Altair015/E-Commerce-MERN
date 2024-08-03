@@ -13,13 +13,12 @@ import productRouter from "./routes/productRoutes.js";
 
 config()
 
-const { MONGODB_URL, PORT, HOST_NAMES } = process.env;
-console.log(MONGODB_URL, PORT, HOST_NAMES)
+const { ATLAS_URL, PORT, HOST_NAMES } = process.env;
 
 const server = express();
 
 try {
-    const db = connect(MONGODB_URL);
+    const db = connect(ATLAS_URL);
     if (db) {
         const { connection } = mongoose;
         connection.on('connected', () => console.log('MongoDB is connected'));

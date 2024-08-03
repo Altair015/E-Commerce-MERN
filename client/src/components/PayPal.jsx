@@ -18,7 +18,6 @@ function PayPalApp({ show, cartTotal, error, errorDispatch }) {
     const { cartItems, cartDispatch } = store.cart;
 
     async function getOrders() {
-        console.log(userId)
         try {
             const orderResponse = await axios.get(
                 `/api/getorders/${userId}/${userType}`,
@@ -26,13 +25,11 @@ function PayPalApp({ show, cartTotal, error, errorDispatch }) {
                     headers: { 'Authorization': `JWT ${token}` }
                 }
             )
-            console.log(orderResponse)
             if (orderResponse.status === 201) {
                 return orderResponse.data.orders.length
             }
         }
         catch (error) {
-            console.log(error)
             if (Object.values(error.response.data)[0]) {
                 errorDispatch(Object.values(error.response.data)[0])
             }
@@ -43,10 +40,7 @@ function PayPalApp({ show, cartTotal, error, errorDispatch }) {
     }
 
     const onCreateOrder = (data, actions) => {
-        console.log("onCreateOrder")
-
         getOrders()
-        console.log("onCreateOrder", error)
         if (!error) {
             return actions.order.create({
                 purchase_units: [
@@ -65,16 +59,13 @@ function PayPalApp({ show, cartTotal, error, errorDispatch }) {
 
 
     const onApproveOrder = async (data, actions) => {
-        console.log("onApprove")
         try {
             const details = await actions.order.capture();
 
             let response = null;
             if (details.status === "COMPLETED") {
                 const ordersLength = await getOrders();
-                console.log(typeof (ordersLength))
                 if (!ordersLength || ordersLength === 0) {
-                    console.log("IF")
                     response = await axios.post(
                         "/api/createorder",
                         {
@@ -93,7 +84,6 @@ function PayPalApp({ show, cartTotal, error, errorDispatch }) {
                     )
                 }
                 else if (ordersLength > 0) {
-                    console.log("ELSE")
                     response = await axios.put(
                         "/api/insertorder",
                         {
@@ -111,14 +101,9 @@ function PayPalApp({ show, cartTotal, error, errorDispatch }) {
                         }
                     )
                 }
-                else {
-                    console.log("EDGE CASE")
-                }
-                console.log(response)
             }
             if (response.status === 201) {
                 const { userId, orders } = Object.values(response.data)[1]
-                console.log(63, userId, orders);
                 cartDispatch({ type: "EMPTY_CART" })
 
                 // extracting the order id from response and sending it to the next

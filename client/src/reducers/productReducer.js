@@ -1,5 +1,4 @@
 export function productReducer(state, action) {
-    console.log(state, action)
     const { type, payload } = action
 
     if (type === "LOAD_PRODUCTS") {
@@ -28,10 +27,8 @@ export function productReducer(state, action) {
             }
         }
         else {
-            console.log("ELSE", state.productId, productId)
             if (state.productId === productId) {
                 state.quantity = productQuantity;
-                console.log("UPDATEDSTATE", { ...state })
                 return { ...state }
             }
         }

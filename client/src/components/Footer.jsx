@@ -5,7 +5,6 @@ import { contextStore } from "../context/ContextStore";
 
 // Footer
 function CustomToggle({ eventKey }) {
-    console.log(eventKey)
     const decoratedOnClick = useAccordionButton(eventKey, () =>
         console.log('totally custom!'),
     );

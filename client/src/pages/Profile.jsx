@@ -17,7 +17,6 @@ function Profile() {
     const { token, getToken } = store.tokenStore;
 
     const [localUserData, localUserDataDispatch] = useReducer(useStateReducer, null);
-    console.log("RERENDERED")
     const [newUserData, newUserDataDispatch] = useReducer(useStateReducer, {});
     const [newShipData, newShipDataDispatch] = useReducer(useStateReducer, {});
 
@@ -36,7 +35,6 @@ function Profile() {
                     headers: { 'Authorization': `JWT ${token}` }
                 }
             )
-            console.log(loginResponse)
             if (loginResponse.status === 201) {
                 if (Object.values(loginResponse.data.userFound).length) {
                     localUserDataDispatch(Object.values(loginResponse.data)[0])
@@ -58,7 +56,6 @@ function Profile() {
 
     useEffect(
         () => {
-            console.log("USEREFFECT")
             if (params.userId && userType === 'admin') {
                 getUser(userId)
             }
@@ -74,7 +71,6 @@ function Profile() {
 
 
     if (error) {
-        console.log(error)
         return <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
     }
     if (localUserData) {
@@ -84,11 +80,9 @@ function Profile() {
         function recordChange(event, ship = false) {
             const key = event.target.id;
             const value = event.target.value;
-            console.log(key, value)
             const temp = {};
             temp[key] = value
             if (ship && temp[key] != shippingAddress[key]) {
-                console.log("ship", temp[key], shippingAddress[key])
                 newShipDataDispatch({ ...newShipData, ...temp })
             }
             else {

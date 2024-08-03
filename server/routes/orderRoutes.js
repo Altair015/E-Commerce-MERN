@@ -3,8 +3,6 @@ import { createOrder, getOrder, getOrders, insertOrder, updateOrder } from "../c
 import { Router } from "express";
 import authJwt from "../middlewares/authJwt.js";
 
-
-
 const orderRouter = Router();
 
 orderRouter.post("/createorder", authJwt, createOrder);

@@ -24,12 +24,10 @@ function Home() {
     const [products, productsDispatch] = useReducer(productReducer, []);
     const [error, errorDispatch] = useReducer(useStateReducer, "");
 
-    console.log(products, error)
 
     async function getProducts() {
         try {
             const response = await axios.get(`/api/getitems/${userType}/${userId}/null`);
-            console.log(response)
             if (response.status === 201) {
                 if (response.data.products.length) {
                     productsDispatch({ type: "LOAD_PRODUCTS", payload: response.data.products })
@@ -51,7 +49,6 @@ function Home() {
 
     useEffect(
         () => {
-            console.log("USEFFCT")
             if (!products.length) {
                 getProducts();
             }

@@ -210,7 +210,6 @@ export async function deleteCart(req, res) {
         let cartDeleted = null;
 
         if (removeQuantity) {
-            console.log("IF")
             // If the length of the cart is greater than 1 and one product has to be removed.
             if (cartFound[0].products.length > 1) {
                 cartUpdated = await CartModel.updateOne(

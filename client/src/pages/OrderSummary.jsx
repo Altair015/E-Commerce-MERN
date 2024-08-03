@@ -50,7 +50,6 @@ function OrderSummary() {
     }
 
     async function loadClientId() {
-        console.log(token)
         try {
             const response = await axios.get(
                 "/api/getpaypalid",
@@ -58,7 +57,6 @@ function OrderSummary() {
                     headers: { 'Authorization': `JWT ${token}` }
                 }
             )
-            console.log(response)
             if (response.status === 201) {
                 // showDispatch({ type: "SET_SHOW", payload: false })
                 initialOptionsDispatch({ ...initialOptions, "client-id": response.data.payPalClientId })

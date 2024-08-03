@@ -6,7 +6,6 @@ import { useEffect } from "react";
 const { Item } = Carousel;
 
 function Crousel({ products, increment, carouselClass, handleSelect, index, errorDispatch }) {
-    console.log(errorDispatch)
     let result = [];
 
     for (let i = 0; i < 12; i += increment) {

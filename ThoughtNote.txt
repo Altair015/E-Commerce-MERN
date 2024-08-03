@@ -29,11 +29,27 @@ Created the route /sampleusers to seed the sample users.
 --remove the middleware authJwt from the userRoutes for the router /sampleusers.
 Created three more user Controllers updateUser, getUsers and getUser with their respective routes /updateprofile, /getusers and /getuser to
 update the user details, getting all the users and getting the specific user respectively.
-Test these routes using postman.
-
+Tested these routes using postman.
 Created the ProductModel in ProductModel.js file in the models directory using mongoose.
-Created the createProduct controller in the controller ProductController.js to create the product.
-
+Created the createProduct controller in the controller ProductController.js to create the product using multer.
+Created the middleware imageUpload to handle the image upload to the server while creating the product.
+Tested the the addition of the product in the Database using the route /createitem from frontend.
+Created the controller getProducts to return all the products for the users except the seller who can see the products created by him.
+Created the getProduct product to return a specific product for editting by admin/seller and viewing by the users.
+Created the controller updateProduct to update the existing product.
+Created the addProductRating controller to add the rating by the logged in users.
+Created the sampleProducts controller to add the sample products on this router /sampleproducts. (NOTE:Utilise the sample data from utilities directory)
+Created the createCart controller to create a Cart in the server.
+Created the getCart controller to return the existing cart for the user.
+Created the updateCart controller to updated the products in the cart specific to the user.
+Created the deleteCart controller to reduce product Quantity, remove product from the cart or the remove the cart itself if there is no product in the cart.
+Created the updatingCart controller to update the Cart on the Backend with Cart in the FrontEnd created when the user is not logged in.
+Created the getPayPalId controller in the PayPal controller to return the PayPal id.
+Created the createOrder controller in the OrderController to create an order.
+Created the insertOrder controller to add an order if the user has existing orders.
+Created the getOrders controller to return all the specific orders for user and all the orders for Admin to manage them.
+Created the getOrder controller to return a specific order for user to view.
+Created the updateOrder contorller to update the details in the existing order.
 
 FrontEnd:
 Created the react app using the VITE.
@@ -59,6 +75,7 @@ Created the Home component in the pages directory using the Brand component.
 Added a route for the "Layout" component using "Routes" and "Route" component of react-router-dom in App.jsx.
 Wrapped the <App/> component using <BrowserRouter/> component of react-router-dom in main.jsx.
 Tested if the image is loading on the this react server url i.e., 192.*.*
+Created the <AccordianDropDown/> in the components directory which is used to display option in the sidebar for the smaller screens in the <NavigationLinks/> component.
 Create the context directory in the "src" directory containing files ContextStore.js in which the react context is created using "createContext" of "react".
 Created a provider component <ContextProvider/> in the context directory in which the provider compnent of the react Context is returned.
 Three reducers are also created in the <ContextProvider/> component to handle the date for the token, logged in user Data and logged in user Cart.
@@ -74,10 +91,35 @@ Added the routes /product and product/:productId in the App.jsx file.
 Tested the creation and updation functionalities for the product.
 Created the <MyProduct/> component in the components directory in the "src" directory which displays a single product fetched from backend based on the productId.
 This component is added in the component <Product/> of the pages directory.
-
+Created the <StartRating/> component to display the ratings by the user.
+Created the <UserReview/> component in the components directory to submit the review by the logged in users.
 Created the <MyCard/> component in the components directory.
+Created the <Crousel/> component in the components directory to display the Carouse on the <Home/> compnent.
 Created the <Products/> component in the pages directory.
 Created a function getProducts() to get the products from backend and load in the state variable "products". The products are passed as a prop to another component <ProductsComponents/> in the components in which the <MyCard/> component is mapped to all the elements of the products.
-
-
-Added a route /products in the App.jsx file.
+The <Products/> component displays different UI's for standard and seller and admin users respectively.
+Implemented the local Cart functionality to store the products in the context Cart if the user has not logged in.
+Created a component <MyCartProduct/> which will be displayed on the <Cart/> component of the pages directory.
+Added a route /cart in the App.jsx to navigate to the <Cart/> component.
+Implemented the functionality to increase, decrease and remove product from the local and server cart.
+Created the function "checkQuantity" function in the functions.js file in the utils directory to check if the productId exist in the cart.
+Implemented the function getOrUpdateCart in the <Login/> component to return the updated cart after performing the actions on the non-login cart and logged in cart.
+Created the <Profile/> component to update the user's profile. This compnent is accessible by the user to update their own profile as well the Admin can update any user's profile on this page.
+Added the route /profile in the <App/> component.
+Created the <Toys/>, <Accessories/>, <Food/> and <Litter/> components in the pages directory and their respective routes /toys, /accessory, /food and /litter to display specific category products.
+Created a <Shipping/> component in the directory pages to update the shipping address while placing the order.
+Added the route /ship in the <App/> component. 
+Created the <PayPal/> component in the components directory to handle the payment and order placement on the <Payment/> page.
+Created the <Payment/> component in the pages directory to select the payment option while placing the order.
+Added the route /pay in the <App/> component. 
+Created the compnent <OrderSummary/> in the pages directory to display the products in the cart, the shipping Address, the payment method and the PayPal buttons to complete the payment.
+The page will display the Order Summary if the client ID is fetched from the backedn else an error is displayed.
+Added a route /summary in the <App/> component.
+Created a <ThankYou/> component in the pages directory which will be displayed on the route /pay for successfull or unsuccesfull order.
+Created an <Order/> component to fetch the specific order on /order.
+Created an <OrderHistory/> component in the pages directory to display all the orders for admin user and orders related to single user.
+Created the <AboutUs/> and <ContactUs/> component in the pages directory.
+Created the <Search/> component to display the search results and the filters.
+Created the <Users/> component in the pages directory to manage the users by admin.
+Created the <UpdateOrder/> component in the pages directory to manage the order by Admin user.
+Created the <Loading/> and <Message/> components in the components directory to implement loading and error/message handling.

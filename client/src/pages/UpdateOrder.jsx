@@ -32,7 +32,6 @@ function UpdateOrder() {
                     }
                 }
             )
-            console.log(51, Object.values(orderResponse.data)[0].length)
             if (orderResponse.status === 201) {
                 if (Object.values(orderResponse.data)[0].length) {
                     orderDispatch({ type: "UPDATE_ORDER", payload: orderResponse.data });
@@ -43,7 +42,6 @@ function UpdateOrder() {
             }
         }
         catch (error) {
-            console.log(error)
             if (Object.values(error.response.data)[0].length) {
                 errorDispatch(Object.values(error.response.data)[0])
             }
@@ -73,14 +71,11 @@ function UpdateOrder() {
         const { shippingAddress, products, payment, amount, shippingStatus } = order;
 
         function recordChange(e, keyName, objectName, filter) {
-            // console.log(e, keyName, objectName, filter)
-
             const key = e.target.id;
             const value = e.target.value;
             const comparisionObject = order[keyName];
             const objectType = typeof (comparisionObject);
             const arrayType = Array.isArray(comparisionObject);
-            // console.log(objectType, arrayType)
             if (!order[keyName]) {
                 if (arrayType === false && objectType === "object") {
                     order[keyName] = {}
@@ -102,10 +97,8 @@ function UpdateOrder() {
                     orderDispatch({ type: "UPDATE_ORDER", payload: order });
                 }
             }
-            console.log(order["shippingStatus"], order["payment"]["paymentStatus"])
             if (order["shippingStatus"] === "Cancelled" || order["shippingStatus"] === "Returned") {
                 order["payment"]["paymentStatus"] = "Refund Inititiated";
-                console.log(order["shippingStatus"], order["payment"]["paymentStatus"])
                 orderDispatch({ type: "UPDATE_ORDER", payload: order });
             }
         }
@@ -193,10 +186,8 @@ function UpdateOrder() {
         }
 
         function iteratObject(keyName, objectName, filter) {
-            // console.log(objectName, comparisionObject)
             let tempComp = [];
             for (let objectKey in objectName) {
-                // console.log(key)
                 const value = objectName[objectKey];
                 tempComp.push(
                     <ShippingComp objectKey={objectKey} value={value} keyName={keyName} objectName={objectName} filter={filter} />

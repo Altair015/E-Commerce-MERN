@@ -173,22 +173,6 @@ export const updateProduct = async (req, res) => {
     }
 }
 
-// Controller function to delete specific product
-export async function deleteProduct(req, res) {
-    const { user } = req.body;
-
-    try {
-        const productDeleted = await ProductModel.findOneAndDelete({ _id: req.params.id, sellerId: user });
-        if (productDeleted) {
-            return res.status(201).send({ "msg": "Product Deleted Successfully." });
-        }
-        return res.status(400).send("Something went wrong.");
-    }
-    catch (error) {
-        return res.status(500).send({ message: error.message })
-    }
-}
-
 // Controller to add rating to a product.
 export async function addProductRating(req, res) {
     const { productId, review } = req.body;

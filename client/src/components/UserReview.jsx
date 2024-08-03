@@ -104,7 +104,6 @@ function UserReview({ reviews, productId, productDispatch, errorDispatch }) {
                             {
                                 reviews.map(
                                     (review, index) => {
-                                        console.log(review.ratedBy._id, userId)
                                         return (
                                             <Container fluid className="p-0 pb-1" key={index}>
                                                 {userId && review.ratedBy._id === userId

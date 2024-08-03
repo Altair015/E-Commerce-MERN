@@ -27,7 +27,6 @@ function Users() {
                     headers: { 'Authorization': `JWT ${token}` }
                 }
             )
-            console.log(response)
             if (response.status === 201) {
                 if (Object.values(response.data)[0].length) {
                     usersDispatch(Object.values(response.data)[0])

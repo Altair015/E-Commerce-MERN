@@ -14,10 +14,8 @@ function Products() {
     const store = useContext(contextStore);
 
     const { userId, userType } = store.userStore.userData;
-    const { cartItems } = store.cart
 
     const getLocation = useLocation();
-    console.log(getLocation.pathname)
 
     const [products, productsDispatch] = useReducer(productReducer, []);
     const [error, errorDispatch] = useReducer(useStateReducer, "");
@@ -25,7 +23,6 @@ function Products() {
     async function getProducts() {
         try {
             const response = await axios.get(`/api/getitems/${userType}/${userId}/null`);
-            console.log(response)
             if (response.status === 201) {
                 if (response.data.products.length) {
                     productsDispatch({ type: "LOAD_PRODUCTS", payload: response.data.products })
@@ -36,7 +33,6 @@ function Products() {
             }
         }
         catch (error) {
-            console.log(error)
             if (Object.values(error.response.data)[0].length) {
                 errorDispatch(Object.values(error.response.data)[0])
             }
@@ -48,7 +44,6 @@ function Products() {
 
     useEffect(
         () => {
-            console.log("USEFFCT")
             if (!products.length) {
                 getProducts();
             }

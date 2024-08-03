@@ -26,12 +26,10 @@ function Login() {
     const [show, showDispatch] = useReducer(useStateReducer, true);
 
     const [userData, userDataDispatch] = useReducer(useStateReducer, {})
-    console.log(userData)
     const { cartItems, cartDispatch } = store.cart;
 
     // Function to get the updated cart from the server.
     async function getOrUpdateCart(userId, responseToken) {
-        console.log(responseToken)
         try {
             let cartResponse = null;
             if (cartItems.length > 0) {
@@ -69,7 +67,6 @@ function Login() {
 
             if (cartResponse.status === 201) {
                 const { existingCart } = cartResponse.data
-                console.log(existingCart)
                 cartDispatch(existingCart)
             }
         }
@@ -82,7 +79,6 @@ function Login() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         delete userData.confirmPassword
-        console.log("SIGNIN", userData, event)
 
         // Sign In
         if (event.target["6"].textContent === "Sign In") {
@@ -109,7 +105,7 @@ function Login() {
                         getToken(localStorage.getItem("token"));
 
                         store.userStore.userDispatch({ type: "LOAD_USER_DATA", payload: responseData[2] })
-                        const { userId, userType } = responseData[2];
+                        const { userId } = responseData[2];
                         getOrUpdateCart(userId, responseToken)
                     }
                     else {
@@ -133,7 +129,6 @@ function Login() {
                     }
                 )
                 const status = { ...loginResponse.data }
-                console.log(loginResponse)
                 if (loginResponse.status === 201) {
                     navigate(`/login/${usertype}`)
                     errorDispatch({ general: Object.values(status)[0] })
@@ -192,7 +187,6 @@ function Login() {
 
     function handlelinkClick() {
         showDispatch(!show);
-        // userDataDispatch({});
         errorDispatch({});
     }
 

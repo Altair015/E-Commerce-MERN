@@ -19,7 +19,6 @@ function Search() {
     const [error, errorDispatch] = useReducer(useStateReducer, "");
 
     let searchComp = [];
-    console.log(searchComp)
     const filterValues = Object.values(filter)
     const filterLength = filterValues.length
 
@@ -119,7 +118,6 @@ function Search() {
                     }
                 }
                 else {
-                    console.log("ELSEFILTER2")
                     if (filter.filter2 === "price" || filter.filter2 === "rating") {
                         searchComp = search.sort((a, b) => a[filter.filter2] - b[filter.filter2])
                     }
@@ -129,7 +127,6 @@ function Search() {
                 }
             }
             else {
-                console.log("ELSEFILTER3")
                 if (searchComp.length) {
                     search = searchComp
                 }
@@ -148,7 +145,6 @@ function Search() {
         }
     }
     else {
-        console.log("ELSE")
         searchComp = search
     }
 

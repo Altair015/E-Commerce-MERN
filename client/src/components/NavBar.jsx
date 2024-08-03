@@ -19,9 +19,7 @@ const { Brand, Toggle } = Navbar;
 const { Divider } = NavDropdown;
 
 function MyNavBar({ handleToken, search, searchDispatch, sideShow, sideShowDispatch }) {
-    console.log("NAVGBAS")
     const store = useContext(contextStore);
-    console.log("STORE", store)
 
     const dropdownItemClass = "dropdown-item d-block text-decoration-none fw-normal text-dark py-1 px-3";
 
@@ -42,13 +40,11 @@ function MyNavBar({ handleToken, search, searchDispatch, sideShow, sideShowDispa
 
     function handleSubmit(event) {
         event.preventDefault();
-        console.log("searchSubmit")
         const searchValue = event.target[0].value.trim().toLowerCase();
 
         async function getProducts() {
             try {
                 const response = await axios.get(`/api/getitems/${userType}/${userId}/${searchValue}`);
-                console.log(response)
                 if (response.status === 201) {
                     searchDispatch({ type: "SEARCHED_PRODUCTS", payload: response.data.products });
                     navigate("search")
