@@ -11,7 +11,7 @@ export function userReducer(state, action) {
     }
 
     else if (type === "CLEAR_DATA") {
-        return payload
+        return {}
     }
 
     return state;

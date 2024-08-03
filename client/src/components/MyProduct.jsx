@@ -10,14 +10,14 @@ import { faMinus, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { checkQuantity } from '../utils/functions';
 
-function MyProduct({ productId, image, title, description, quantity, age, price, rating, category, sellerId, reviews, productDispatch }) {
+function MyProduct({ productId, image, title, description, quantity, age, price, rating, category, sellerId, reviews, productDispatch, errorDispatch }) {
     console.log(sellerId)
     const store = useContext(contextStore);
-
+    const { token, getToken } = store.tokenStore;
 
     const { userId } = store.userStore.userData;
 
-    const { Img, Header, Body, Footer, Title, Text } = Card;
+    const { Img, Header, Body, Text } = Card;
 
     const { cartItems, cartDispatch } = store.cart;
 
@@ -41,17 +41,24 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
                     {
                         userId,
                         productId
+                    },
+                    {
+                        headers: { 'Authorization': `JWT ${token}` }
                     }
                 )
                 if (response.status === 201) {
                     const { newCart, productQuantity } = response.data
-                    console.log(response.data)
-                    console.log(newCart, productQuantity)
-                    cartDispatch(newCart)
+                    cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: newCart })
                     productDispatch({ type: "UPDATE_PRODUCT_QUANTITY", payload: { productId, productQuantity } })
                 }
             } catch (error) {
                 console.log(error)
+                if (Object.values(error.response.data)[0].length) {
+                    errorDispatch(Object.values(error.response.data)[0])
+                }
+                else {
+                    errorDispatch(error.response.statusText)
+                }
             }
         }
 
@@ -63,17 +70,24 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
                     {
                         userId,
                         productId
+                    },
+                    {
+                        headers: { 'Authorization': `JWT ${token}` }
                     }
                 )
                 if (response.status === 201) {
                     const { updatedCart, productQuantity } = response.data
-                    console.log(49, response.data)
-                    console.log(50, updatedCart, productQuantity)
-                    cartDispatch(updatedCart)
+                    cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
                     productDispatch({ type: "UPDATE_PRODUCT_QUANTITY", payload: { productId, productQuantity } })
                 }
             } catch (error) {
                 console.log(error)
+                if (Object.values(error.response.data)[0].length) {
+                    errorDispatch(Object.values(error.response.data)[0])
+                }
+                else {
+                    errorDispatch(error.response.statusText)
+                }
             }
         }
     }
@@ -83,6 +97,7 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
             const response = await axios.delete(
                 "/api/deletecart",
                 {
+                    headers: { 'Authorization': `JWT ${token}` },
                     data: {
                         userId,
                         productId
@@ -91,13 +106,17 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
             )
             if (response.status === 201) {
                 const { updatedCart, productQuantity } = response.data;
-                console.log(response.data);
-                console.log(updatedCart, productQuantity);
-                cartDispatch(updatedCart);
+                cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
                 productDispatch({ type: "UPDATE_PRODUCT_QUANTITY", payload: { productId, productQuantity } })
             }
         } catch (error) {
             console.log(error)
+            if (Object.values(error.response.data)[0].length) {
+                errorDispatch(Object.values(error.response.data)[0])
+            }
+            else {
+                errorDispatch(error.response.statusText)
+            }
         }
     }
 

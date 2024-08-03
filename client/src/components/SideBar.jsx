@@ -62,13 +62,13 @@ function SideBar({ sideShow, sideShowDispatch }) {
                         <h5 className={`${commmonClass} cursor-none fs-5 px-1 pt-1 text-light`}>Sign In</h5>
                         <Link to="/login/user" className={`${commmonClass} px-3`}>User</Link>
                         <Link to="/login/seller" className={`${commmonClass} px-3 py-1`}>Seller</Link>
-                        <Link to="/login/Admin" className={`${commmonClass} px-3`}>Admin</Link>
+                        <Link to="/login/admin" className={`${commmonClass} px-3`}>Admin</Link>
                     </div>
                     <div className={`${textDisplay} d-sm-flex flex-column px-2`}>
                         <h5 className={`${commmonClass} cursor-none fs-5 px-1 pt-1 text-light`}>Sign Up</h5>
                         <Link to="/signup/user" className={`${commmonClass} px-3`}>User</Link>
                         <Link to="/signup/seller" className={`${commmonClass} px-3 py-1`}>Seller</Link>
-                        <Link to="/signup/Admin" className={`${commmonClass} px-3`}>Admin</Link>
+                        <Link to="/signup/admin" className={`${commmonClass} px-3`}>Admin</Link>
                     </div>
                 </>
             }

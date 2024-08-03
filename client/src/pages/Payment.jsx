@@ -1,7 +1,7 @@
 import { Button, Container, Form, ProgressBar } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const { Group, Label, Control, Check } = Form;
+const { Check } = Form;
 
 function Payment() {
     const navigate = useNavigate()

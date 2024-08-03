@@ -10,18 +10,27 @@ import { contextStore } from "../context/ContextStore";
 import { useStateReducer } from "../reducers/reducerFunctions";
 
 function AddProduct({ productId, image, title, description, quantity,
-    age, price, category, sellerId, sellerEmail, productDispatch }) {
+    age, price, category, sellerId, sellerEmail, productDispatch, errorDispatch }) {
     const store = useContext(contextStore);
     const { Label, Select, Group, Control } = Form;
     const { BASE_URL } = SETTINGS;
     const { userId, userType } = store.userStore.userData;
+    const { token } = store.tokenStore;
     const [uploadImage, uploadImageDispatch] = useReducer(useStateReducer, { preview: "", data: "" });
+    console.log(uploadImage)
 
     if (sellerId) {
         sellerId = sellerId._id;
     }
     else if (userType === "seller" || userType === "admin") {
         sellerId = userId;
+    }
+
+    // Function generating the preview for image uploaded and setting it to be sent.
+    const handleImageUpload = (event) => {
+        uploadImage.preview = URL.createObjectURL(event.target.files[0]);
+        uploadImage.data = event.target.files[0];
+        uploadImageDispatch({ ...uploadImage });
     }
 
     function handleSubmit(event) {
@@ -34,6 +43,7 @@ function AddProduct({ productId, image, title, description, quantity,
         if (operation === "Create Product") {
             formData.append("file", uploadImage.data)
 
+            // inserting the data in the formData which will be sent.
             for (let i = 1; i < event.target.length - 1; i++) {
                 if (event.target[i].value) {
                     const key = event.target[i].id
@@ -47,11 +57,15 @@ function AddProduct({ productId, image, title, description, quantity,
                 }
             }
 
+            // Trying to create a new product
             async function createProduct() {
                 try {
                     const response = await axios.post(
                         "/api/createitem",
                         formData,
+                        {
+                            headers: { 'Authorization': `JWT ${token}` }
+                        }
                     )
                     if (response.status === 201) {
                         toast.success("Product Created Successfully.", { position: "bottom-center" });
@@ -62,14 +76,23 @@ function AddProduct({ productId, image, title, description, quantity,
                     }
                 }
                 catch (error) {
-                    if (error.response.statusText) {
-                        toast.error(error.response.statusText, { position: "bottom-center" });
+                    if (Object.values(error.response.data)[0].length) {
+                        if (Object.values(error.response.data)[0] === "Invalid Token") {
+                            errorDispatch(Object.values(error.response.data)[0]);
+                        }
+                        else {
+                            toast.error(Object.values(error.response.data)[0], { position: "bottom-center" });
+                        }
+                    }
+                    else {
+                        errorDispatch(error.response.statusText)
                     }
                 }
             }
 
             createProduct()
         }
+        // Updating the existing product
         else if (operation === "Update Product") {
             formData.append("productId", productId);
 
@@ -77,11 +100,11 @@ function AddProduct({ productId, image, title, description, quantity,
                 productId, sellerId, image, title, age, description,
                 price, category, quantity: quantity
             }
-
-            if (uploadImage.data && image !== uploadImage.data.name) {
+            if (uploadImage.data.name && image !== uploadImage.data.name) {
                 formData.append("file", uploadImage.data)
             }
 
+            // inserting the data in the formData which will be sent.
             for (let i = 1; i < event.target.length - 1; i++) {
                 if (event.target[i].value) {
                     const key = event.target[i].id
@@ -99,11 +122,15 @@ function AddProduct({ productId, image, title, description, quantity,
                 }
             }
 
+            // Trying to update the existing product.
             async function updateProduct() {
                 try {
                     const response = await axios.put(
                         "/api/updateitem",
                         formData,
+                        {
+                            headers: { 'Authorization': `JWT ${token}` }
+                        }
                     )
                     if (response.status === 201) {
                         const message = Object.values(response.data)[0]
@@ -116,19 +143,21 @@ function AddProduct({ productId, image, title, description, quantity,
                     }
                 }
                 catch (error) {
-                    if (error.response.statusText) {
-                        toast.error(error.response.statusText, { position: "bottom-center" });
+                    if (Object.values(error.response.data)[0].length) {
+                        if (Object.values(error.response.data)[0] === "Invalid Token") {
+                            errorDispatch(Object.values(error.response.data)[0]);
+                        }
+                        else {
+                            toast.error(Object.values(error.response.data)[0], { position: "bottom-center" });
+                        }
+                    }
+                    else {
+                        errorDispatch(error.response.statusText)
                     }
                 }
             }
             updateProduct()
         }
-    }
-
-    const handleImageUpload = (event) => {
-        uploadImage.preview = URL.createObjectURL(event.target.files[0]);
-        uploadImage.data = event.target.files[0];
-        uploadImageDispatch({ ...uploadImage });
     }
 
     return (

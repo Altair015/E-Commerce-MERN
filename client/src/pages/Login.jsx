@@ -11,6 +11,7 @@ const { Group, Label, Control, Text } = Form;
 function Login() {
     const store = useContext(contextStore);
 
+    const { token, getToken } = store.tokenStore;
 
     const currentLocation = useLocation();
 
@@ -20,7 +21,7 @@ function Login() {
 
     const navigate = useNavigate()
 
-    const [fieldError, fieldErrorDispatch] = useReducer(useStateReducer, {});
+    const [error, errorDispatch] = useReducer(useStateReducer, {});
 
     const [show, showDispatch] = useReducer(useStateReducer, true);
 
@@ -28,7 +29,9 @@ function Login() {
     console.log(userData)
     const { cartItems, cartDispatch } = store.cart;
 
-    async function getOrUpdateCart(userId) {
+    // Function to get the updated cart from the server.
+    async function getOrUpdateCart(userId, responseToken) {
+        console.log(responseToken)
         try {
             let cartResponse = null;
             if (cartItems.length > 0) {
@@ -49,12 +52,18 @@ function Login() {
                     {
                         userId,
                         existingCart
+                    },
+                    {
+                        headers: { 'Authorization': `JWT ${responseToken}` }
                     }
                 )
             }
             else {
                 cartResponse = await axios.get(
-                    `/api/getcart/${userId}`
+                    `/api/getcart/${userId}`,
+                    {
+                        headers: { 'Authorization': `JWT ${responseToken}` }
+                    }
                 )
             }
 
@@ -65,10 +74,11 @@ function Login() {
             }
         }
         catch (error) {
-            console.log(error)
+            errorDispatch({ general: "Inactive Account. Contact Support." })
         }
     }
 
+    // Sign In or Sign Up
     const handleSubmit = async (event) => {
         event.preventDefault();
         delete userData.confirmPassword
@@ -91,21 +101,25 @@ function Login() {
 
                 if (loginResponse.status === 201) {
                     if (responseData[2].isActive) {
-                        localStorage.setItem("token", responseData[1]);
-                        localStorage.setItem("userType", responseData[2].userType);
-                        store.tokenStore.getToken(localStorage.getItem("token"));
+                        // setting the token in the localstorage
+                        const responseToken = responseData[1];
+                        localStorage.setItem("token", responseToken);
+
+                        // setting the token in the context
+                        getToken(localStorage.getItem("token"));
+
                         store.userStore.userDispatch({ type: "LOAD_USER_DATA", payload: responseData[2] })
                         const { userId, userType } = responseData[2];
-                        getOrUpdateCart(userId)
+                        getOrUpdateCart(userId, responseToken)
                     }
                     else {
-                        fieldErrorDispatch({ general: "Inactive Account. Contact Support." })
+                        errorDispatch({ general: "Inactive Account. Contact Support." })
                     }
                 }
             }
             catch (error) {
                 const err = { ...error.response.data }
-                fieldErrorDispatch({ general: Object.values(err)[0] })
+                errorDispatch({ general: Object.values(err)[0] })
             }
         }
         // Sign Up
@@ -122,27 +136,26 @@ function Login() {
                 console.log(loginResponse)
                 if (loginResponse.status === 201) {
                     navigate(`/login/${usertype}`)
-                    fieldErrorDispatch({ general: Object.values(status)[0] })
+                    errorDispatch({ general: Object.values(status)[0] })
                 }
                 else if (loginResponse.status === 208) {
-                    fieldError["general"] = Object.values(status)[0];
-                    fieldErrorDispatch({ general: Object.values(status)[0] })
+                    error["general"] = Object.values(status)[0];
+                    errorDispatch({ general: Object.values(status)[0] })
                 }
             }
             catch (error) {
                 const err = { ...error.response.data }
-                fieldErrorDispatch({ general: Object.values(err)[0] })
+                errorDispatch({ general: Object.values(err)[0] })
             }
         }
     }
-
 
     function recordChange(event) {
         const key = event.target.id
         const value = event.target.value;
 
-        if (fieldError["general"]) {
-            delete fieldError["general"]
+        if (error["general"]) {
+            delete error["general"]
         }
 
         if (!value.trim()) {
@@ -155,32 +168,32 @@ function Login() {
         userDataDispatch({ ...userData })
 
         if (!userData[key]) {
-            fieldError[key] = `${stringCapitalize(key)} field cannot be empty.`
-            fieldErrorDispatch({ ...fieldError })
+            error[key] = `${stringCapitalize(key)} field cannot be empty.`
+            errorDispatch({ ...error })
 
         }
         else {
             if ((userData["password"] && userData["confirmPassword"])) {
                 if ((userData["password"] !== userData["confirmPassword"])) {
-                    fieldError["password"] = "Password and Confirm Password do not match."
-                    fieldError["confirmPassword"] = "Password and Confirm Password do not match."
+                    error["password"] = "Password and Confirm Password do not match."
+                    error["confirmPassword"] = "Password and Confirm Password do not match."
                 }
                 else {
-                    delete fieldError["password"]
-                    delete fieldError["confirmPassword"]
+                    delete error["password"]
+                    delete error["confirmPassword"]
                 }
             }
             else {
-                delete fieldError[key]
+                delete error[key]
             }
-            fieldErrorDispatch({ ...fieldError })
+            errorDispatch({ ...error })
         }
     }
 
     function handlelinkClick() {
         showDispatch(!show);
         // userDataDispatch({});
-        fieldErrorDispatch({});
+        errorDispatch({});
     }
 
     useEffect(
@@ -200,37 +213,37 @@ function Login() {
             <h1>{show ? "Sign In" : "Sign Up"}</h1>
             <hr className="pb-3" />
             {/* First and Last Name */}
-            <Group className={fieldError["firstName"] ? "mb-2" : "mb-3"} hidden={show} controlId="firstName">
+            <Group className={error["firstName"] ? "mb-2" : "mb-3"} hidden={show} controlId="firstName">
                 <Label className="fw-medium">First Name</Label>
                 <Control className="rounded-1 mb-2" type="text" placeholder="Enter email" onChange={recordChange} />
-                <Text className="text-danger">{fieldError["firstName"]}</Text>
+                <Text className="text-danger">{error["firstName"]}</Text>
             </Group>
-            <Group className={fieldError["lastName"] ? "mb-2" : "mb-3"} hidden={show} controlId="lastName">
+            <Group className={error["lastName"] ? "mb-2" : "mb-3"} hidden={show} controlId="lastName">
                 <Label className="fw-medium">Last Name</Label>
                 <Control className="rounded-1 mb-2" type="text" placeholder="Enter email" onChange={recordChange} />
-                <Text className="text-danger">{fieldError["lastName"]}</Text>
+                <Text className="text-danger">{error["lastName"]}</Text>
             </Group>
-            <Group className={fieldError["phone"] ? "mb-2" : "mb-3"} hidden={show} controlId="phone">
+            <Group className={error["phone"] ? "mb-2" : "mb-3"} hidden={show} controlId="phone">
                 <Label className="fw-medium">Phone</Label>
                 <Control className="rounded-1 mb-2" type="number" placeholder="e.g. +91 8794651232" onChange={recordChange} />
-                <Text className="text-danger">{fieldError["phone"]}</Text>
+                <Text className="text-danger">{error["phone"]}</Text>
             </Group>
-            <Group className={fieldError["email"] ? "mb-2" : "mb-3"} controlId="email">
+            <Group className={error["email"] ? "mb-2" : "mb-3"} controlId="email">
                 <Label className="fw-medium" >Email</Label>
                 <Control className="rounded-1 mb-2" type="email" placeholder="Enter email" onChange={recordChange} />
-                <Text className="text-danger">{fieldError["email"]}</Text>            </Group>
-            <Group className={fieldError["password"] ? "mb-2" : "mb-3"} controlId="password">
+                <Text className="text-danger">{error["email"]}</Text>            </Group>
+            <Group className={error["password"] ? "mb-2" : "mb-3"} controlId="password">
                 <Label className="fw-medium" >Password</Label>
                 <Control className="rounded-1 mb-2" type="password" placeholder="Password" onChange={recordChange} />
-                <Text className="text-danger">{fieldError["password"]}</Text>
+                <Text className="text-danger">{error["password"]}</Text>
             </Group>
-            <Group className={fieldError["confirmPassword"] ? "mb-2" : "mb-3"} hidden={show} controlId="confirmPassword">
+            <Group className={error["confirmPassword"] ? "mb-2" : "mb-3"} hidden={show} controlId="confirmPassword">
                 <Label className="fw-medium">Confirm Password</Label>
                 <Control className="rounded-1 mb-2" type="password" placeholder="Password" onChange={recordChange} />
-                <Text className="text-danger">{fieldError["confirmPassword"]}</Text>
+                <Text className="text-danger">{error["confirmPassword"]}</Text>
             </Group>
-            <Group className={fieldError["general"] ? "mb-2" : "mb-2"} controlId="general">
-                <Text className="text-danger">{fieldError["general"]}</Text>
+            <Group className={error["general"] ? "mb-2" : "mb-2"} controlId="general">
+                <Text className="text-danger">{error["general"]}</Text>
             </Group>
             <Group className="mb-3">
                 <Text>
@@ -238,7 +251,7 @@ function Login() {
                     {show && <>  Dont't have an account? <Link className="fw-semibold text-info text-decoration-none" to={`/signup/${usertype}`} onClick={handlelinkClick}>SignUp</Link> . </>}
                 </Text>
             </Group >
-            <Button className="fw-medium rounded-1" variant="info" type="submit" disabled={(!Object.values(userData).length && Object.values(fieldError).length) ? true : false}>
+            <Button className="fw-medium rounded-1" variant="info" type="submit" disabled={(!Object.values(userData).length && Object.values(error).length) ? true : false}>
                 {!show ? "Sign Up" : "Sign In"}
             </Button>
         </Form >

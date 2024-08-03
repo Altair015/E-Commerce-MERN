@@ -32,7 +32,7 @@ import Users from './pages/Users';
 function App() {
   const store = useContext(contextStore);
   const { token } = store.tokenStore;
-  const userType = localStorage.getItem("userType");
+  const { userType } = store.userStore.userData;
 
   return (
     <Routes>

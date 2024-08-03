@@ -15,16 +15,22 @@ import { stringCapitalize } from "../utils/functions";
 const { Group, Control, Label, Feedback, Select } = Form;
 
 function UpdateOrder() {
+    const store = useContext(contextStore);
+    const [order, orderDispatch] = useReducer(orderReducer, {});
+    const [error, errorDispatch] = useReducer(useStateReducer, "");
     const { userId, orderId } = useParams();
 
-    const [order, orderDispatch] = useReducer(orderReducer, {});
-
-    const [error, errorDispatch] = useReducer(useStateReducer, "")
+    const { token } = store.tokenStore;
 
     async function getOrder() {
         try {
             const orderResponse = await axios.get(
-                `/api/getorder/${userId}/${orderId}`
+                `/api/getorder/${userId}/${orderId}`,
+                {
+                    headers: {
+                        'Authorization': `JWT ${token}`
+                    }
+                }
             )
             console.log(51, Object.values(orderResponse.data)[0].length)
             if (orderResponse.status === 201) {
@@ -38,8 +44,8 @@ function UpdateOrder() {
         }
         catch (error) {
             console.log(error)
-            if (error.response.status === 404) {
-                errorDispatch("Order not found.")
+            if (Object.values(error.response.data)[0].length) {
+                errorDispatch(Object.values(error.response.data)[0])
             }
             else {
                 errorDispatch(error.response.statusText)
@@ -52,9 +58,12 @@ function UpdateOrder() {
             getOrder()
         }, []
     )
-    console.log(order)
-    if (order.products) {
-        console.log(order)
+
+    if (error) {
+        return <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
+    }
+
+    else if (order.products) {
         let shippingComp = [];
         let productsComp = [];
         let paymentComp = [];
@@ -109,20 +118,25 @@ function UpdateOrder() {
                     {
                         orderId,
                         ...order
+                    },
+                    {
+                        headers: {
+                            'Authorization': `JWT ${token}`
+                        }
                     }
                 )
-                console.log(response)
                 if (response.status === 201) {
                     toast.success("Order Updated Successfully.", { position: "bottom-center" });
                     orderDispatch({ type: "UPDATE_ORDER", payload: response.data });
                 }
             }
             catch (error) {
-                if (error.response.statusText) {
-                    toast.error(error.response.statusText, { position: "bottom-center" });
+                if (Object.values(error.response.data)[0].length) {
+                    errorDispatch(Object.values(error.response.data)[0])
                 }
-                const err = Object.values(error.response.data)[0]
-                console.log(err)
+                else {
+                    errorDispatch(error.response.statusText)
+                }
             }
         }
 
@@ -294,9 +308,7 @@ function UpdateOrder() {
             </Container>
         )
     }
-    if (error) {
-        return <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
-    }
+
     else {
         return <Loading variant="info" loadingMessage="Loading..." containerClassName="h-100 d-flex align-items-center justify-content-center gap-3" />
     }

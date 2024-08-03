@@ -4,7 +4,7 @@ import { useContext, useEffect, useReducer } from "react";
 import { useLocation } from "react-router-dom";
 import Loading from "../components/Loading";
 import Message from "../components/Message";
-import ProductsComponent from "../components/Products";
+import ProductsComponent from "../components/ProductsComponent";
 import { contextStore } from "../context/ContextStore";
 import { productReducer } from "../reducers/productReducer";
 import { useStateReducer } from "../reducers/reducerFunctions";
@@ -30,7 +30,9 @@ function Products() {
                 if (response.data.products.length) {
                     productsDispatch({ type: "LOAD_PRODUCTS", payload: response.data.products })
                 }
-                errorDispatch("No products found.")
+                else {
+                    errorDispatch("No products found.")
+                }
             }
         }
         catch (error) {
@@ -53,13 +55,13 @@ function Products() {
     return (
         <>
             {
-                products.length
+                error
                     ?
-                    <ProductsComponent {...{ products, userType, category: "Food" }} />
+                    <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
                     :
-                    error
+                    products.length
                         ?
-                        <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
+                        <ProductsComponent {...{ products, userType, errorDispatch, category: "Toy" }} />
                         :
                         <Loading variant="info" loadingMessage="Loading..." containerClassName="h-100 d-flex align-items-center justify-content-center gap-3" />
             }

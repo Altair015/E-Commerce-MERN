@@ -3,50 +3,56 @@ export function cartReducer(state, action) {
     const { type, productId, payload } = action
 
 
-    if (state.length > 0 && action.type === "-") {
-        console.log("---------")
-        const productIndex = state.findIndex(item => item.productId === action.productId);
-        if (productIndex !== -1) {
-            const product = state[productIndex]
-            const newState = [...state];
-            if (product.quantity > 1) {
-                newState[productIndex] = {
-                    ...newState[productIndex],
-                    quantity: newState[productIndex].quantity - 1
-                };
-                return newState;
-            }
-            else {
-                newState.splice(productIndex, 1)
-                return newState
-            }
-        }
-        else if (state.length >= 0 && action.type === undefined) {
-            console.log("UNDEFINED CONTEXT")
-            return [...action];
-        }
+    // if (state.length > 0 && action.type === "-") {
+    //     console.log("---------")
+    //     const productIndex = state.findIndex(item => item.productId === action.productId);
+    //     if (productIndex !== -1) {
+    //         const product = state[productIndex]
+    //         const newState = [...state];
+    //         if (product.quantity > 1) {
+    //             newState[productIndex] = {
+    //                 ...newState[productIndex],
+    //                 quantity: newState[productIndex].quantity - 1
+    //             };
+    //             return newState;
+    //         }
+    //         else {
+    //             newState.splice(productIndex, 1)
+    //             return newState
+    //         }
+    //     }
+    //     else if (state.length >= 0 && action.type === undefined) {
+    //         console.log("UNDEFINED CONTEXT")
+    //         return [...action];
+    //     }
 
-        else {
-            return state;
-        }
-    }
+    //     else {
+    //         return state;
+    //     }
+    // }
 
-    else if (state.length >= 0 && action.type === "+") {
-        console.log("+++++++++")
-        // console.log(action, state)
-        const productIndex = state.findIndex(item => item.productId === action.productId);
-        if (productIndex !== -1) {
-            // If product exists, update its quantity
-            const newState = [...state];
-            newState[productIndex] = {
-                ...newState[productIndex],
-                quantity: newState[productIndex].quantity + 1
-            };
-            return newState;
-        } else {
-            // If product doesn't exist, add it to the cart
-            return [...state] + { productId: action.productId, quantity: 1, };
-        }
+    // else if (state.length >= 0 && action.type === "+") {
+    //     console.log("+++++++++")
+    //     // console.log(action, state)
+    //     const productIndex = state.findIndex(item => item.productId === action.productId);
+    //     if (productIndex !== -1) {
+    //         // If product exists, update its quantity
+    //         const newState = [...state];
+    //         newState[productIndex] = {
+    //             ...newState[productIndex],
+    //             quantity: newState[productIndex].quantity + 1
+    //         };
+    //         return newState;
+    //     } else {
+    //         // If product doesn't exist, add it to the cart
+    //         return [...state] + { productId: action.productId, quantity: 1, };
+    //     }
+    // }
+
+
+    if (state.length >= 0 && action.type === "LOAD_PRODUCTS_IN_CART") {
+        console.log("UNDEFINED CONTEXT")
+        return [...payload];
     }
 
     else if (state.length >= 0 && action.type === undefined) {

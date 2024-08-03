@@ -1,20 +1,20 @@
 import { Link } from "react-router-dom";
 import PayPalApp from "../components/PayPal";
 
-import { useContext, useEffect, useReducer } from "react";
-import { Button, Col, Container, ListGroup, ProgressBar, Row } from 'react-bootstrap';
-import MyCartProduct from "../components/MyCartProduct";
-import SETTINGS from "../config";
-import { contextStore } from "../context/ContextStore";
-import { showReducer, useStateReducer } from "../reducers/reducerFunctions";
-import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import axios from "axios";
+import { useContext, useEffect, useReducer } from "react";
+import { Col, Container, ListGroup, ProgressBar, Row } from 'react-bootstrap';
+import { toast, ToastContainer } from "react-toastify";
 import Loading from "../components/Loading";
+import Message from "../components/Message";
+import MyCartProduct from "../components/MyCartProduct";
+import { contextStore } from "../context/ContextStore";
+import { useStateReducer } from "../reducers/reducerFunctions";
 
 function OrderSummary() {
     const store = useContext(contextStore);
-
     const { userData } = store.userStore;
     const { cartItems } = store.cart;
     const { shippingAddress } = store.userStore.userData;
@@ -22,6 +22,8 @@ function OrderSummary() {
     const { token, getToken } = store.tokenStore;
 
     const [initialOptions, initialOptionsDispatch] = useReducer(useStateReducer, { "client-id": "", currency: "USD", intent: "capture", })
+
+    const [error, errorDispatch] = useReducer(useStateReducer, "");
 
     const { Item } = ListGroup;
 
@@ -61,8 +63,15 @@ function OrderSummary() {
                 // showDispatch({ type: "SET_SHOW", payload: false })
                 initialOptionsDispatch({ ...initialOptions, "client-id": response.data.payPalClientId })
             }
-        } catch (error) {
+        }
+        catch (error) {
             toast.info("Your session is expired", { position: "bottom-center" });
+            if (Object.values(error.response.data)[0]) {
+                errorDispatch(Object.values(error.response.data)[0])
+            }
+            else {
+                errorDispatch(error.response.statusText)
+            }
         }
     }
     if (token && !initialOptions["client-id"]) {
@@ -74,7 +83,10 @@ function OrderSummary() {
         }, []
     )
 
-    if (initialOptions["client-id"]) {
+    if (error) {
+        return <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
+    }
+    else if (initialOptions["client-id"]) {
         return (
             <PayPalScriptProvider options={initialOptions}>
                 <Container className="p-4">
@@ -158,7 +170,7 @@ function OrderSummary() {
                                         Proceed to Payment
                                     </Button> */}
                                     {/* <PayPalApp show={show} cartTotal={total} /> */}
-                                    <PayPalApp cartTotal={total} />
+                                    <PayPalApp cartTotal={total} {...{ error, errorDispatch, token, getToken }} />
                                 </Col>
                             </Row>
                         </Col>

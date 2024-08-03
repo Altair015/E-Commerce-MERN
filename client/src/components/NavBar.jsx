@@ -19,12 +19,19 @@ const { Brand, Toggle } = Navbar;
 const { Divider } = NavDropdown;
 
 function MyNavBar({ handleToken, search, searchDispatch, sideShow, sideShowDispatch }) {
+    console.log("NAVGBAS")
     const store = useContext(contextStore);
-
+    console.log("STORE", store)
 
     const dropdownItemClass = "dropdown-item d-block text-decoration-none fw-normal text-dark py-1 px-3";
 
-    const { userId, userType, firstName } = store.userStore.userData;
+    const { userData, userDispatch } = store.userStore;
+
+    const { cartItems, cartDispatch } = store.cart;
+
+    const { getToken } = store.tokenStore;
+
+    const { userId, userType, firstName } = userData;
 
     const [searchValueDispatch] = useReducer(useStateReducer, "");
 
@@ -56,11 +63,14 @@ function MyNavBar({ handleToken, search, searchDispatch, sideShow, sideShowDispa
             getProducts()
         }
     }
-    function handleLogout() {
+
+    function handleLogout(event) {
+        event.preventDefault()
         localStorage.clear()
-        searchDispatch({})
-        navigate(`/login/${userType}`);
+        userDispatch({ type: "CLEAR_DATA" });
+        cartDispatch({ type: "EMPTY_CART" })
         getToken()
+        navigate(`/login/${userType}`);
     }
 
     function handleSideShowClick(event) {

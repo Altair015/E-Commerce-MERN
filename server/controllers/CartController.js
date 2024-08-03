@@ -185,7 +185,7 @@ export async function getCart(req, res) {
 
 // Removing the products from the cart and deleting the cart itself if no product is there.
 export async function deleteCart(req, res) {
-    const { userId, productId } = req.body;
+    let { userId, productId, removeQuantity } = req.body;
 
     try {
         let cartFound = await CartModel.find({ userId });
@@ -205,63 +205,94 @@ export async function deleteCart(req, res) {
                 _id: productId
             }
         );
+
+        let cartUpdated = null;
+        let cartDeleted = null;
+
+        if (removeQuantity) {
+            console.log("IF")
+            // If the length of the cart is greater than 1 and one product has to be removed.
+            if (cartFound[0].products.length > 1) {
+                cartUpdated = await CartModel.updateOne(
+                    {
+                        userId,
+                        "products.productId": productId                 // Finding the product inside the Array
+                    },
+                    {
+                        $pull: {
+                            products: { productId }
+                        }
+                    },
+                );
+            }
+
+            // if the there is only one product in the cart to be removed, delete the cart itself.
+            else if (cartFound[0].products.length === 1) {
+                cartDeleted = await CartModel.findOneAndDelete({ userId });
+            }
+            else {
+                console.log("TO KNOW IF THERE IS ANY OTHER CONDITION PENDING")
+            }
+        }
+        else {
+            console.log("ELSE")
+
+            if (findProductInCart.quantity > 1) {
+                cartUpdated = await CartModel.updateOne(
+                    {
+                        userId,
+                        "products.productId": productId                 // Finding the product inside the Array
+                    },
+                    {
+                        $set: { "products.$.quantity": findProductInCart.quantity - 1 }       // Setting the New Quantity of the existing product
+                    },
+                    {
+                        new: true,                                      // It ensures that the updated document is returned
+                        useFindAndModify: false
+                    }
+                );
+            }
+
+            // If the length of the cart is greater than 1 and one product has to be removed.
+            else if (cartFound[0].products.length > 1 && findProductInCart.quantity === 1) {
+                cartUpdated = await CartModel.updateOne(
+                    {
+                        userId,
+                        "products.productId": productId                 // Finding the product inside the Array
+                    },
+                    {
+                        $pull: {
+                            products: { productId }
+                        }
+                    },
+                );
+            }
+
+            // if the there is only one product in the cart to be removed, delete the cart itself.
+            else if (findProductInCart.quantity === 1) {
+                cartDeleted = await CartModel.findOneAndDelete({ userId });
+            }
+            else {
+                console.log("TO KNOW IF THERE IS ANY OTHER CONDITION PENDING")
+            }
+        }
+
         if (productFound.quantity >= 0) {
+            if (!removeQuantity) {
+                removeQuantity = 1
+            }
             const quantityUpdated = await ProductModel.updateOne(
                 {
                     _id: productId
                 },
                 {
-                    $set: { quantity: productFound.quantity + 1 }
+                    $set: { quantity: productFound.quantity + removeQuantity }
                 },
                 {
                     new: true,
                     useFindAndModify: false
                 }
             )
-        }
-
-        let cartUpdated = null;
-        let cartDeleted = null;
-
-        // If the quantity of the product in the cart is greater than 1 it must be reduced by 1.
-        if (findProductInCart.quantity > 1) {
-            cartUpdated = await CartModel.updateOne(
-                {
-                    userId,
-                    "products.productId": productId                 // Finding the product inside the Array
-                },
-                {
-                    $set: { "products.$.quantity": findProductInCart.quantity - 1 }       // Setting the New Quantity of the existing product
-                },
-                {
-                    new: true,                                      // It ensures that the updated document is returned
-                    useFindAndModify: false
-                }
-            );
-        }
-
-        // If the length of the cart is greater than 1 and one product has to be removed.
-        else if (cartFound[0].products.length > 1 && findProductInCart.quantity === 1) {
-            cartUpdated = await CartModel.updateOne(
-                {
-                    userId,
-                    "products.productId": productId                 // Finding the product inside the Array
-                },
-                {
-                    $pull: {
-                        products: { productId }
-                    }
-                },
-            );
-        }
-
-        // if the there is only one product in the cart to be removed, delete the cart itself.
-        else if (findProductInCart.quantity === 1) {
-            cartDeleted = await CartModel.findOneAndDelete({ userId });
-        }
-
-        else {
-            console.log("TO KNOW IF THERE IS ANY OTHER CONDITION PENDING")
         }
 
         // sending the updated cart

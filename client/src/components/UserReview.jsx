@@ -7,13 +7,12 @@ import StarRating from "./StarRating";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function UserReview({ rating, reviews, productId, productDispatch }) {
+function UserReview({ reviews, productId, productDispatch, errorDispatch }) {
     const store = useContext(contextStore);
-
 
     const { userId, userType } = store.userStore.userData;
 
-    const { token, getToken } = store.tokenStore;
+    const { token } = store.tokenStore;
 
     const { Label, Select, Group, Control } = Form;
 
@@ -28,8 +27,6 @@ function UserReview({ rating, reviews, productId, productDispatch }) {
             comment: event.target[1].value,
             ratedBy: userId
         }
-        console.log(review, productId)
-
         if (event.target[1].value.trim()) {
             try {
                 const response = await axios.put(
@@ -37,19 +34,24 @@ function UserReview({ rating, reviews, productId, productDispatch }) {
                     {
                         productId,
                         review
+                    },
+                    {
+                        headers: { 'Authorization': `JWT ${token}` }
                     }
                 )
 
                 if (response.status === 201) {
-                    console.log("RESPONSE201", response)
                     toast.success("Review submitted succesfully.", { position: "bottom-center" });
                     productDispatch({ type: "UPDATE_PRODUCT_RATING", payload: response.data.ratedProduct })
                     showDispatch(true)
                 }
             }
             catch (error) {
-                if (error.response.statusText) {
-                    toast.error(error.response.statusText, { position: "bottom-center" });
+                if (Object.values(error.response.data)[0].length) {
+                    errorDispatch(Object.values(error.response.data)[0])
+                }
+                else {
+                    errorDispatch(error.response.statusText)
                 }
                 showDispatch(true)
             }
@@ -65,8 +67,6 @@ function UserReview({ rating, reviews, productId, productDispatch }) {
             return review.ratedBy._id === userId
         }
     )
-
-    console.log("userFOund", userReviewFound)
 
     {/* If the logged in user is User only and he has not submitted the review earlier. */ }
     return (

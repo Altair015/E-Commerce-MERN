@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useContext, useEffect, useReducer } from 'react';
 import { Button, Container, Form } from "react-bootstrap";
 import { contextStore } from "../context/ContextStore";
-
 import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,13 +14,14 @@ function Profile() {
     const store = useContext(contextStore);
     const { userData, userDispatch } = store.userStore;
     const { userType } = userData;
+    const { token, getToken } = store.tokenStore;
 
     const [localUserData, localUserDataDispatch] = useReducer(useStateReducer, null);
     console.log("RERENDERED")
     const [newUserData, newUserDataDispatch] = useReducer(useStateReducer, {});
     const [newShipData, newShipDataDispatch] = useReducer(useStateReducer, {});
 
-    const [error, errorDispatch] = useReducer(useStateReducer, "")
+    const [error, errorDispatch] = useReducer(useStateReducer, "");
 
     const params = useParams();
 
@@ -31,7 +31,10 @@ function Profile() {
         try {
             const loginResponse = await axios.post(
                 "/api/getuser",
-                { userId }
+                { userId },
+                {
+                    headers: { 'Authorization': `JWT ${token}` }
+                }
             )
             console.log(loginResponse)
             if (loginResponse.status === 201) {
@@ -44,11 +47,11 @@ function Profile() {
             }
         }
         catch (error) {
-            if (error.response.status === 404) {
-                errorDispatch("Profile not found.")
+            if (Object.values(error.response.data)[0]) {
+                errorDispatch(Object.values(error.response.data)[0]);
             }
-            else {
-                errorDispatch(error.response.statusText)
+            else if (error.response.statusText) {
+                errorDispatch(error.response.statusText);
             }
         }
     }
@@ -62,18 +65,21 @@ function Profile() {
             else {
                 getUser(userData.userId)
             }
+            getToken()
             return () => {
                 localUserDataDispatch(null)
-                console.log("UNMOUNTED")
             }
         }, [userId]
     )
 
 
+    if (error) {
+        console.log(error)
+        return <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
+    }
     if (localUserData) {
         const { firstName, lastName, email, phone, userId, isActive, userType, shippingAddress } = localUserData;
         const { shipName, addressLine1, addressLine2, city, state, country, pincode, shipPhone } = shippingAddress;
-
 
         function recordChange(event, ship = false) {
             const key = event.target.id;
@@ -96,7 +102,6 @@ function Profile() {
             event.preventDefault()
 
             const dataToBeUpdated = { userId, ...newUserData, shippingAddress: { ...newShipData } }
-            console.log(Object.keys(dataToBeUpdated.shippingAddress).length)
 
             newUserDataDispatch({})
             newShipDataDispatch({})
@@ -105,19 +110,19 @@ function Profile() {
                 delete dataToBeUpdated.shippingAddress
             }
 
-            console.log(dataToBeUpdated)
             async function updateUserData() {
                 try {
                     const response = await axios.put(
                         "/api/updateprofile",
-                        dataToBeUpdated
+                        dataToBeUpdated,
+                        {
+                            headers: { 'Authorization': `JWT ${token}` }
+                        }
                     )
-                    console.log(response)
                     if (response.status === 201) {
                         toast.success(Object.values(response.data)[0], {
                             position: "bottom-center"
                         });
-                        console.log(Object.values(response.data)[1])
                         if (userData.userType === localUserData.userType) {
                             userDispatch({ type: "UPDATE_USER_DATA", payload: Object.values(response.data)[1] })
                         }
@@ -132,10 +137,12 @@ function Profile() {
                     }
                 }
                 catch (error) {
-                    console.log(error)
-                    toast.error(Object.values(response.data)[0], {
-                        position: "bottom-center"
-                    });
+                    if (Object.values(error.response.data)[0]) {
+                        errorDispatch(Object.values(error.response.data)[0])
+                    }
+                    else {
+                        errorDispatch(error.response.statusText)
+                    }
                 }
             }
 
@@ -242,9 +249,6 @@ function Profile() {
                 <Button variant="info" type="submit" color="danger" className="fw-medium rounded-1" disabled={!isActive}>Update</Button>
             </Form >
         )
-    }
-    if (error) {
-        return <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
     }
     else {
         return <Loading variant="info" loadingMessage="Loading..." containerClassName="h-100 d-flex align-items-center justify-content-center gap-3" />

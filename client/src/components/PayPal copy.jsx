@@ -1,15 +1,14 @@
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import axios from "axios";
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { contextStore } from "../context/ContextStore";
 
-function PayPalApp({ show, cartTotal, error, errorDispatch }) {
+function PayPalApp({ show, cartTotal }) {
     const store = useContext(contextStore);
 
-    const { token, getToken } = store.tokenStore;
 
-    const [{ isPending }] = usePayPalScriptReducer();
+    const [{ isPending, isResolved, isInitial, isRejected, options }] = usePayPalScriptReducer();
 
     const navigate = useNavigate();
 
@@ -22,9 +21,6 @@ function PayPalApp({ show, cartTotal, error, errorDispatch }) {
         try {
             const orderResponse = await axios.get(
                 `/api/getorders/${userId}/${userType}`,
-                {
-                    headers: { 'Authorization': `JWT ${token}` }
-                }
             )
             console.log(orderResponse)
             if (orderResponse.status === 201) {
@@ -33,39 +29,27 @@ function PayPalApp({ show, cartTotal, error, errorDispatch }) {
         }
         catch (error) {
             console.log(error)
-            if (Object.values(error.response.data)[0]) {
-                errorDispatch(Object.values(error.response.data)[0])
-            }
-            else {
-                errorDispatch(error.response.statusText)
-            }
         }
     }
 
     const onCreateOrder = (data, actions) => {
-        console.log("onCreateOrder")
-
-        getOrders()
-        console.log("onCreateOrder", error)
-        if (!error) {
-            return actions.order.create({
-                purchase_units: [
-                    {
-                        amount: {
-                            value: parseFloat(cartTotal / 83.51).toFixed(1),
-                        },
+        return actions.order.create({
+            purchase_units: [
+                {
+                    amount: {
+                        value: parseFloat(cartTotal / 83.51).toFixed(1),
                     },
-                ],
-                application_context: {
-                    shipping_preference: 'NO_SHIPPING' // This disables shipping address
-                }
-            });
-        }
+                },
+            ],
+            application_context: {
+                shipping_preference: 'NO_SHIPPING' // This disables shipping address
+            }
+        });
     }
 
 
     const onApproveOrder = async (data, actions) => {
-        console.log("onApprove")
+
         try {
             const details = await actions.order.capture();
 
@@ -86,9 +70,6 @@ function PayPalApp({ show, cartTotal, error, errorDispatch }) {
                                 paymentStatus: "Paid"
                             },
                             amount: cartTotal
-                        },
-                        {
-                            headers: { 'Authorization': `JWT ${token}` }
                         }
                     )
                 }
@@ -105,9 +86,6 @@ function PayPalApp({ show, cartTotal, error, errorDispatch }) {
                                 paymentStatus: "Paid"
                             },
                             amount: cartTotal
-                        },
-                        {
-                            headers: { 'Authorization': `JWT ${token}` }
                         }
                     )
                 }
@@ -129,20 +107,18 @@ function PayPalApp({ show, cartTotal, error, errorDispatch }) {
         }
         catch (error) {
             console.error(error);
-            if (Object.values(error.response.data)[0]) {
-                errorDispatch(Object.values(error.response.data)[0])
-            }
-            else {
-                errorDispatch(error.response.statusText)
-            }
+            setTimeout(() => {
+                navigate("/placed")
+            }, 2000);
+            // Handle error as needed
         }
     };
 
 
     function onError(data, actions) {
-        if (!error) {
+        setTimeout(() => {
             navigate("/placed")
-        }
+        }, 2000);
     }
 
     return (
@@ -153,7 +129,7 @@ function PayPalApp({ show, cartTotal, error, errorDispatch }) {
                     createOrder={onCreateOrder}
                     onApprove={onApproveOrder}
                     onError={onError}
-                    onCancel={() => navigate("/placed")}
+
                 />
             )
             }

@@ -6,7 +6,7 @@ import { useStateReducer } from "../reducers/reducerFunctions";
 import Message from "../components/Message";
 import { faCircleExclamation, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Loading from "../components/Loading";
-import ProductsComponent from "../components/Products";
+import ProductsComponent from "../components/ProductsComponent";
 import { contextStore } from "../context/ContextStore";
 
 function Search() {
@@ -208,7 +208,6 @@ function Search() {
                             <Button type="reset" className=" align-self-end" onClick={() => fiterDispatch({})}>Clear Filters</Button>
                         </Form>
                     </div>
-
                     {searchComp.length
                         ?
                         < ProductsComponent {...{ products: searchComp, userType }} />

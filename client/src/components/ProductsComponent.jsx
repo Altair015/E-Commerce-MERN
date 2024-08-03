@@ -2,7 +2,8 @@ import { Container, Table } from "react-bootstrap";
 import MyCard from "./MyCard";
 import { Link } from "react-router-dom";
 
-function ProductsComponent({ products, category, userType }) {
+function ProductsComponent({ products, category, userType, errorDispatch }) {
+    console.log("CATEGORY", category)
     return (
         <>
             {
@@ -76,7 +77,7 @@ function ProductsComponent({ products, category, userType }) {
                                     ?
                                     products.reduce((accumu, product) => {
                                         if (product.category === category) {
-                                            const comp = <MyCard {...product} key={product.productId} />;
+                                            const comp = <MyCard {...{ ...product, errorDispatch }} key={product.productId} />;
                                             return [...accumu, comp]; // Return the updated accumulator
                                         }
                                         return accumu;
@@ -86,8 +87,8 @@ function ProductsComponent({ products, category, userType }) {
                                         (product, index) => {
                                             return (
                                                 <MyCard
-                                                    {...product}
                                                     key={product.productId}
+                                                    {...{ ...product, errorDispatch }}
                                                 />
                                             )
                                         }

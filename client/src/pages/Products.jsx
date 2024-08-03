@@ -1,26 +1,20 @@
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useContext, useEffect, useReducer } from "react";
 import { useLocation } from "react-router-dom";
-import ProductsComponent from "../components/Products";
+import Loading from "../components/Loading";
+import Message from "../components/Message";
+import ProductsComponent from "../components/ProductsComponent";
 import { contextStore } from "../context/ContextStore";
 import { productReducer } from "../reducers/productReducer";
 import { useStateReducer } from "../reducers/reducerFunctions";
-import { Container } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleExclamation, faExclamation, faSchoolCircleExclamation } from "@fortawesome/free-solid-svg-icons";
-import Loading from "../components/Loading"
-import Message from "../components/Message";
 
 function Products() {
     const store = useContext(contextStore);
-
-    const { userId, userType } = store.userStore.userData;
-
-    const getLocation = useLocation();
-    console.log(getLocation.pathname)
-
     const [products, productsDispatch] = useReducer(productReducer, []);
     const [error, errorDispatch] = useReducer(useStateReducer, "")
+    console.log(error, products)
+    const { userId, userType } = store.userStore.userData;
 
     async function getProducts() {
         try {
@@ -30,12 +24,18 @@ function Products() {
                 if (response.data.products.length) {
                     productsDispatch({ type: "LOAD_PRODUCTS", payload: response.data.products })
                 }
-                errorDispatch("No products found.")
+                else {
+                    errorDispatch("No products found.")
+                }
             }
         }
         catch (error) {
-            errorDispatch(error.response.statusText)
-            console.log(error)
+            if (Object.values(error.response.data)[0]) {
+                errorDispatch(Object.values(error.response.data)[0]);
+            }
+            else if (error.response.statusText) {
+                errorDispatch(error.response.statusText);
+            }
         }
     }
 
@@ -51,14 +51,13 @@ function Products() {
     return (
         <>
             {
-
-                products.length
+                error
                     ?
-                    < ProductsComponent {...{ products, userType }} />
+                    <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
                     :
-                    error
+                    products.length
                         ?
-                        <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
+                        < ProductsComponent {...{ products, errorDispatch, userType }} />
                         :
                         <Loading variant="info" loadingMessage="Loading..." containerClassName="h-100 d-flex align-items-center justify-content-center gap-3" />
             }

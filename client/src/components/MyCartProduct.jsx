@@ -9,11 +9,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
 import SETTINGS from '../config';
 
-function MyCartProduct({ productId, image, title, description, quantity, cartProductQuantity, productQuantity, age, price, rating, category, sellerId, displayActions }) {
+function MyCartProduct({ productId, image, title, description, quantity, cartProductQuantity, productQuantity, age, price, rating, category, sellerId, displayActions, errorDispatch }) {
     cartProductQuantity = quantity;
 
     const store = useContext(contextStore);
 
+    const { token, getToken } = store.tokenStore;
 
     const { userId } = store.userStore.userData;
 
@@ -35,14 +36,24 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
                     {
                         userId,
                         productId
+                    },
+                    {
+                        headers: { 'Authorization': `JWT ${token}` }
                     }
                 )
                 if (response.status === 201) {
                     const { updatedCart } = response.data
                     cartDispatch(updatedCart)
+                    cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
                 }
             } catch (error) {
                 console.log(error)
+                if (Object.values(error.response.data)[0].length) {
+                    errorDispatch(Object.values(error.response.data)[0])
+                }
+                else {
+                    errorDispatch(error.response.statusText)
+                }
             }
         }
     }
@@ -52,6 +63,8 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
             const response = await axios.delete(
                 "/api/deletecart",
                 {
+                    headers: { 'Authorization': `JWT ${token}` }
+                    ,
                     data: {
                         userId,
                         productId
@@ -61,14 +74,49 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
             console.log(response)
             if (response.status === 201) {
                 const { updatedCart, productQuantity } = response.data;
-                cartDispatch(updatedCart);
+                cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
             }
         } catch (error) {
             console.log(error)
+            if (Object.values(error.response.data)[0].length) {
+                errorDispatch(Object.values(error.response.data)[0])
+            }
+            else {
+                errorDispatch(error.response.statusText)
+            }
         }
     }
 
-    console.log(productQuantity, cartProductQuantity, quantity)
+    const removeProductFromServerCart = async () => {
+        try {
+            const response = await axios.delete(
+                "/api/deletecart",
+                {
+                    headers: { 'Authorization': `JWT ${token}` }
+                    ,
+                    data: {
+                        userId,
+                        productId,
+                        removeQuantity: cartProductQuantity
+                    }
+                }
+            )
+            console.log(response)
+            if (response.status === 201) {
+                const { updatedCart, productQuantity } = response.data;
+                cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
+            }
+        } catch (error) {
+            console.log(error)
+            if (Object.values(error.response.data)[0].length) {
+                errorDispatch(Object.values(error.response.data)[0])
+            }
+            else {
+                errorDispatch(error.response.statusText)
+            }
+        }
+    }
+
     const addToLocalCart = async () => {
         const findProductInCart = cartItems.find(
             (cartProduct) => {
@@ -143,7 +191,7 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
                 <p className='m-0'>₹ {price}</p>
             </Col>
             <Col className={`d-flex align-items-center justify-content-center p-0 ${displayActions}`}>
-                <FontAwesomeIcon icon={faTrash} size='lg' />
+                <FontAwesomeIcon icon={faTrash} size='lg' onClick={userId ? removeProductFromServerCart : removerFromLocalCart} />
             </Col>
         </Row >
     );

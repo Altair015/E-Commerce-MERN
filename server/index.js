@@ -5,7 +5,7 @@ import mongoose, { connect } from "mongoose";
 import { config } from "dotenv";
 
 import morgan from "morgan";
-import userRouter from "./routes/UserRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 import cartRouter from "./routes/cartRoutes.js";
 import orderRouter from "./routes/orderRoutes.js";
 import payPalRouter from "./routes/payPalRoutes.js";
@@ -13,12 +13,13 @@ import productRouter from "./routes/productRoutes.js";
 
 config()
 
-const { ATLAS_URL, PORT, HOST_NAMES } = process.env;
+const { MONGODB_URL, PORT, HOST_NAMES } = process.env;
+console.log(MONGODB_URL, PORT, HOST_NAMES)
 
 const server = express();
 
 try {
-    const db = connect(ATLAS_URL);
+    const db = connect(MONGODB_URL);
     if (db) {
         const { connection } = mongoose;
         connection.on('connected', () => console.log('MongoDB is connected'));

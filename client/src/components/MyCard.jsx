@@ -10,12 +10,14 @@ import StarRating from './StarRating';
 import SETTINGS from '../config';
 import { checkQuantity } from '../utils/functions';
 
-function MyCard({ productId, image, title, description, quantity, age, price, rating, category, reviews, sellerId }) {
+function MyCard({ productId, image, title, description, quantity, age, price, rating, category, reviews, sellerId, errorDispatch }) {
 
     const store = useContext(contextStore);
 
-
     const { Img, Body, Title, Text } = Card;
+
+    const { token, getToken } = store.tokenStore;
+    console.log(token)
 
     const { cartItems, cartDispatch } = store.cart;
 
@@ -34,6 +36,7 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
         productQuantity = quantity;
     }
 
+    // Adding/Updating the product quantity in the cart as well as on the server.
     const addToServerCart = async () => {
         if (cartItems.length === 0) {
             try {
@@ -42,14 +45,24 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
                     {
                         userId,
                         productId
+                    },
+                    {
+                        headers: { 'Authorization': `JWT ${token}` }
                     }
-                )
+                );
+                console.log(response)
                 if (response.status === 201) {
-                    const { newCart, productQuantity } = response.data
-                    cartDispatch(newCart)
+                    const { newCart } = response.data
+                    cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: newCart })
                 }
             } catch (error) {
                 console.log(error)
+                if (Object.values(error.response.data)[0].length) {
+                    errorDispatch(Object.values(error.response.data)[0])
+                }
+                else {
+                    errorDispatch(error.response.statusText)
+                }
             }
         }
 
@@ -60,14 +73,23 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
                     {
                         userId,
                         productId
+                    },
+                    {
+                        headers: { 'Authorization': `JWT ${token}` }
                     }
-                )
+                );
                 if (response.status === 201) {
-                    const { updatedCart, productQuantity } = response.data
-                    cartDispatch(updatedCart)
+                    const { updatedCart } = response.data
+                    cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
                 }
             } catch (error) {
                 console.log(error)
+                if (Object.values(error.response.data)[0].length) {
+                    errorDispatch(Object.values(error.response.data)[0])
+                }
+                else {
+                    errorDispatch(error.response.statusText)
+                }
             }
         }
     }
@@ -77,18 +99,25 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
             const response = await axios.delete(
                 "/api/deletecart",
                 {
+                    headers: { 'Authorization': `JWT ${token}` },
                     data: {
                         userId,
                         productId
                     }
                 }
-            )
+            );
             if (response.status === 201) {
                 const { updatedCart, productQuantity } = response.data;
-                cartDispatch(updatedCart);
+                cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
             }
         } catch (error) {
             console.log(error)
+            if (Object.values(error.response.data)[0].length) {
+                errorDispatch(Object.values(error.response.data)[0])
+            }
+            else {
+                errorDispatch(error.response.statusText)
+            }
         }
     }
 

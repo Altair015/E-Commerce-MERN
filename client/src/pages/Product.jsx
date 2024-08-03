@@ -14,17 +14,10 @@ import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 function Product() {
     const store = useContext(contextStore);
-
-    const { cartItems } = store.cart;
-    const { userId, userType } = store.userStore.userData
-
-    console.log(15, store)
+    const { userType } = store.userStore.userData
     const urlParams = useParams("productId")
     const { productId } = urlParams;
-
     const [product, productDispatch] = useReducer(productReducer, {});
-
-    console.log(product, "PRODUCT")
     const [error, errorDispatch] = useReducer(useStateReducer, "")
 
     async function getProduct() {
@@ -49,9 +42,7 @@ function Product() {
 
     useEffect(
         () => {
-            console.log("USEFFCT")
             if (productId) {
-                console.log("GETPRODUCT")
                 getProduct();
             }
         }, []
@@ -60,42 +51,33 @@ function Product() {
     return (
         <>
             {
-                (userType === "admin" || userType === "seller")
+                error
                     ?
-                    <>
-                        {
-                            productId
-                                ?
-                                // Creation of Product
-                                <AddProduct {...product} productDispatch={productDispatch} />
-                                :
-                                // Updation of Product
-                                <AddProduct />
-                        }
-                    </>
+                    <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
                     :
-                    <>
-                        {
-                            product.title
-                                ?
-                                <>
-                                    <MyProduct
-                                        {...product}
-                                        productDispatch={productDispatch}
-                                    />
-                                    <UserReview {...{ ...product, error, errorDispatch }} productDispatch={productDispatch} />
-                                </>
-                                :
-                                error
-                                    ?
-                                    <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
-                                    :
-                                    <Loading variant="info" loadingMessage="Loading..." containerClassName="h-100 d-flex align-items-center justify-content-center gap-3" />
-                        }
-                    </>
+                    (userType === "admin" || userType === "seller")
+                        ?
+                        product.title
+                            ?
+                            // Updation of Product
+                            <AddProduct {...{ ...product, productDispatch, errorDispatch }} />
+                            :
+                            // Creation of Product
+                            <AddProduct {...{ errorDispatch }} />
+                        :
+                        product.title
+                            ?
+                            <>
+                                <MyProduct {...{ ...product, errorDispatch, productDispatch }} />
+                                <UserReview {...{ ...product, errorDispatch, productDispatch }} />
+                            </>
+                            :
+                            < Loading variant="info" loadingMessage="Loading..." containerClassName="h-100 d-flex align-items-center justify-content-center gap-3" />
             }
         </>
+
     )
+
 }
 
 export default Product;

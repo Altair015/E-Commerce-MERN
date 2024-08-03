@@ -8,14 +8,11 @@ const { JWT_SECRET } = process.env;
 
 function authJwt(req, res, next) {
     const token = req.headers.authorization.split(" ");
-    console.log(token, JWT_SECRET)
-
     if (token[0] === "JWT") {
         jwt.verify(
             token[1],
             JWT_SECRET,
             async (err, verifiedToken) => {
-
                 if (err) {
                     console.log(err)
                     return res.status(401).json({ failure: "Invalid Token" })

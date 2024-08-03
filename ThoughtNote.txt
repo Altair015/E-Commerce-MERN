@@ -1,0 +1,83 @@
+Created the directory structure using CHATGPT.
+Linked the root directory to the GitHub.
+Created the directories server and client.
+
+Backend:
+Created the package.json file.
+Created the directories models, controllers, routes, middlewares, public and utilites. 
+Installed the libraries: mongoose,nodemon, morgan, multer, nodemon bcrypt, dotenv, express, jsonwebtoken and mongoose.
+Created the cluster on the MongoDB Atlas.
+Setup the environment variables ATLAS_URL, PORT, JWT_SECRET, JWT_EXPIRY, HOST_NAMES and PAYPAL_CLIENT_ID in the .env file.
+Setup the backend server using the express and mongoose.
+Tested if the backend server is running using the npm start.
+Created the UserModel in UserModel.js file in the models directory using mongoose.
+Created the SignUp controller in the UserController.js file in the controllers directory.
+Created the post route "/signup" in the userRoute.js file in the routes directory. 
+Tested the Sign Up functionalities using PostMan.
+Created the SignIn Controller in the UserController.js file in the controllers directory.
+Created the post route "/signin" in the userRoute.js file in the routes directory. 
+Tested the Sign In functionalities using PostMan.
+Created the authJwt.js file in the directory "middlewares" to implement the JWT authentication.
+Implemented the JWT authentication in the Sign In controller.
+Created a middleware authJwt.js in middlewares directory. 
+Created the contorller signUpSampleUsers in the UserController.js to seed the sample user's data. (Utilise the sample data from utilities directory).
+Created the route /sampleusers to seed the sample users. 
+--Create a standard user from the UI,
+--generate the token from the postman | endpoint: /api/signin
+--utilise this token to seed sample users | endpoint: /api/sampleusers
+                                or
+--remove the middleware authJwt from the userRoutes for the router /sampleusers.
+Created three more user Controllers updateUser, getUsers and getUser with their respective routes /updateprofile, /getusers and /getuser to
+update the user details, getting all the users and getting the specific user respectively.
+Test these routes using postman.
+
+Created the ProductModel in ProductModel.js file in the models directory using mongoose.
+Created the createProduct controller in the controller ProductController.js to create the product.
+
+
+FrontEnd:
+Created the react app using the VITE.
+Removed the existing code from App.jsx and main.jsx.
+Installed the libraries:-
+-- @fortawesome/fontawesome-svg-core,
+-- @fortawesome/free-brands-svg-icons,
+-- @fortawesome/free-regular-svg-icons,
+-- @fortawesome/free-solid-svg-icons,
+-- @fortawesome/react-fontawesome,
+-- @paypal/react-paypal-js,
+-- axios,
+-- bootstrap,
+-- react-bootstrap,
+-- react-toastify
+Created the directories components, context, pages, reducers and utils.
+Created the images directories in the "public" directory to serve the Brand image and default product image.
+Created the Navbar, Sidebar, NavigationLinks and Footer components in the "components" directory.
+Created the Main component using "Outlet" component of the "react-router-dom" library.
+Created the Layout component using Navbar, Sidebar, NavigationLinks, Footer and Main Component.
+Created the Brand component using the image "PurrStoreBanner.webp" from the public directory.
+Created the Home component in the pages directory using the Brand component.
+Added a route for the "Layout" component using "Routes" and "Route" component of react-router-dom in App.jsx.
+Wrapped the <App/> component using <BrowserRouter/> component of react-router-dom in main.jsx.
+Tested if the image is loading on the this react server url i.e., 192.*.*
+Create the context directory in the "src" directory containing files ContextStore.js in which the react context is created using "createContext" of "react".
+Created a provider component <ContextProvider/> in the context directory in which the provider compnent of the react Context is returned.
+Three reducers are also created in the <ContextProvider/> component to handle the date for the token, logged in user Data and logged in user Cart.
+The reducers functions cartReducer, userReducer and useStateReducer are created in the directory reducers in the "src" directory.
+Wrapped the <BrowserRouter/> and <App/> component using <ContextProvider/> component in main.jsx.
+Created the <Login/> compnent in the pages directories.
+Implemented the SignIn and SignUp login in the <Login/> component.
+Added a route for the <Login/> component in the App.jsx.
+Implemented the field errors and tested the Logout and Login feature.
+Created the <AddProduct/> component in the components directory in the "src" directory which support creation of new/ updation of existing product.
+This component is added in the component <Product/> of the pages directory.
+Added the routes /product and product/:productId in the App.jsx file.
+Tested the creation and updation functionalities for the product.
+Created the <MyProduct/> component in the components directory in the "src" directory which displays a single product fetched from backend based on the productId.
+This component is added in the component <Product/> of the pages directory.
+
+Created the <MyCard/> component in the components directory.
+Created the <Products/> component in the pages directory.
+Created a function getProducts() to get the products from backend and load in the state variable "products". The products are passed as a prop to another component <ProductsComponents/> in the components in which the <MyCard/> component is mapped to all the elements of the products.
+
+
+Added a route /products in the App.jsx file.
