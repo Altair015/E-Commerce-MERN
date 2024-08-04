@@ -187,7 +187,7 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
         <Row className='mb-4 mb-sm-3' >
             <Col onClick={handleCardClick} className='d-none d-sm-flex align-items-center justify-content-center p-0'>
                 <div className='h-75 w-75'>
-                    <Img className='' src={image ? `/api/uploads/${sellerId}/${image}` : "/images/PurrStore.svg"} alt='images/PurrStore.svg' />
+                    <Img className='' src={image ? `/static/${sellerId}/${image}` : "/images/PurrStore.svg"} alt='images/PurrStore.svg' />
                 </div>
             </Col>
             <Col onClick={handleCardClick} className=' d-sm-flex text-truncate align-items-center justify-content-center p-0'>

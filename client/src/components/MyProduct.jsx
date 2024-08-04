@@ -172,7 +172,7 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
     return (
         <Card className='w-100 d-flex flex-md-row border-0 flex-wrap align-items-center align-items-lg-start justify-content-center' >
             <Header className='flex-lg-one-third align-self-center bg-transparent border-0 w-min-sm-75 w-min-md-50 w-min-lg-25'>
-                <Img className='object-fit-contain' src={image ? `/api/uploads/${sellerId}/${image}` : "/images/PurrStore.svg"} alt='images/PurrStore.svg' />
+                <Img className='object-fit-contain' src={image ? `/static/${sellerId}/${image}` : "/images/PurrStore.svg"} alt='images/PurrStore.svg' />
             </Header>
             <Body className='flex-1 flex-lg-one-third w-mx-md-100 align-self-start' >
                 <Text className='display-6'>{title}</Text>

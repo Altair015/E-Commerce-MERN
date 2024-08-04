@@ -7,7 +7,10 @@ export default defineConfig(
     server: {
       proxy: {
         "/api": "http://10.0.0.1:4000",
-        "/api": "http://192.168.0.105:4000",
+        '/static': {
+          target: 'http://10.0.0.1:4000',
+          rewrite: (path) => path.replace(/^\/static/, '/uploads'),
+        },
       }
     }
   }
