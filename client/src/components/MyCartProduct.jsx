@@ -7,7 +7,6 @@ import "./MyCard.css";
 import { faCircleMinus, faCirclePlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
-import SETTINGS from '../config';
 
 function MyCartProduct({ productId, image, title, description, quantity, cartProductQuantity, productQuantity, age, price, rating, category, sellerId, displayActions, errorDispatch }) {
     cartProductQuantity = quantity;
