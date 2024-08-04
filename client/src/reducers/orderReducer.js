@@ -1,5 +1,4 @@
 export function orderReducer(state, action) {
-    console.log(state, action)
     const { type, payload } = action;
 
     if (type === "LOAD_USER_ORDERS") {
@@ -12,7 +11,6 @@ export function orderReducer(state, action) {
                 return orders.orders
             }
         )
-        console.log(orders.flat())
         return [...orders.flat()]
     }
     else if (type === "UPDATE_ORDER") {
@@ -25,10 +23,7 @@ export function orderReducer(state, action) {
 }
 
 export function changeReducer(state, action) {
-    console.log(state, action);
-
     const { type, payload } = action;
-
 
     if (type === "SET_CHANGE") {
         return payload;

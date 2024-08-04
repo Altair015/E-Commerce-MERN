@@ -1,20 +1,19 @@
+import { faCloudUpload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useContext, useReducer } from "react";
-import { Alert, Button, Col, Container, Form, Image, Row } from "react-bootstrap";
-import SETTINGS from "../config";
-import { contextStore } from "../context";
-import { useStateReducer } from "../reducers/reducerFunctions";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCloud, faCloudArrowUp, faCloudUpload, faUpload } from "@fortawesome/free-solid-svg-icons";
-import { Icons, toast, ToastContainer } from "react-toastify";
+import { Button, Col, Container, Form, Image, Row } from "react-bootstrap";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { contextStore } from "../context/ContextStore";
+import { useStateReducer } from "../reducers/reducerFunctions";
 
 function AddProduct({ productId, image, title, description, quantity,
-    age, price, category, sellerId, sellerEmail, productDispatch }) {
+    age, price, category, sellerId, sellerEmail, productDispatch, errorDispatch }) {
     const store = useContext(contextStore);
     const { Label, Select, Group, Control } = Form;
-    const { BASE_URL } = SETTINGS;
     const { userId, userType } = store.userStore.userData;
+    const { token } = store.tokenStore;
     const [uploadImage, uploadImageDispatch] = useReducer(useStateReducer, { preview: "", data: "" });
 
     if (sellerId) {
@@ -24,25 +23,11 @@ function AddProduct({ productId, image, title, description, quantity,
         sellerId = userId;
     }
 
-    const [alert, altertDispatch] = useReducer(useStateReducer,
-        {
-            variant: "",
-            message: "",
-            display: true
-        }
-    )
-
-    function alertValue(variant = "", message = "", display = true) {
-        altertDispatch(
-            {
-                variant: variant,
-                message: message,
-                display: display
-            }
-        )
-        setTimeout(() => {
-            altertDispatch(alert)
-        }, 4000);
+    // Function generating the preview for image uploaded and setting it to be sent.
+    const handleImageUpload = (event) => {
+        uploadImage.preview = URL.createObjectURL(event.target.files[0]);
+        uploadImage.data = event.target.files[0];
+        uploadImageDispatch({ ...uploadImage });
     }
 
     function handleSubmit(event) {
@@ -52,9 +37,11 @@ function AddProduct({ productId, image, title, description, quantity,
         const formData = new FormData();
         formData.append("sellerId", sellerId);
 
+        // Creation of new product
         if (operation === "Create Product") {
             formData.append("file", uploadImage.data)
 
+            // inserting the data in the formData which will be sent.
             for (let i = 1; i < event.target.length - 1; i++) {
                 if (event.target[i].value) {
                     const key = event.target[i].id
@@ -68,11 +55,15 @@ function AddProduct({ productId, image, title, description, quantity,
                 }
             }
 
+            // Trying to create a new product
             async function createProduct() {
                 try {
                     const response = await axios.post(
                         "/api/createitem",
                         formData,
+                        {
+                            headers: { 'Authorization': `JWT ${token}` }
+                        }
                     )
                     if (response.status === 201) {
                         toast.success("Product Created Successfully.", { position: "bottom-center" });
@@ -83,14 +74,24 @@ function AddProduct({ productId, image, title, description, quantity,
                     }
                 }
                 catch (error) {
-                    if (error.response.statusText) {
-                        toast.error(error.response.statusText, { position: "bottom-center" });
+                    if (Object.values(error.response.data)[0].length) {
+                        if (Object.values(error.response.data)[0] === "Invalid Token") {
+                            errorDispatch(Object.values(error.response.data)[0]);
+                        }
+                        else {
+                            toast.error(Object.values(error.response.data)[0], { position: "bottom-center" });
+                        }
+                    }
+                    else {
+                        errorDispatch(error.response.statusText)
                     }
                 }
             }
 
             createProduct()
         }
+
+        // Updating the existing product
         else if (operation === "Update Product") {
             formData.append("productId", productId);
 
@@ -98,11 +99,11 @@ function AddProduct({ productId, image, title, description, quantity,
                 productId, sellerId, image, title, age, description,
                 price, category, quantity: quantity
             }
-
-            if (uploadImage.data && image !== uploadImage.data.name) {
+            if (uploadImage.data.name && image !== uploadImage.data.name) {
                 formData.append("file", uploadImage.data)
             }
 
+            // inserting the data in the formData which will be sent.
             for (let i = 1; i < event.target.length - 1; i++) {
                 if (event.target[i].value) {
                     const key = event.target[i].id
@@ -120,11 +121,15 @@ function AddProduct({ productId, image, title, description, quantity,
                 }
             }
 
+            // Trying to update the existing product.
             async function updateProduct() {
                 try {
                     const response = await axios.put(
                         "/api/updateitem",
                         formData,
+                        {
+                            headers: { 'Authorization': `JWT ${token}` }
+                        }
                     )
                     if (response.status === 201) {
                         const message = Object.values(response.data)[0]
@@ -137,19 +142,21 @@ function AddProduct({ productId, image, title, description, quantity,
                     }
                 }
                 catch (error) {
-                    if (error.response.statusText) {
-                        toast.error(error.response.statusText, { position: "bottom-center" });
+                    if (Object.values(error.response.data)[0].length) {
+                        if (Object.values(error.response.data)[0] === "Invalid Token") {
+                            errorDispatch(Object.values(error.response.data)[0]);
+                        }
+                        else {
+                            toast.error(Object.values(error.response.data)[0], { position: "bottom-center" });
+                        }
+                    }
+                    else {
+                        errorDispatch(error.response.statusText)
                     }
                 }
             }
             updateProduct()
         }
-    }
-
-    const handleImageUpload = (event) => {
-        uploadImage.preview = URL.createObjectURL(event.target.files[0]);
-        uploadImage.data = event.target.files[0];
-        uploadImageDispatch({ ...uploadImage });
     }
 
     return (
@@ -168,7 +175,7 @@ function AddProduct({ productId, image, title, description, quantity,
                                             :
                                             image
                                                 ?
-                                                `${BASE_URL}/uploads/${sellerId}/${image}`
+                                                `/api/uploads/${sellerId}/${image}`
                                                 :
                                                 "/images/PurrStore.svg"
                                     }
@@ -240,9 +247,6 @@ function AddProduct({ productId, image, title, description, quantity,
                     </Row>
                 </Container>
             </Form >
-            <Alert variant={alert.variant} className="m-3 fw-semibold" hidden={alert.display}>
-                {alert.message}
-            </Alert>
         </>
     )
 }

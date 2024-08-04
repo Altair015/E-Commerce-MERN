@@ -2,17 +2,17 @@ import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { aboutData } from '../utils/InitialData';
 
+// About Us page.
 function AboutUs() {
-
     return (
         <Container className="py-3">
             <h1>About Us</h1>
             <hr className="pb-2" />
             {
                 aboutData.map(
-                    ({ cardTitle, cardText }) => {
+                    ({ cardTitle, cardText }, index) => {
                         return (
-                            <Row className="mb-4">
+                            <Row key={index} className="mb-4">
                                 <Col>
                                     <Card>
                                         <Card.Body>

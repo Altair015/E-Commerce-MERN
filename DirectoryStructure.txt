@@ -12,7 +12,6 @@ ecomern/
 │       └── main.js          # Entry point for React app
 │
 ├── server/                   # Backend (Node.js with Express.js) folder
-│   ├── config/               # Configuration files (database, environment, etc.)
 │   ├── controllers/          # Request handlers (controller functions)
 │   ├── models/               # Database models (Mongoose schemas)
 │   ├── routes/               # API routes

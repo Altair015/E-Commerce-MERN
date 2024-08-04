@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Form, Button, Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 
+// Contact Us Page
 const ContactUs = () => {
     return (
         <Container className="p-4">
@@ -34,7 +35,6 @@ const ContactUs = () => {
                     </Card>
                 </Col>
             </Row>
-
             <Row className="mt-4">
                 <Col>
                     <Card>

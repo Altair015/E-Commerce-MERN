@@ -1,18 +1,14 @@
 import { Button, Container, Form, ProgressBar } from "react-bootstrap";
-import { navigateTo } from "../utils/cardQuantity";
 import { useNavigate } from "react-router-dom";
 
-const { Group, Label, Control, Check } = Form;
+const { Check } = Form;
 
+// Payment selection page.
 function Payment() {
     const navigate = useNavigate()
 
     function handleSubmit(event) {
         event.preventDefault()
-        console.log(event.target.paypal.checked)
-        console.log(event.target.paypal.value)
-        console.log(event.target.stripe.checked)
-        console.log(event.target.stripe.value)
         navigate("/summary")
     }
 

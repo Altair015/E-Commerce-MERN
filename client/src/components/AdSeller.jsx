@@ -1,11 +1,15 @@
 import { Link } from "react-router-dom";
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
 import { useContext } from "react";
 
 function AdSeller() {
     const store = useContext(contextStore);
+
     const { userType } = store.userStore.userData;
+
+    // Admin and Seller Dashboard UI
     return (
+        // Banner for the Dashboard.
         <>
             <div className="bg-info-subtle fw-normal d-flex display-1 justify-content-center p-5 ">
                 {
@@ -20,6 +24,8 @@ function AdSeller() {
                             ""
                 }
             </div>
+
+            {/* Buttons for managing the orders/products/users */}
             <div className="d-flex justify-content-center p-3 p-sm-4">
                 <div className="d-flex gap-3 justify-content-center justify-content-sm-start flex-wrap">
                     <Link to="/product" className="fs-5 fw-medium flex-fill bg-success-subtle border p-5 pt-3 ps-3 link-dark rounded-1 border-0 text-decoration-none">

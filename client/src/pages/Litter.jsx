@@ -1,31 +1,23 @@
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useContext, useEffect, useReducer } from "react";
-import { Container, Table } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
-import MyCard from "../components/MyCard";
-import { contextStore } from "../context";
-import { productReducer } from "../reducers/productReducer";
-import ProductsComponent from "../components/Products";
 import Loading from "../components/Loading";
 import Message from "../components/Message";
+import ProductsComponent from "../components/ProductsComponent";
+import { contextStore } from "../context/ContextStore";
+import { productReducer } from "../reducers/productReducer";
 import { useStateReducer } from "../reducers/reducerFunctions";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
-
-function Products() {
+// Litter products page.
+function Litter() {
     const store = useContext(contextStore);
     const { userId, userType } = store.userStore.userData;
-    const { cartItems } = store.cart
-
-    const getLocation = useLocation();
-
     const [products, productsDispatch] = useReducer(productReducer, []);
     const [error, errorDispatch] = useReducer(useStateReducer, "")
 
     async function getProducts() {
         try {
             const response = await axios.get(`/api/getitems/${userType}/${userId}/null`);
-            console.log(response)
             if (response.status === 201) {
                 if (response.data.products.length) {
                     productsDispatch({ type: "LOAD_PRODUCTS", payload: response.data.products })
@@ -36,8 +28,8 @@ function Products() {
             }
         }
         catch (error) {
-            if (error.response.status === 404) {
-                errorDispatch("No products found.")
+            if (Object.values(error.response.data)[0].length) {
+                errorDispatch(Object.values(error.response.data)[0])
             }
             else {
                 errorDispatch(error.response.statusText)
@@ -47,25 +39,22 @@ function Products() {
 
     useEffect(
         () => {
-            console.log("USEFFCT")
             if (!products.length) {
                 getProducts();
             }
         }, []
     )
 
-    console.log(products)
-
     return (
         <>
             {
-                products.length
+                error
                     ?
-                    <ProductsComponent {...{ products, userType, category: "Litter" }} />
+                    <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
                     :
-                    error
+                    products.length
                         ?
-                        <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
+                        <ProductsComponent {...{ products, userType, errorDispatch, category: "Litter" }} />
                         :
                         <Loading variant="info" loadingMessage="Loading..." containerClassName="h-100 d-flex align-items-center justify-content-center gap-3" />
             }
@@ -74,4 +63,4 @@ function Products() {
 
 }
 
-export default Products;
+export default Litter;

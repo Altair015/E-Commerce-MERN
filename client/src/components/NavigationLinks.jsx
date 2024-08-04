@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import { Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { contextStore } from '../context';
-import { adminOptions, productsOptions, signInOptions, signUpOptions } from '../utils/InitialData';
+import { contextStore } from "../context/ContextStore";
+import { adminOptions, productsOptions, sellerOptions, signInOptions, signUpOptions } from '../utils/InitialData';
 import AccordionDropdown from './AccordionDropdown';
 
 // const { Link } = Nav;
@@ -10,8 +10,10 @@ import AccordionDropdown from './AccordionDropdown';
 
 function NavigationLinks({ handleLogout, componentId, bg, className, dropdownItemClass }) {
     const store = useContext(contextStore);
+
     const { userId, userType } = store.userStore.userData;
 
+    // Navigation links to be displayed for the smaller screen
     return (
         <Nav id={componentId} className={`${className} d-sm-none`} >
             <Link to="/" className='text-light fw-medium py-2 text-decoration-none px-0 px-sm-3'>Home</Link>
@@ -20,11 +22,11 @@ function NavigationLinks({ handleLogout, componentId, bg, className, dropdownIte
                     ?
                     <AccordionDropdown options={adminOptions} heading="Categories" />
                     :
-                    (userType !== "seller")
+                    (userType === "seller")
                         ?
-                        <AccordionDropdown options={productsOptions} heading="Categories" />
+                        <AccordionDropdown options={sellerOptions} heading="Categories" />
                         :
-                        ""
+                        <AccordionDropdown options={productsOptions} heading="Categories" />
             }
             {userId
                 ?

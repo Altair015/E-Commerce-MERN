@@ -1,5 +1,6 @@
 import { Spinner } from "react-bootstrap";
 
+// Loading component
 function Loading({ containerClassName, loadingMessage, variant }) {
     return (
         <div className={containerClassName}>

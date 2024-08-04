@@ -112,20 +112,17 @@ export async function insertOrder(req, res) {
 // Function which returns all orders for admin and specific orders for user.
 export async function getOrders(req, res) {
     const { userId, userType } = req.params;
-    console.log(userId, userType)
 
     try {
         let ordersFound = null;
         if (userType === "admin") {
             ordersFound = await OrderModel.find();
-            console.log(68, ordersFound)
             if (ordersFound) {
                 return res.status(201).json({ ordersFound: ordersFound })
             }
         }
         else if (userType === "user") {
             ordersFound = await OrderModel.findOne({ userId });
-            console.log(71, ordersFound)
             if (ordersFound) {
                 console.log(ordersFound.toJSON())
                 return res.status(201).json({ ...ordersFound.toJSON() })
@@ -178,7 +175,7 @@ export async function getOrder(req, res) {
 export async function updateOrder(req, res) {
     const { userId, orderId, ...rest } = req.body;
     const { shippingStatus } = rest
-    const {  paymentStatus } = rest.payment
+    const { paymentStatus } = rest.payment
 
     // automating the payment status to Refund in case the order is cancelled or returned
     if (shippingStatus === "Cancelled" && !paymentStatus.includes("Refund Initiated")) {

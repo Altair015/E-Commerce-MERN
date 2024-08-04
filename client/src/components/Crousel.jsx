@@ -5,8 +5,7 @@ import { useEffect } from "react";
 
 const { Item } = Carousel;
 
-function Crousel({ products, increment, carouselClass, handleSelect, index }) {
-
+function Crousel({ products, increment, carouselClass, handleSelect, index, errorDispatch }) {
     let result = [];
 
     for (let i = 0; i < 12; i += increment) {
@@ -14,8 +13,7 @@ function Crousel({ products, increment, carouselClass, handleSelect, index }) {
         result.push(cards);
     }
 
-
-
+    // Carousel to display the featured products
     return (
         <Carousel className={carouselClass} activeIndex={index} onSelect={handleSelect} indicators={false}>
             {
@@ -30,7 +28,7 @@ function Crousel({ products, increment, carouselClass, handleSelect, index }) {
                                                 (card) => {
                                                     return <MyCard
                                                         key={card.productId}
-                                                        {...card}
+                                                        {...{ ...card, errorDispatch }}
                                                     />
                                                 }
                                             )

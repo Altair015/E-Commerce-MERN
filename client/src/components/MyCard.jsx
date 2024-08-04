@@ -1,27 +1,20 @@
+import { faMinus, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
 import { useContext } from 'react';
 import { Button, ButtonGroup, Card, Form } from 'react-bootstrap';
-import { contextStore } from '../context';
+import { useNavigate } from 'react-router-dom';
+import { contextStore } from "../context/ContextStore";
+import { checkQuantity } from '../utils/functions';
 import "./MyCard.css";
-import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartPlus, faMinus, faPlus, faStar, faTrash } from '@fortawesome/free-solid-svg-icons';
 import StarRating from './StarRating';
-import SETTINGS from '../config';
-import { checkQuantity } from '../utils/cardQuantity';
 
-function MyCard({ productId, image, title, description, quantity, age, price, rating, category, reviews, sellerId }) {
-
+function MyCard({ productId, image, title, description, quantity, age, price, rating, category, reviews, sellerId, errorDispatch }) {
     const store = useContext(contextStore);
-
-    const { Img, Body, Title, Text } = Card;
-
+    const { Img, Body, Text } = Card;
+    const { token } = store.tokenStore;
     const { cartItems, cartDispatch } = store.cart;
-
     const { userId } = store.userStore.userData
-
-    const { BASE_URL } = SETTINGS;
-
     const navigate = useNavigate();
 
     let cartProductQuantity = checkQuantity(productId, cartItems);
@@ -33,6 +26,7 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
         productQuantity = quantity;
     }
 
+    // Adding/Updating the product quantity in the cart as well as on the server.
     const addToServerCart = async () => {
         if (cartItems.length === 0) {
             try {
@@ -41,14 +35,22 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
                     {
                         userId,
                         productId
+                    },
+                    {
+                        headers: { 'Authorization': `JWT ${token}` }
                     }
-                )
+                );
                 if (response.status === 201) {
-                    const { newCart, productQuantity } = response.data
-                    cartDispatch(newCart)
+                    const { newCart } = response.data
+                    cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: newCart })
                 }
             } catch (error) {
-                console.log(error)
+                if (Object.values(error.response.data)[0].length) {
+                    errorDispatch(Object.values(error.response.data)[0])
+                }
+                else {
+                    errorDispatch(error.response.statusText)
+                }
             }
         }
 
@@ -59,38 +61,54 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
                     {
                         userId,
                         productId
+                    },
+                    {
+                        headers: { 'Authorization': `JWT ${token}` }
                     }
-                )
+                );
                 if (response.status === 201) {
-                    const { updatedCart, productQuantity } = response.data
-                    cartDispatch(updatedCart)
+                    const { updatedCart } = response.data
+                    cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
                 }
             } catch (error) {
-                console.log(error)
+                if (Object.values(error.response.data)[0].length) {
+                    errorDispatch(Object.values(error.response.data)[0])
+                }
+                else {
+                    errorDispatch(error.response.statusText)
+                }
             }
         }
     }
 
+    // Removing the product from the Cart on the server and updating the cart in the context.
     const removeFromServerCart = async () => {
         try {
             const response = await axios.delete(
                 "/api/deletecart",
                 {
+                    headers: { 'Authorization': `JWT ${token}` },
                     data: {
                         userId,
                         productId
                     }
                 }
-            )
+            );
             if (response.status === 201) {
                 const { updatedCart, productQuantity } = response.data;
-                cartDispatch(updatedCart);
+                cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
             }
         } catch (error) {
-            console.log(error)
+            if (Object.values(error.response.data)[0].length) {
+                errorDispatch(Object.values(error.response.data)[0])
+            }
+            else {
+                errorDispatch(error.response.statusText)
+            }
         }
     }
 
+    // Adding the product to the cart in the context.
     const addToLocalCart = async () => {
         const findProductInCart = cartItems.find(
             (cartProduct) => {
@@ -115,6 +133,7 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
         }
     }
 
+    // Removing the product from the cart in the context.
     const removerFromLocalCart = async () => {
         const findProductInCart = cartItems.find(
             (cartProduct) => {
@@ -147,7 +166,7 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
         <Card className='my-card-width rounded-1 cursor-pointer' >
             <Img
                 className='object-fit-cover'
-                src={image ? `${BASE_URL}/uploads/${sellerId}/${image}` : "/images/PurrStore.svg"}
+                src={image ? `/api/uploads/${sellerId}/${image}` : "/images/PurrStore.svg"}
                 alt='ImageNotFound'
                 onClick={handleCardClick}
                 width="250em"

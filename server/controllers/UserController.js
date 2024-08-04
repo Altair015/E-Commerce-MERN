@@ -1,8 +1,11 @@
-import UserModel from "../models/UserModel.js";
 import { compareSync, hash, hashSync } from "bcrypt";
+import { config } from "dotenv";
 import jwt from "jsonwebtoken";
-import SETTINGS from "../config.js";
+import UserModel from "../models/UserModel.js";
+import { stringCapitalize } from "../utilities/utilities.js";
+config()
 
+const { JWT_SECRET, JWT_EXPIRY } = process.env;
 // Contoroller for creating new user.
 export const signUp = async (req, res) => {
     const { firstName, lastName, phone, email, password, userType } = req.body;
@@ -53,6 +56,9 @@ export const signUp = async (req, res) => {
 // Controller for loggin in of user and return auto token.
 export const signIn = async (req, res) => {
     const { email, password, userType } = req.body;
+    console.log(req.body)
+    console.log(JWT_SECRET, JWT_EXPIRY)
+    console.log(typeof (JWT_EXPIRY))
 
     if (!email || !password) {
         return res.status(401).json({ Entries: "Email or Password field cannot be empty." })
@@ -61,25 +67,29 @@ export const signIn = async (req, res) => {
     // Trying to login.
 
     try {
-
         // checking if the account with the user input email exist in the DB.
-        const userExist = await UserModel.findOne({ email: email, userType: userType })
-
+        const userExist = await UserModel.findOne({ email: email })
+        console.log(userExist)
         // comparing the password input by the user and existing password in the db.
         if (userExist) {
-            const passwordMatched = compareSync(password, userExist.password);
-            if (passwordMatched) {
-                const JWT_TOKEN = jwt.sign({ id: userExist._id }, SETTINGS.JWT_SECRET, { expiresIn: SETTINGS.JWT_EXPIRY })
-                return res.status(201).json(
-                    {
-                        Success: "You have logged in successfully.",
-                        auth_token: JWT_TOKEN,
-                        userData: userExist.toJSON()
-                    }
-                )
+            if (userExist.userType === userType) {
+                const passwordMatched = compareSync(password, userExist.password);
+                if (passwordMatched) {
+                    const JWT_TOKEN = jwt.sign({ id: userExist._id }, JWT_SECRET, { expiresIn: JWT_EXPIRY })
+                    return res.status(201).json(
+                        {
+                            Success: "You have logged in successfully.",
+                            auth_token: JWT_TOKEN,
+                            userData: userExist.toJSON()
+                        }
+                    )
+                }
+                else {
+                    return res.status(401).json({ Info: "Invalid Credentials." })
+                }
             }
             else {
-                return res.status(401).json({ Info: "Invalid Credentials." })
+                return res.status(401).json({ Info: `Invalid Account Type.` })
             }
         }
         else {
@@ -87,6 +97,7 @@ export const signIn = async (req, res) => {
         }
     }
     catch (error) {
+        console.log(error)
         return res.status(500).send({ message: "Internal Server Error." })
     }
 }
@@ -126,7 +137,7 @@ export const updateUser = async (req, res) => {
             const findUser = await UserModel.findById({
                 _id: userId,
             })
-            return res.status(201).json({ "Success": "User Data Updated Successfully", updatedUserData: findUser.toJSON() });
+            return res.status(201).json({ Success: "User Data Updated Successfully", updatedUserData: findUser.toJSON() });
         }
         else {
             return res.status(404).json({ Failure: "No Record Found." })

@@ -4,7 +4,7 @@ import { faBars, faSearch, faShoppingCart } from "@fortawesome/free-solid-svg-ic
 // Font-awesome Component
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { useContext, useEffect, useReducer } from "react";
+import { useContext, useReducer } from "react";
 
 // Navigation Components from React Bootstrap
 import { Button, Form, Navbar, NavDropdown, Offcanvas } from 'react-bootstrap';
@@ -12,21 +12,19 @@ import NavigationLinks from './NavigationLinks';
 
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
 import { useStateReducer } from "../reducers/reducerFunctions";
 
 const { Brand, Toggle } = Navbar;
 const { Divider } = NavDropdown;
 
-function MyNavBar({ handleToken, search, searchDispatch, sideShow, sideShowDispatch }) {
+function MyNavBar({ searchDispatch, sideShow, sideShowDispatch }) {
     const store = useContext(contextStore);
-
     const dropdownItemClass = "dropdown-item d-block text-decoration-none fw-normal text-dark py-1 px-3";
-
-    const token = localStorage.getItem("token")
-
-    const { userId, userType, firstName } = store.userStore.userData;
-
+    const { userData, userDispatch } = store.userStore;
+    const { cartDispatch } = store.cart;
+    const { getToken } = store.tokenStore;
+    const { userId, userType, firstName } = userData;
     const [searchValue, searchValueDispatch] = useReducer(useStateReducer, "");
 
     const navigate = useNavigate();
@@ -34,15 +32,14 @@ function MyNavBar({ handleToken, search, searchDispatch, sideShow, sideShowDispa
     // State to handle the Women Dropdown in the Navigation Bar.
     const [show, showDispatch] = useReducer(useStateReducer, false);
 
+    // Function to handle the searching of products
     function handleSubmit(event) {
         event.preventDefault();
-        console.log("searchSubmit")
         const searchValue = event.target[0].value.trim().toLowerCase();
 
         async function getProducts() {
             try {
                 const response = await axios.get(`/api/getitems/${userType}/${userId}/${searchValue}`);
-                console.log(response)
                 if (response.status === 201) {
                     searchDispatch({ type: "SEARCHED_PRODUCTS", payload: response.data.products });
                     navigate("search")
@@ -57,13 +54,18 @@ function MyNavBar({ handleToken, search, searchDispatch, sideShow, sideShowDispa
             getProducts()
         }
     }
-    function handleLogout() {
+
+    // Function to handle the logout click.
+    function handleLogout(event) {
+        event.preventDefault()
         localStorage.clear()
-        searchDispatch({})
-        navigate(`/login/${userType}`);
+        userDispatch({ type: "CLEAR_DATA" });
+        cartDispatch({ type: "EMPTY_CART" })
         getToken()
+        navigate(`/login/${userType}`);
     }
 
+    // Function to handle the sidebar show hide functionality.
     function handleSideShowClick(event) {
         event.stopPropagation();
         sideShowDispatch({ type: "SET_SHOW", payload: !sideShow })

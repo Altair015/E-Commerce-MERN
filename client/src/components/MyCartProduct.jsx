@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useContext } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
-import { contextStore } from '../context';
+import { contextStore } from "../context/ContextStore";
 import "./MyCard.css";
 
 import { faCircleMinus, faCirclePlus, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -9,21 +9,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
 import SETTINGS from '../config';
 
-function MyCartProduct({ productId, image, title, description, quantity, cartProductQuantity, productQuantity, age, price, rating, category, sellerId, displayActions }) {
+function MyCartProduct({ productId, image, title, description, quantity, cartProductQuantity, productQuantity, age, price, rating, category, sellerId, displayActions, errorDispatch }) {
     cartProductQuantity = quantity;
-
     const store = useContext(contextStore);
-
+    const { token, getToken } = store.tokenStore;
     const { userId } = store.userStore.userData;
-
     const { Img } = Card;
-
     const { cartItems, cartDispatch } = store.cart;
-
-    const { BASE_URL } = SETTINGS;
-
     const navigate = useNavigate();
 
+    // Adding one product to the cart in the server.
     const addToServerCart = async () => {
 
         if (cartItems.length > 0 && productQuantity > 0) {
@@ -34,40 +29,86 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
                     {
                         userId,
                         productId
+                    },
+                    {
+                        headers: { 'Authorization': `JWT ${token}` }
                     }
                 )
                 if (response.status === 201) {
                     const { updatedCart } = response.data
                     cartDispatch(updatedCart)
+                    cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
                 }
             } catch (error) {
-                console.log(error)
+                if (Object.values(error.response.data)[0].length) {
+                    errorDispatch(Object.values(error.response.data)[0])
+                }
+                else {
+                    errorDispatch(error.response.statusText)
+                }
             }
         }
     }
 
+    // Removing one product from the cart in the server.
     const removeFromServerCart = async () => {
         try {
             const response = await axios.delete(
                 "/api/deletecart",
                 {
+                    headers: { 'Authorization': `JWT ${token}` }
+                    ,
                     data: {
                         userId,
                         productId
                     }
                 }
             )
-            console.log(response)
             if (response.status === 201) {
                 const { updatedCart, productQuantity } = response.data;
-                cartDispatch(updatedCart);
+                cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
             }
         } catch (error) {
-            console.log(error)
+            if (Object.values(error.response.data)[0].length) {
+                errorDispatch(Object.values(error.response.data)[0])
+            }
+            else {
+                errorDispatch(error.response.statusText)
+            }
         }
     }
 
-    console.log(productQuantity, cartProductQuantity, quantity)
+    // Removing the product from the cart in the server.
+    const removeProductFromServerCart = async () => {
+        try {
+            const response = await axios.delete(
+                "/api/deletecart",
+                {
+                    headers: { 'Authorization': `JWT ${token}` }
+                    ,
+                    data: {
+                        userId,
+                        productId,
+                        removeQuantity: cartProductQuantity
+                    }
+                }
+            )
+            if (response.status === 201) {
+                const { updatedCart, productQuantity } = response.data;
+                cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
+            }
+        }
+        catch (error) {
+            if (Object.values(error.response.data)[0].length) {
+                errorDispatch(Object.values(error.response.data)[0])
+            }
+            else {
+                errorDispatch(error.response.statusText)
+            }
+        }
+    }
+
+    // Adding one product to the cart in the context.
     const addToLocalCart = async () => {
         const findProductInCart = cartItems.find(
             (cartProduct) => {
@@ -93,6 +134,7 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
         }
     }
 
+    // Removing one product from the cart in the context.
     const removerFromLocalCart = async () => {
         const findProductInCart = cartItems.find(
             (cartProduct) => {
@@ -119,15 +161,33 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
         }
     }
 
+    // Removing the product from the cart in the context.
+    const removeProductFromLocalCart = async () => {
+        const findProductInCart = cartItems.find(
+            (cartProduct) => {
+                return cartProduct.productId === productId
+            }
+        )
+
+        if (findProductInCart && cartProductQuantity) {
+            cartDispatch(
+                {
+                    type: "REMOVE_PRODUCT_FROM_CART",
+                    payload: { productId, productQuantity: productQuantity + cartProductQuantity }
+                }
+            )
+        }
+    }
+
     function handleCardClick(event) {
         navigate(`/product/${productId}`)
     }
-    // image = "";
+
     return (
         <Row className='mb-4 mb-sm-3' >
             <Col onClick={handleCardClick} className='d-none d-sm-flex align-items-center justify-content-center p-0'>
                 <div className='h-75 w-75'>
-                    <Img className='' src={image ? `${BASE_URL}/uploads/${sellerId}/${image}` : "/images/PurrStore.svg"} alt='images/PurrStore.svg' />
+                    <Img className='' src={image ? `/api/uploads/${sellerId}/${image}` : "/images/PurrStore.svg"} alt='images/PurrStore.svg' />
                 </div>
             </Col>
             <Col onClick={handleCardClick} className=' d-sm-flex text-truncate align-items-center justify-content-center p-0'>
@@ -142,7 +202,7 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
                 <p className='m-0'>₹ {price}</p>
             </Col>
             <Col className={`d-flex align-items-center justify-content-center p-0 ${displayActions}`}>
-                <FontAwesomeIcon icon={faTrash} size='lg' />
+                <FontAwesomeIcon icon={faTrash} size='lg' onClick={userId ? removeProductFromServerCart : removeProductFromLocalCart} />
             </Col>
         </Row >
     );

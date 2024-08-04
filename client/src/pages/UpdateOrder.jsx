@@ -4,29 +4,35 @@ import { Button, Col, Container, Form, Row, Table } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import Loading from "../components/Loading";
 import { orderReducer } from "../reducers/orderReducer";
-import { stringCapitalize } from "../utils/InitialData";
 import Message from "../components/Message";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { useStateReducer } from "../reducers/reducerFunctions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import CSS for toastify
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
+import { stringCapitalize } from "../utils/functions";
 
-const { Group, Control, Label, Feedback, Select } = Form;
+const { Group, Control, Label, Select } = Form;
 
+// Updating Order page.
 function UpdateOrder() {
+    const store = useContext(contextStore);
+    const [order, orderDispatch] = useReducer(orderReducer, {});
+    const [error, errorDispatch] = useReducer(useStateReducer, "");
     const { userId, orderId } = useParams();
 
-    const [order, orderDispatch] = useReducer(orderReducer, {});
-
-    const [error, errorDispatch] = useReducer(useStateReducer, "")
+    const { token } = store.tokenStore;
 
     async function getOrder() {
         try {
             const orderResponse = await axios.get(
-                `/api/getorder/${userId}/${orderId}`
+                `/api/getorder/${userId}/${orderId}`,
+                {
+                    headers: {
+                        'Authorization': `JWT ${token}`
+                    }
+                }
             )
-            console.log(51, Object.values(orderResponse.data)[0].length)
             if (orderResponse.status === 201) {
                 if (Object.values(orderResponse.data)[0].length) {
                     orderDispatch({ type: "UPDATE_ORDER", payload: orderResponse.data });
@@ -37,9 +43,8 @@ function UpdateOrder() {
             }
         }
         catch (error) {
-            console.log(error)
-            if (error.response.status === 404) {
-                errorDispatch("Order not found.")
+            if (Object.values(error.response.data)[0].length) {
+                errorDispatch(Object.values(error.response.data)[0])
             }
             else {
                 errorDispatch(error.response.statusText)
@@ -52,9 +57,12 @@ function UpdateOrder() {
             getOrder()
         }, []
     )
-    console.log(order)
-    if (order.products) {
-        console.log(order)
+
+    if (error) {
+        return <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
+    }
+
+    else if (order.products) {
         let shippingComp = [];
         let productsComp = [];
         let paymentComp = [];
@@ -64,14 +72,11 @@ function UpdateOrder() {
         const { shippingAddress, products, payment, amount, shippingStatus } = order;
 
         function recordChange(e, keyName, objectName, filter) {
-            // console.log(e, keyName, objectName, filter)
-
             const key = e.target.id;
             const value = e.target.value;
             const comparisionObject = order[keyName];
             const objectType = typeof (comparisionObject);
             const arrayType = Array.isArray(comparisionObject);
-            // console.log(objectType, arrayType)
             if (!order[keyName]) {
                 if (arrayType === false && objectType === "object") {
                     order[keyName] = {}
@@ -93,10 +98,8 @@ function UpdateOrder() {
                     orderDispatch({ type: "UPDATE_ORDER", payload: order });
                 }
             }
-            console.log(order["shippingStatus"], order["payment"]["paymentStatus"])
             if (order["shippingStatus"] === "Cancelled" || order["shippingStatus"] === "Returned") {
                 order["payment"]["paymentStatus"] = "Refund Inititiated";
-                console.log(order["shippingStatus"], order["payment"]["paymentStatus"])
                 orderDispatch({ type: "UPDATE_ORDER", payload: order });
             }
         }
@@ -109,20 +112,25 @@ function UpdateOrder() {
                     {
                         orderId,
                         ...order
+                    },
+                    {
+                        headers: {
+                            'Authorization': `JWT ${token}`
+                        }
                     }
                 )
-                console.log(response)
                 if (response.status === 201) {
                     toast.success("Order Updated Successfully.", { position: "bottom-center" });
                     orderDispatch({ type: "UPDATE_ORDER", payload: response.data });
                 }
             }
             catch (error) {
-                if (error.response.statusText) {
-                    toast.error(error.response.statusText, { position: "bottom-center" });
+                if (Object.values(error.response.data)[0].length) {
+                    errorDispatch(Object.values(error.response.data)[0])
                 }
-                const err = Object.values(error.response.data)[0]
-                console.log(err)
+                else {
+                    errorDispatch(error.response.statusText)
+                }
             }
         }
 
@@ -164,7 +172,6 @@ function UpdateOrder() {
                                 <Control type="text" className="rounded-1" defaultValue={value} onChange={(e) => recordChange(e, keyName, objectName, filter)} disabled={disabled} />
                             </Group>
                         }
-
                     </Group>
                 )
             }
@@ -172,17 +179,15 @@ function UpdateOrder() {
                 return (
                     <Group key={objectKey} className="mb-3" controlId={`${objectKey}`}>
                         <Label className="fw-medium">{`${objectKey.slice(0, 4) === "ship" ? stringCapitalize(objectKey).slice(4) : stringCapitalize(objectKey)}`}</Label>
-                        <Control type="text" className="rounded-1" defaultValue={value} onChange={(e) => recordChange(e, keyName, objectName, filter)} disabled={disabled} />
+                        <Control type={(objectKey === "pincode" || objectKey === "shipPhone") ? "number" : "text"} className="rounded-1" defaultValue={value} onChange={(e) => recordChange(e, keyName, objectName, filter)} disabled={disabled} />
                     </Group>
                 )
             }
         }
 
         function iteratObject(keyName, objectName, filter) {
-            // console.log(objectName, comparisionObject)
             let tempComp = [];
             for (let objectKey in objectName) {
-                // console.log(key)
                 const value = objectName[objectKey];
                 tempComp.push(
                     <ShippingComp objectKey={objectKey} value={value} keyName={keyName} objectName={objectName} filter={filter} />
@@ -220,7 +225,7 @@ function UpdateOrder() {
                                         <Col xs={12} md={6}>
                                             <h1>Shipping Address</h1>
                                             {shippingComp}
-                                            < Button className="mb-3 d-none d-md-block" variant="info" type="submit" disabled={(shippingStatus === "Cancelled" || shippingStatus === "Returned") ? true : false}> Update</Button >
+                                            < Button className="mb-3 d-none d-md-block rounded-1" variant="info" type="submit" disabled={(shippingStatus === "Cancelled" || shippingStatus === "Returned") ? true : false}> Update</Button >
                                         </Col>
                                         <Col xs={12} md={6} className="py-4 py-md-0">
                                             <Row>
@@ -243,7 +248,7 @@ function UpdateOrder() {
                                             </Row>
                                             <Row className="d-block d-md-none">
                                                 <Col>
-                                                    < Button className="mb-3" variant="info" type="submit" disabled={(shippingStatus === "Cancelled" || shippingStatus === "Returned") ? true : false}>Update</Button >
+                                                    < Button className="mb-3 rounded-1" variant="info" type="submit" disabled={(shippingStatus === "Cancelled" || shippingStatus === "Returned") ? true : false}>Update</Button >
                                                 </Col>
                                             </Row>
                                         </Col>
@@ -294,9 +299,7 @@ function UpdateOrder() {
             </Container>
         )
     }
-    if (error) {
-        return <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
-    }
+
     else {
         return <Loading variant="info" loadingMessage="Loading..." containerClassName="h-100 d-flex align-items-center justify-content-center gap-3" />
     }

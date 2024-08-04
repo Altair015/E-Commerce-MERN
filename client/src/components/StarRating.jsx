@@ -3,14 +3,12 @@ import { faStar as faStar0 } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Card } from "react-bootstrap";
 
+// Rating component to display the stars.
 function StarRating({ ratingClass, rating, reviewsCount }) {
 
     const { Text } = Card;
-
     let ratings = [];
-
     const abs = Math.abs
-
     const topRating = abs(Math.ceil(rating) - rating)
     const bottomRating = abs(Math.floor(rating) - rating);
 

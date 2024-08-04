@@ -1,26 +1,20 @@
 import axios from 'axios';
 import { useContext } from 'react';
 import { Button, ButtonGroup, Card, Container, Form } from 'react-bootstrap';
-import { contextStore } from '../context';
+import { contextStore } from "../context/ContextStore";
 import "./MyCard.css";
 
-import StarRating from './StarRating';
-import SETTINGS from '../config';
 import { faMinus, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { checkQuantity } from '../utils/cardQuantity';
+import { checkQuantity } from '../utils/functions';
+import StarRating from './StarRating';
 
-function MyProduct({ productId, image, title, description, quantity, age, price, rating, category, sellerId, reviews, productDispatch }) {
-    console.log(sellerId)
+function MyProduct({ productId, image, title, description, quantity, age, price, rating, category, sellerId, reviews, productDispatch, errorDispatch }) {
     const store = useContext(contextStore);
-
+    const { token, getToken } = store.tokenStore;
     const { userId } = store.userStore.userData;
-
-    const { Img, Header, Body, Footer, Title, Text } = Card;
-
+    const { Img, Header, Body, Text } = Card;
     const { cartItems, cartDispatch } = store.cart;
-
-    const { BASE_URL } = SETTINGS;
 
     let cartProductQuantity = checkQuantity(productId, cartItems);
     let productQuantity = Math.abs(quantity - checkQuantity(productId, cartItems));
@@ -32,6 +26,7 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
         productQuantity = quantity;
     }
 
+    // Adding one product to the cart in the server.
     const addToServerCart = async () => {
         if (cartItems.length === 0) {
             try {
@@ -40,17 +35,24 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
                     {
                         userId,
                         productId
+                    },
+                    {
+                        headers: { 'Authorization': `JWT ${token}` }
                     }
                 )
                 if (response.status === 201) {
                     const { newCart, productQuantity } = response.data
-                    console.log(response.data)
-                    console.log(newCart, productQuantity)
-                    cartDispatch(newCart)
+                    cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: newCart })
                     productDispatch({ type: "UPDATE_PRODUCT_QUANTITY", payload: { productId, productQuantity } })
                 }
-            } catch (error) {
-                console.log(error)
+            }
+            catch (error) {
+                if (Object.values(error.response.data)[0].length) {
+                    errorDispatch(Object.values(error.response.data)[0])
+                }
+                else {
+                    errorDispatch(error.response.statusText)
+                }
             }
         }
 
@@ -62,26 +64,35 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
                     {
                         userId,
                         productId
+                    },
+                    {
+                        headers: { 'Authorization': `JWT ${token}` }
                     }
                 )
                 if (response.status === 201) {
                     const { updatedCart, productQuantity } = response.data
-                    console.log(49, response.data)
-                    console.log(50, updatedCart, productQuantity)
-                    cartDispatch(updatedCart)
+                    cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
                     productDispatch({ type: "UPDATE_PRODUCT_QUANTITY", payload: { productId, productQuantity } })
                 }
-            } catch (error) {
-                console.log(error)
+            }
+            catch (error) {
+                if (Object.values(error.response.data)[0].length) {
+                    errorDispatch(Object.values(error.response.data)[0])
+                }
+                else {
+                    errorDispatch(error.response.statusText)
+                }
             }
         }
     }
 
+    // Removing one product from the cart in the server.
     const removeFromServerCart = async () => {
         try {
             const response = await axios.delete(
                 "/api/deletecart",
                 {
+                    headers: { 'Authorization': `JWT ${token}` },
                     data: {
                         userId,
                         productId
@@ -90,16 +101,21 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
             )
             if (response.status === 201) {
                 const { updatedCart, productQuantity } = response.data;
-                console.log(response.data);
-                console.log(updatedCart, productQuantity);
-                cartDispatch(updatedCart);
+                cartDispatch({ type: "LOAD_PRODUCTS_IN_CART", payload: updatedCart })
                 productDispatch({ type: "UPDATE_PRODUCT_QUANTITY", payload: { productId, productQuantity } })
             }
-        } catch (error) {
-            console.log(error)
+        }
+        catch (error) {
+            if (Object.values(error.response.data)[0].length) {
+                errorDispatch(Object.values(error.response.data)[0])
+            }
+            else {
+                errorDispatch(error.response.statusText)
+            }
         }
     }
 
+    // Adding one product to the cart in the context.
     const addToLocalCart = async () => {
         const findProductInCart = cartItems.find(
             (cartProduct) => {
@@ -126,6 +142,7 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
         }
     }
 
+    // Removing one product from the cart in the context.
     const removerFromLocalCart = async () => {
         const findProductInCart = cartItems.find(
             (cartProduct) => {
@@ -155,7 +172,7 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
     return (
         <Card className='w-100 d-flex flex-md-row border-0 flex-wrap align-items-center align-items-lg-start justify-content-center' >
             <Header className='flex-lg-one-third align-self-center bg-transparent border-0 w-min-sm-75 w-min-md-50 w-min-lg-25'>
-                <Img className='object-fit-contain' src={image ? `${BASE_URL}/uploads/${sellerId}/${image}` : "/images/PurrStore.svg"} alt='images/PurrStore.svg' />
+                <Img className='object-fit-contain' src={image ? `/api/uploads/${sellerId}/${image}` : "/images/PurrStore.svg"} alt='images/PurrStore.svg' />
             </Header>
             <Body className='flex-1 flex-lg-one-third w-mx-md-100 align-self-start' >
                 <Text className='display-6'>{title}</Text>

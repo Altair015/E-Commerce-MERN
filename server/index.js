@@ -2,31 +2,26 @@ import express, { json } from "express";
 
 import mongoose, { connect } from "mongoose";
 
-import SETTINGS from "./config.js";
+import { config } from "dotenv";
 
 import morgan from "morgan";
-import userRouter from "./routes/UserRoutes.js";
-import productRouter from "./routes/productRoutes.js";
 import cartRouter from "./routes/cartRoutes.js";
-import payPalRouter from "./routes/payPalRoutes.js";
 import orderRouter from "./routes/orderRoutes.js";
+import payPalRouter from "./routes/payPalRoutes.js";
+import productRouter from "./routes/productRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 
-export const server = express();
+config()
 
-// Port number on which the Backend Server is running.
-const PORT = 4000;
+const { ATLAS_URL, PORT, HOST_NAMES } = process.env;
 
-// Setup the host name to access the Express Server from different computer rather than localhost
-// const hostName = "10.0.0.1";
-// const hostName = "192.168.0.105";
-
-const hostNames = ["10.0.0.1", "192.168.0.105"];
+const server = express();
 
 try {
-    const db = connect(SETTINGS.MONGODB_URL);
+    const db = connect(ATLAS_URL);
     if (db) {
         const { connection } = mongoose;
-        connection.on('connected', () => console.log('MongoDB is connected'));
+        connection.on('connected', () => console.log('MongoDB Server is connected'));
     }
 }
 catch (error) {
@@ -57,7 +52,7 @@ server.use('/api', payPalRouter);
 
 // server.listen(PORT, hostName, () => console.log("Express Server is started."))
 
-hostNames.forEach(hostname => {
+HOST_NAMES.split(",").forEach(hostname => {
     server.listen(PORT, hostname, () => {
         console.log(`Express Server is started on ${hostname}:${PORT}`);
     });

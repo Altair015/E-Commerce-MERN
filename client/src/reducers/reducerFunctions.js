@@ -1,8 +1,5 @@
 export function showReducer(state, action) {
-    console.log(state, action);
-
     const { type, payload } = action;
-
     if (type === "SET_SHOW") {
         return payload;
     }

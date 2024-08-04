@@ -1,5 +1,4 @@
 export function userReducer(state, action) {
-    console.log(state, action)
     const { type, payload } = action;
 
     if (type === "LOAD_USER_DATA") {
@@ -11,7 +10,7 @@ export function userReducer(state, action) {
     }
 
     else if (type === "CLEAR_DATA") {
-        return payload
+        return {}
     }
 
     return state;

@@ -14,6 +14,7 @@ function Layout() {
 
     const layoutProps = { search, searchDispatch, sideShow, sideShowDispatch };
 
+    // Layout for the application
     return (
         <div className="d-flex vh-100">
             <SideBar {...layoutProps} />

@@ -4,14 +4,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext } from "react";
 import { Col, Row } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
-import { contextStore } from "../context";
+import { contextStore } from "../context/ContextStore";
 
+// Order place or error page.
 function ThankYou() {
     const store = useContext(contextStore);
     const { userId } = store.userStore.userData
     const { orderId } = useParams();
-    console.log(orderId)
-
     const failure = "Your Order Could Not be placed. Please try again later or contact support."
     const success = "You have Successfully placed the order."
 
