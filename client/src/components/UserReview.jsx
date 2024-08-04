@@ -75,8 +75,8 @@ function UserReview({ reviews, productId, productDispatch, errorDispatch }) {
             {
                 (userType === "user" && !userReviewFound)
                     ?
-                    <Form onSubmit={submitReview} className='p-3 pb-0'>
-                        <p className="p-0 pb-3 fs-5 fw-semibold m-0">Create a review.</p>
+                    <Form onSubmit={submitReview} className='p-3'>
+                        <p className="p-0 pb-2 fs-5 fw-semibold m-0">Create a review.</p>
                         <Label className='fw-medium'>Rating</Label>
                         <Select className="mb-3 outline-0" defaultValue={3}>
                             <option value="1">Worst</option>
@@ -105,7 +105,7 @@ function UserReview({ reviews, productId, productDispatch, errorDispatch }) {
                     ?
                     (reviews.length > 0)
                         ?
-                        <div className="p-3 pb-0">
+                        <div className="p-3 py-0">
                             <p className="p-0 pb-3 fs-5 fw-semibold m-0">Reviews</p>
                             {
                                 reviews.map(

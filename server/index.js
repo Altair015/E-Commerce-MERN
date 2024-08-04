@@ -13,12 +13,12 @@ import userRouter from "./routes/userRoutes.js";
 
 config()
 
-const { MONGODB_URL, PORT, HOST_NAMES } = process.env;
+const { ATLAS_URL, PORT, HOST_NAMES } = process.env;
 
 const server = express();
 
 try {
-    const db = connect(MONGODB_URL);
+    const db = connect(ATLAS_URL);
     if (db) {
         const { connection } = mongoose;
         connection.on('connected', () => console.log('MongoDB Server is connected'));
