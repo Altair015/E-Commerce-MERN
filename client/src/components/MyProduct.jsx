@@ -4,23 +4,17 @@ import { Button, ButtonGroup, Card, Container, Form } from 'react-bootstrap';
 import { contextStore } from "../context/ContextStore";
 import "./MyCard.css";
 
-import StarRating from './StarRating';
-import SETTINGS from '../config';
 import { faMinus, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { checkQuantity } from '../utils/functions';
+import StarRating from './StarRating';
 
 function MyProduct({ productId, image, title, description, quantity, age, price, rating, category, sellerId, reviews, productDispatch, errorDispatch }) {
     const store = useContext(contextStore);
     const { token, getToken } = store.tokenStore;
-
     const { userId } = store.userStore.userData;
-
     const { Img, Header, Body, Text } = Card;
-
     const { cartItems, cartDispatch } = store.cart;
-
-    const { BASE_URL } = SETTINGS;
 
     let cartProductQuantity = checkQuantity(productId, cartItems);
     let productQuantity = Math.abs(quantity - checkQuantity(productId, cartItems));
@@ -32,6 +26,7 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
         productQuantity = quantity;
     }
 
+    // Adding one product to the cart in the server.
     const addToServerCart = async () => {
         if (cartItems.length === 0) {
             try {
@@ -91,6 +86,7 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
         }
     }
 
+    // Removing one product from the cart in the server.
     const removeFromServerCart = async () => {
         try {
             const response = await axios.delete(
@@ -119,6 +115,7 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
         }
     }
 
+    // Adding one product to the cart in the context.
     const addToLocalCart = async () => {
         const findProductInCart = cartItems.find(
             (cartProduct) => {
@@ -145,6 +142,7 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
         }
     }
 
+    // Removing one product from the cart in the context.
     const removerFromLocalCart = async () => {
         const findProductInCart = cartItems.find(
             (cartProduct) => {
@@ -174,7 +172,7 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
     return (
         <Card className='w-100 d-flex flex-md-row border-0 flex-wrap align-items-center align-items-lg-start justify-content-center' >
             <Header className='flex-lg-one-third align-self-center bg-transparent border-0 w-min-sm-75 w-min-md-50 w-min-lg-25'>
-                <Img className='object-fit-contain' src={image ? `${BASE_URL}/uploads/${sellerId}/${image}` : "/images/PurrStore.svg"} alt='images/PurrStore.svg' />
+                <Img className='object-fit-contain' src={image ? `/api/uploads/${sellerId}/${image}` : "/images/PurrStore.svg"} alt='images/PurrStore.svg' />
             </Header>
             <Body className='flex-1 flex-lg-one-third w-mx-md-100 align-self-start' >
                 <Text className='display-6'>{title}</Text>

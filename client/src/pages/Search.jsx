@@ -1,22 +1,19 @@
-import { useOutletContext } from "react-router-dom";
-import MyCard from "../components/MyCard";
-import { Button, Form } from "react-bootstrap";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useContext, useReducer } from "react";
-import { useStateReducer } from "../reducers/reducerFunctions";
+import { Button, Form } from "react-bootstrap";
+import { useOutletContext } from "react-router-dom";
 import Message from "../components/Message";
-import { faCircleExclamation, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import Loading from "../components/Loading";
 import ProductsComponent from "../components/ProductsComponent";
 import { contextStore } from "../context/ContextStore";
+import { useStateReducer } from "../reducers/reducerFunctions";
 
+// Search page
 function Search() {
     const store = useContext(contextStore);
-
-    const { userId, userType } = store.userStore.userData;
+    const { userType } = store.userStore.userData;
     const { Label, Select, Group } = Form;
     let [search, searchDispatch] = useOutletContext();
     const [filter, fiterDispatch] = useReducer(useStateReducer, {});
-    const [error, errorDispatch] = useReducer(useStateReducer, "");
 
     let searchComp = [];
     const filterValues = Object.values(filter)

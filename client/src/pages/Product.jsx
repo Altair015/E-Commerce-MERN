@@ -1,16 +1,15 @@
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 import { useContext, useEffect, useReducer } from "react";
 import { useParams } from "react-router-dom";
 import AddProduct from "../components/AddProduct";
-import MyProduct from "../components/MyProduct";
-import UserReview from "../components/UserReview";
-import SETTINGS from "../config";
-import { contextStore } from "../context/ContextStore";
-import { productReducer } from "../reducers/productReducer";
-import axios from "axios";
-import { useStateReducer } from "../reducers/reducerFunctions";
 import Loading from "../components/Loading";
 import Message from "../components/Message";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import MyProduct from "../components/MyProduct";
+import UserReview from "../components/UserReview";
+import { contextStore } from "../context/ContextStore";
+import { productReducer } from "../reducers/productReducer";
+import { useStateReducer } from "../reducers/reducerFunctions";
 
 function Product() {
     const store = useContext(contextStore);
@@ -18,8 +17,7 @@ function Product() {
     const urlParams = useParams("productId")
     const { productId } = urlParams;
     const [product, productDispatch] = useReducer(productReducer, {});
-    const [error, errorDispatch] = useReducer(useStateReducer, "")
-
+    const [error, errorDispatch] = useReducer(useStateReducer, "");
     async function getProduct() {
         try {
             const response = await axios.get(`/api/getproduct/${productId}`);
@@ -66,6 +64,7 @@ function Product() {
                         :
                         product.title
                             ?
+                            // Product page for standard user
                             <>
                                 <MyProduct {...{ ...product, errorDispatch, productDispatch }} />
                                 <UserReview {...{ ...product, errorDispatch, productDispatch }} />

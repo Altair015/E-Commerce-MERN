@@ -10,9 +10,7 @@ const { Group, Label, Control, Text } = Form;
 
 function Login() {
     const store = useContext(contextStore);
-
-    const { token, getToken } = store.tokenStore;
-
+    const { getToken } = store.tokenStore;
     const currentLocation = useLocation();
 
     // Extracting the path and usertype from the URL
@@ -20,11 +18,8 @@ function Login() {
     const { usertype } = params
 
     const navigate = useNavigate()
-
     const [error, errorDispatch] = useReducer(useStateReducer, {});
-
     const [show, showDispatch] = useReducer(useStateReducer, true);
-
     const [userData, userDataDispatch] = useReducer(useStateReducer, {})
     const { cartItems, cartDispatch } = store.cart;
 
@@ -145,6 +140,7 @@ function Login() {
         }
     }
 
+    // recording user input
     function recordChange(event) {
         const key = event.target.id
         const value = event.target.value;
@@ -152,7 +148,6 @@ function Login() {
         if (error["general"]) {
             delete error["general"]
         }
-
         if (!value.trim()) {
             delete userData[key]
         }

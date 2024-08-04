@@ -12,15 +12,15 @@ import { useStateReducer } from "../reducers/reducerFunctions";
 const { Group, Label, Control } = Form;
 const { Feedback } = Control;
 
+// Shipping address page while placing the order
 function Shipping() {
     const store = useContext(contextStore);
     const [error, errorDispatch] = useReducer(useStateReducer, "")
     const navigate = useNavigate();
     const { userData, userDispatch } = store.userStore;
-    const { userId, userType } = userData;
+    const { userId } = userData;
     const { shipName, addressLine1, addressLine2, city, state, country, pincode, shipPhone } = userData.shippingAddress;
-    const { token, getToken } = store.tokenStore;
-
+    const { token } = store.tokenStore;
     const [newShipData, newShipDataDispatch] = useReducer(useStateReducer, {});
     const [feedBack, feedBackDispatch] = useReducer(useStateReducer, {});
 
@@ -119,7 +119,6 @@ function Shipping() {
             {
                 error
                     ?
-                    // <p className="text-center display-6 fw-medium pt-4">No Records Found.</p>
                     <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
                     :
                     userData

@@ -10,13 +10,11 @@ import Loading from "../components/Loading.jsx";
 import Message from "../components/Message.jsx";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
+// Home page.
 function Home() {
     const store = useContext(contextStore);
-
     const { userId, userType } = store.userStore.userData;
-
     const [index, indexDispatch] = useReducer(useStateReducer, 0);
-
     const handleSelect = (selectedIndex) => {
         indexDispatch(selectedIndex);
     };
@@ -49,7 +47,7 @@ function Home() {
 
     useEffect(
         () => {
-            if (!products.length) {
+            if ((userType === "user" || !userType) && !products.length) {
                 getProducts();
             }
         }, []
@@ -58,16 +56,24 @@ function Home() {
     return (
         <>
             {
+                (userType === "user" || !userType)
+                    ?
+                    <Brand />
+                    :
+                    ""
+            }
+            {
                 error
                     ?
                     <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
                     :
                     (userType === "seller" || userType === "admin")
                         ?
+                        // Admin and Seller Dashboard
                         <AdSeller />
                         :
+                        // Standard User Page
                         <>
-                            <Brand />
                             {
                                 products.length >= 12
                                     ?

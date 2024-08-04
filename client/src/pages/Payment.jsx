@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const { Check } = Form;
 
+// Payment selection page.
 function Payment() {
     const navigate = useNavigate()
 

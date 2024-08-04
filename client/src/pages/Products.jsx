@@ -9,12 +9,12 @@ import { contextStore } from "../context/ContextStore";
 import { productReducer } from "../reducers/productReducer";
 import { useStateReducer } from "../reducers/reducerFunctions";
 
+// All products page
 function Products() {
     const store = useContext(contextStore);
     const [products, productsDispatch] = useReducer(productReducer, []);
     const [error, errorDispatch] = useReducer(useStateReducer, "")
     const { userId, userType } = store.userStore.userData;
-
     async function getProducts() {
         try {
             const response = await axios.get(`/api/getitems/${userType}/${userId}/null`);

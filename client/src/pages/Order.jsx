@@ -10,17 +10,16 @@ import Message from "../components/Message";
 import { contextStore } from "../context/ContextStore";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
+// specific order page
 function Order() {
     const store = useContext(contextStore);
     const { userId, orderId } = useParams();
     const { token } = store.tokenStore;
-
     const [error, errorDispatch] = useReducer(useStateReducer, "")
-
     const [order, orderDispatch] = useReducer(orderReducer, {});
-
     const { Item } = ListGroup;
 
+    // getting one order
     async function getOrder() {
         try {
             const orderResponse = await axios.get(
@@ -79,7 +78,6 @@ function Order() {
             {
                 error
                     ?
-                    // <p className="text-center display-6 fw-medium pt-4">No Records Found.</p>
                     <Message text={error} icon={faCircleExclamation} color="#0dcaf0" size="8x" />
                     :
                     order.products

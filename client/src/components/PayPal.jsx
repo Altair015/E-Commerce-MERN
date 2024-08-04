@@ -6,17 +6,13 @@ import { contextStore } from "../context/ContextStore";
 
 function PayPalApp({ show, cartTotal, error, errorDispatch }) {
     const store = useContext(contextStore);
-
     const { token, getToken } = store.tokenStore;
-
     const [{ isPending }] = usePayPalScriptReducer();
-
     const navigate = useNavigate();
-
     const { userId, userType, shippingAddress } = store.userStore.userData;
-
     const { cartItems, cartDispatch } = store.cart;
 
+    // function to return the length of the order
     async function getOrders() {
         try {
             const orderResponse = await axios.get(
@@ -57,11 +53,10 @@ function PayPalApp({ show, cartTotal, error, errorDispatch }) {
         }
     }
 
-
+    // Creation of the order 
     const onApproveOrder = async (data, actions) => {
         try {
             const details = await actions.order.capture();
-
             let response = null;
             if (details.status === "COMPLETED") {
                 const ordersLength = await getOrders();
@@ -122,7 +117,6 @@ function PayPalApp({ show, cartTotal, error, errorDispatch }) {
             }
         }
     };
-
 
     function onError(data, actions) {
         if (!error) {

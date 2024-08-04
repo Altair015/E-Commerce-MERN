@@ -13,8 +13,7 @@ function Crousel({ products, increment, carouselClass, handleSelect, index, erro
         result.push(cards);
     }
 
-
-
+    // Carousel to display the featured products
     return (
         <Carousel className={carouselClass} activeIndex={index} onSelect={handleSelect} indicators={false}>
             {

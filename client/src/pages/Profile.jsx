@@ -10,20 +10,17 @@ import Loading from "../components/Loading";
 import Message from "../components/Message";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
+// Single user's data page.
 function Profile() {
     const store = useContext(contextStore);
     const { userData, userDispatch } = store.userStore;
     const { userType } = userData;
     const { token, getToken } = store.tokenStore;
-
     const [localUserData, localUserDataDispatch] = useReducer(useStateReducer, null);
     const [newUserData, newUserDataDispatch] = useReducer(useStateReducer, {});
     const [newShipData, newShipDataDispatch] = useReducer(useStateReducer, {});
-
     const [error, errorDispatch] = useReducer(useStateReducer, "");
-
     const params = useParams();
-
     const { userId } = params;
 
     async function getUser(userId) {

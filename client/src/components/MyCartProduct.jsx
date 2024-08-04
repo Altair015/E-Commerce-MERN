@@ -11,21 +11,14 @@ import SETTINGS from '../config';
 
 function MyCartProduct({ productId, image, title, description, quantity, cartProductQuantity, productQuantity, age, price, rating, category, sellerId, displayActions, errorDispatch }) {
     cartProductQuantity = quantity;
-
     const store = useContext(contextStore);
-
     const { token, getToken } = store.tokenStore;
-
     const { userId } = store.userStore.userData;
-
     const { Img } = Card;
-
     const { cartItems, cartDispatch } = store.cart;
-
-    const { BASE_URL } = SETTINGS;
-
     const navigate = useNavigate();
 
+    // Adding one product to the cart in the server.
     const addToServerCart = async () => {
 
         if (cartItems.length > 0 && productQuantity > 0) {
@@ -57,6 +50,7 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
         }
     }
 
+    // Removing one product from the cart in the server.
     const removeFromServerCart = async () => {
         try {
             const response = await axios.delete(
@@ -84,6 +78,7 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
         }
     }
 
+    // Removing the product from the cart in the server.
     const removeProductFromServerCart = async () => {
         try {
             const response = await axios.delete(
@@ -113,6 +108,7 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
         }
     }
 
+    // Adding one product to the cart in the context.
     const addToLocalCart = async () => {
         const findProductInCart = cartItems.find(
             (cartProduct) => {
@@ -138,6 +134,7 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
         }
     }
 
+    // Removing one product from the cart in the context.
     const removerFromLocalCart = async () => {
         const findProductInCart = cartItems.find(
             (cartProduct) => {
@@ -164,6 +161,7 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
         }
     }
 
+    // Removing the product from the cart in the context.
     const removeProductFromLocalCart = async () => {
         const findProductInCart = cartItems.find(
             (cartProduct) => {
@@ -184,12 +182,12 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
     function handleCardClick(event) {
         navigate(`/product/${productId}`)
     }
-    // image = "";
+
     return (
         <Row className='mb-4 mb-sm-3' >
             <Col onClick={handleCardClick} className='d-none d-sm-flex align-items-center justify-content-center p-0'>
                 <div className='h-75 w-75'>
-                    <Img className='' src={image ? `${BASE_URL}/uploads/${sellerId}/${image}` : "/images/PurrStore.svg"} alt='images/PurrStore.svg' />
+                    <Img className='' src={image ? `/api/uploads/${sellerId}/${image}` : "/images/PurrStore.svg"} alt='images/PurrStore.svg' />
                 </div>
             </Col>
             <Col onClick={handleCardClick} className=' d-sm-flex text-truncate align-items-center justify-content-center p-0'>

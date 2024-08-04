@@ -5,7 +5,6 @@ import { useContext, useReducer } from "react";
 import { Button, Col, Container, Form, Image, Row } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import SETTINGS from "../config";
 import { contextStore } from "../context/ContextStore";
 import { useStateReducer } from "../reducers/reducerFunctions";
 
@@ -13,7 +12,6 @@ function AddProduct({ productId, image, title, description, quantity,
     age, price, category, sellerId, sellerEmail, productDispatch, errorDispatch }) {
     const store = useContext(contextStore);
     const { Label, Select, Group, Control } = Form;
-    const { BASE_URL } = SETTINGS;
     const { userId, userType } = store.userStore.userData;
     const { token } = store.tokenStore;
     const [uploadImage, uploadImageDispatch] = useReducer(useStateReducer, { preview: "", data: "" });
@@ -39,6 +37,7 @@ function AddProduct({ productId, image, title, description, quantity,
         const formData = new FormData();
         formData.append("sellerId", sellerId);
 
+        // Creation of new product
         if (operation === "Create Product") {
             formData.append("file", uploadImage.data)
 
@@ -91,6 +90,7 @@ function AddProduct({ productId, image, title, description, quantity,
 
             createProduct()
         }
+
         // Updating the existing product
         else if (operation === "Update Product") {
             formData.append("productId", productId);
@@ -175,7 +175,7 @@ function AddProduct({ productId, image, title, description, quantity,
                                             :
                                             image
                                                 ?
-                                                `${BASE_URL}/uploads/${sellerId}/${image}`
+                                                `/api/uploads/${sellerId}/${image}`
                                                 :
                                                 "/images/PurrStore.svg"
                                     }

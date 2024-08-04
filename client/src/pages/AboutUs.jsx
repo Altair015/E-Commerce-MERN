@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { aboutData } from '../utils/InitialData';
 
+// About Us page.
 function AboutUs() {
     return (
         <Container className="py-3">

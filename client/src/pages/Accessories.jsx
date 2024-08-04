@@ -11,14 +11,10 @@ import Loading from "../components/Loading";
 import { useStateReducer } from "../reducers/reducerFunctions";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
-
-function Products() {
+// Accesories Page
+function Accesories() {
     const store = useContext(contextStore);
-
     const { userId, userType } = store.userStore.userData;
-
-    const getLocation = useLocation();
-
     const [products, productsDispatch] = useReducer(productReducer, []);
     const [error, errorDispatch] = useReducer(useStateReducer, "");
 
@@ -70,4 +66,4 @@ function Products() {
 
 }
 
-export default Products;
+export default Accesories;

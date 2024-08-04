@@ -12,8 +12,9 @@ import "react-toastify/dist/ReactToastify.css"; // Import CSS for toastify
 import { contextStore } from "../context/ContextStore";
 import { stringCapitalize } from "../utils/functions";
 
-const { Group, Control, Label, Feedback, Select } = Form;
+const { Group, Control, Label, Select } = Form;
 
+// Updating Order page.
 function UpdateOrder() {
     const store = useContext(contextStore);
     const [order, orderDispatch] = useReducer(orderReducer, {});
@@ -171,7 +172,6 @@ function UpdateOrder() {
                                 <Control type="text" className="rounded-1" defaultValue={value} onChange={(e) => recordChange(e, keyName, objectName, filter)} disabled={disabled} />
                             </Group>
                         }
-
                     </Group>
                 )
             }
@@ -179,7 +179,7 @@ function UpdateOrder() {
                 return (
                     <Group key={objectKey} className="mb-3" controlId={`${objectKey}`}>
                         <Label className="fw-medium">{`${objectKey.slice(0, 4) === "ship" ? stringCapitalize(objectKey).slice(4) : stringCapitalize(objectKey)}`}</Label>
-                        <Control type="text" className="rounded-1" defaultValue={value} onChange={(e) => recordChange(e, keyName, objectName, filter)} disabled={disabled} />
+                        <Control type={(objectKey === "pincode" || objectKey === "shipPhone") ? "number" : "text"} className="rounded-1" defaultValue={value} onChange={(e) => recordChange(e, keyName, objectName, filter)} disabled={disabled} />
                     </Group>
                 )
             }
@@ -225,7 +225,7 @@ function UpdateOrder() {
                                         <Col xs={12} md={6}>
                                             <h1>Shipping Address</h1>
                                             {shippingComp}
-                                            < Button className="mb-3 d-none d-md-block" variant="info" type="submit" disabled={(shippingStatus === "Cancelled" || shippingStatus === "Returned") ? true : false}> Update</Button >
+                                            < Button className="mb-3 d-none d-md-block rounded-1" variant="info" type="submit" disabled={(shippingStatus === "Cancelled" || shippingStatus === "Returned") ? true : false}> Update</Button >
                                         </Col>
                                         <Col xs={12} md={6} className="py-4 py-md-0">
                                             <Row>
@@ -248,7 +248,7 @@ function UpdateOrder() {
                                             </Row>
                                             <Row className="d-block d-md-none">
                                                 <Col>
-                                                    < Button className="mb-3" variant="info" type="submit" disabled={(shippingStatus === "Cancelled" || shippingStatus === "Returned") ? true : false}>Update</Button >
+                                                    < Button className="mb-3 rounded-1" variant="info" type="submit" disabled={(shippingStatus === "Cancelled" || shippingStatus === "Returned") ? true : false}>Update</Button >
                                                 </Col>
                                             </Row>
                                         </Col>

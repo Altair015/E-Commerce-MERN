@@ -2,6 +2,8 @@ Created the directory structure using CHATGPT.
 Linked the root directory to the GitHub.
 Created the directories server and client.
 
+Added the proxy for the backend in vite-config.js file in the client directory.
+
 Backend:
 Created the package.json file.
 Created the directories models, controllers, routes, middlewares, public and utilites. 

@@ -18,26 +18,21 @@ import { useStateReducer } from "../reducers/reducerFunctions";
 const { Brand, Toggle } = Navbar;
 const { Divider } = NavDropdown;
 
-function MyNavBar({ handleToken, search, searchDispatch, sideShow, sideShowDispatch }) {
+function MyNavBar({ searchDispatch, sideShow, sideShowDispatch }) {
     const store = useContext(contextStore);
-
     const dropdownItemClass = "dropdown-item d-block text-decoration-none fw-normal text-dark py-1 px-3";
-
     const { userData, userDispatch } = store.userStore;
-
-    const { cartItems, cartDispatch } = store.cart;
-
+    const { cartDispatch } = store.cart;
     const { getToken } = store.tokenStore;
-
     const { userId, userType, firstName } = userData;
-
-    const [searchValueDispatch] = useReducer(useStateReducer, "");
+    const [searchValue, searchValueDispatch] = useReducer(useStateReducer, "");
 
     const navigate = useNavigate();
 
     // State to handle the Women Dropdown in the Navigation Bar.
     const [show, showDispatch] = useReducer(useStateReducer, false);
 
+    // Function to handle the searching of products
     function handleSubmit(event) {
         event.preventDefault();
         const searchValue = event.target[0].value.trim().toLowerCase();
@@ -60,6 +55,7 @@ function MyNavBar({ handleToken, search, searchDispatch, sideShow, sideShowDispa
         }
     }
 
+    // Function to handle the logout click.
     function handleLogout(event) {
         event.preventDefault()
         localStorage.clear()
@@ -69,6 +65,7 @@ function MyNavBar({ handleToken, search, searchDispatch, sideShow, sideShowDispa
         navigate(`/login/${userType}`);
     }
 
+    // Function to handle the sidebar show hide functionality.
     function handleSideShowClick(event) {
         event.stopPropagation();
         sideShowDispatch({ type: "SET_SHOW", payload: !sideShow })

@@ -1,7 +1,6 @@
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useContext, useEffect, useReducer } from "react";
-import { useLocation } from "react-router-dom";
 import Loading from "../components/Loading";
 import Message from "../components/Message";
 import ProductsComponent from "../components/ProductsComponent";
@@ -9,14 +8,10 @@ import { contextStore } from "../context/ContextStore";
 import { productReducer } from "../reducers/productReducer";
 import { useStateReducer } from "../reducers/reducerFunctions";
 
-
-function Products() {
+// Products Page
+function Food() {
     const store = useContext(contextStore);
-
     const { userId, userType } = store.userStore.userData;
-
-    const getLocation = useLocation();
-
     const [products, productsDispatch] = useReducer(productReducer, []);
     const [error, errorDispatch] = useReducer(useStateReducer, "");
 
@@ -68,4 +63,4 @@ function Products() {
 
 }
 
-export default Products;
+export default Food;

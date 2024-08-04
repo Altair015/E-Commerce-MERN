@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import PayPalApp from "../components/PayPal";
-
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import axios from "axios";
@@ -20,11 +19,8 @@ function OrderSummary() {
     const { shippingAddress } = store.userStore.userData;
     const { shipName } = shippingAddress;
     const { token, getToken } = store.tokenStore;
-
     const [initialOptions, initialOptionsDispatch] = useReducer(useStateReducer, { "client-id": "", currency: "USD", intent: "capture", })
-
     const [error, errorDispatch] = useReducer(useStateReducer, "");
-
     const { Item } = ListGroup;
 
     const total = cartItems.reduce(
@@ -49,6 +45,7 @@ function OrderSummary() {
         }
     }
 
+    // getting paypal client id from the server
     async function loadClientId() {
         try {
             const response = await axios.get(

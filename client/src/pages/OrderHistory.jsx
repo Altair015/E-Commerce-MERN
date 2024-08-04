@@ -10,6 +10,7 @@ import { contextStore } from "../context/ContextStore";
 import { orderReducer } from "../reducers/orderReducer";
 import { useStateReducer } from "../reducers/reducerFunctions";
 
+// List of orders
 function OrderHistory() {
     const store = useContext(contextStore);
     const { token } = store.tokenStore;

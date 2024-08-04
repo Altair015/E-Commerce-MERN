@@ -2,6 +2,7 @@ import { Container, Table } from "react-bootstrap";
 import MyCard from "./MyCard";
 import { Link } from "react-router-dom";
 
+// Component to display the products.
 function ProductsComponent({ products, category, userType, errorDispatch }) {
     return (
         <>

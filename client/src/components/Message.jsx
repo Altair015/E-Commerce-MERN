@@ -4,6 +4,7 @@ import { Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { contextStore } from "../context/ContextStore";
 
+// Message component to display the error or info messages.
 function Message({ text, icon, color, size, textClass, iconClas }) {
     const store = useContext(contextStore);
     const { userData, userDispatch } = store.userStore;
@@ -13,6 +14,7 @@ function Message({ text, icon, color, size, textClass, iconClas }) {
 
     const navigate = useNavigate();
 
+    // Clearing the context when the token is invalid
     function clearContext() {
         localStorage.clear()
         userDispatch({ type: "CLEAR_DATA" });

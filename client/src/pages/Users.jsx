@@ -8,13 +8,13 @@ import Message from "../components/Message";
 import Loading from "../components/Loading";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
+// All users page for Admin
 function Users() {
     const store = useContext(contextStore);
     const { userId, userType } = store.userStore.userData;
     const [users, usersDispatch] = useReducer(useStateReducer, []);
     const [error, errorDispatch] = useReducer(useStateReducer, "");
     const { token, getToken } = store.tokenStore;
-
     async function getUsers() {
         try {
             const response = await axios.post(

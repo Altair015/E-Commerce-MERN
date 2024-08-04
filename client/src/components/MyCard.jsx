@@ -1,29 +1,20 @@
+import { faMinus, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
 import { useContext } from 'react';
 import { Button, ButtonGroup, Card, Form } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { contextStore } from "../context/ContextStore";
-import "./MyCard.css";
-import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartPlus, faMinus, faPlus, faStar, faTrash } from '@fortawesome/free-solid-svg-icons';
-import StarRating from './StarRating';
-import SETTINGS from '../config';
 import { checkQuantity } from '../utils/functions';
+import "./MyCard.css";
+import StarRating from './StarRating';
 
 function MyCard({ productId, image, title, description, quantity, age, price, rating, category, reviews, sellerId, errorDispatch }) {
-
     const store = useContext(contextStore);
-
     const { Img, Body, Text } = Card;
-
     const { token } = store.tokenStore;
-
     const { cartItems, cartDispatch } = store.cart;
-
     const { userId } = store.userStore.userData
-
-    const { BASE_URL } = SETTINGS;
-
     const navigate = useNavigate();
 
     let cartProductQuantity = checkQuantity(productId, cartItems);
@@ -90,6 +81,7 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
         }
     }
 
+    // Removing the product from the Cart on the server and updating the cart in the context.
     const removeFromServerCart = async () => {
         try {
             const response = await axios.delete(
@@ -116,6 +108,7 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
         }
     }
 
+    // Adding the product to the cart in the context.
     const addToLocalCart = async () => {
         const findProductInCart = cartItems.find(
             (cartProduct) => {
@@ -140,6 +133,7 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
         }
     }
 
+    // Removing the product from the cart in the context.
     const removerFromLocalCart = async () => {
         const findProductInCart = cartItems.find(
             (cartProduct) => {
@@ -172,7 +166,7 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
         <Card className='my-card-width rounded-1 cursor-pointer' >
             <Img
                 className='object-fit-cover'
-                src={image ? `${BASE_URL}/uploads/${sellerId}/${image}` : "/images/PurrStore.svg"}
+                src={image ? `/api/uploads/${sellerId}/${image}` : "/images/PurrStore.svg"}
                 alt='ImageNotFound'
                 onClick={handleCardClick}
                 width="250em"

@@ -6,6 +6,7 @@ function CustomToggle({ eventKey, heading }) {
         console.log('totally custom!'),
     );
 
+    // headding for the dropdown
     return (
         <p onClick={decoratedOnClick} className='d-flex justify-content-between align-items-center text-light fw-medium cursor-pointer m-0 p-0'>
             <span className='fw-medium text-light'>{heading}</span> +
@@ -14,6 +15,7 @@ function CustomToggle({ eventKey, heading }) {
 }
 
 const AccordionDropdown = ({ heading, options }) => {
+    // Dropdown for the smaller screen
     return (
         < Accordion className='bg-dark text-center py-1' defaultActiveKey="1" >
             <CustomToggle eventKey="0" heading={heading} />
@@ -22,6 +24,7 @@ const AccordionDropdown = ({ heading, options }) => {
                     <Row className="d-sm-flex justify-content-evenly">
                         <Col sm={3} className="text-center">
                             <ListGroup variant="flush">
+                                {/* Items of the dropdown */}
                                 {
                                     options.map(
                                         ({ title, to }, index) => {

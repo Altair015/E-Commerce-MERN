@@ -5,10 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import Message from '../components/Message';
 import MyCartProduct from '../components/MyCartProduct';
 import { contextStore } from "../context/ContextStore";
-import Loading from '../components/Loading';
 import { useStateReducer } from '../reducers/reducerFunctions';
 
-
+// Cart Page
 function Cart() {
     const navigate = useNavigate();
     const store = useContext(contextStore);
