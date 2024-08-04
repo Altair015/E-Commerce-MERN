@@ -4,7 +4,6 @@ import mongoose, { connect } from "mongoose";
 
 import { config } from "dotenv";
 
-import morgan from "morgan";
 import cartRouter from "./routes/cartRoutes.js";
 import orderRouter from "./routes/orderRoutes.js";
 import payPalRouter from "./routes/payPalRoutes.js";
@@ -27,8 +26,6 @@ try {
 catch (error) {
     console.log(error.message)
 }
-
-server.use(morgan())
 
 // Parsing the body sent over requests.
 server.use(json())
