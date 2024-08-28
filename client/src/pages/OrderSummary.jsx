@@ -1,16 +1,17 @@
-import { Link } from "react-router-dom";
-import PayPalApp from "../components/PayPal";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { useContext, useEffect, useReducer } from "react";
 import { Col, Container, ListGroup, ProgressBar, Row } from 'react-bootstrap';
+import { Link } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import Loading from "../components/Loading";
 import Message from "../components/Message";
 import MyCartProduct from "../components/MyCartProduct";
+import PayPalApp from "../components/PayPal";
 import { contextStore } from "../context/ContextStore";
 import { useStateReducer } from "../reducers/reducerFunctions";
+const { VITE_BACKEND_URL } = import.meta.env;
 
 function OrderSummary() {
     const store = useContext(contextStore);
@@ -49,7 +50,7 @@ function OrderSummary() {
     async function loadClientId() {
         try {
             const response = await axios.get(
-                "/api/getpaypalid",
+                `${VITE_BACKEND_URL}/getpaypalid`,
                 {
                     headers: { 'Authorization': `JWT ${token}` }
                 }
@@ -161,10 +162,6 @@ function OrderSummary() {
                                         <Col className="px-0 fw-bold">Order Total</Col>
                                         <Col className="px-0 fw-bold">₹ {total}.00</Col>
                                     </Row>
-                                    {/* <Button variant="info" type="submit" className="fw-medium rounded-1 w-100 pt-2 my-3" hidden={!show}>
-                                        Proceed to Payment
-                                    </Button> */}
-                                    {/* <PayPalApp show={show} cartTotal={total} /> */}
                                     <PayPalApp cartTotal={total} {...{ error, errorDispatch, token, getToken }} />
                                 </Col>
                             </Row>

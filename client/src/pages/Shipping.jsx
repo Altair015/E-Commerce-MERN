@@ -11,6 +11,7 @@ import { useStateReducer } from "../reducers/reducerFunctions";
 
 const { Group, Label, Control } = Form;
 const { Feedback } = Control;
+const { VITE_BACKEND_URL } = import.meta.env;
 
 // Shipping address page while placing the order
 function Shipping() {
@@ -62,7 +63,7 @@ function Shipping() {
         async function updateUserData() {
             try {
                 const response = await axios.put(
-                    "/api/updateprofile",
+                    `${VITE_BACKEND_URL}/updateprofile`,
                     dataToBeUpdated,
                     {
                         headers: { 'Authorization': `JWT ${token}` }

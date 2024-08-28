@@ -8,6 +8,7 @@ import { contextStore } from "../context/ContextStore";
 import { checkQuantity } from '../utils/functions';
 import "./MyCard.css";
 import StarRating from './StarRating';
+const { VITE_BACKEND_URL, VITE_STATIC_URL } = import.meta.env;
 
 function MyCard({ productId, image, title, description, quantity, age, price, rating, category, reviews, sellerId, errorDispatch }) {
     const store = useContext(contextStore);
@@ -31,7 +32,7 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
         if (cartItems.length === 0) {
             try {
                 const response = await axios.post(
-                    "/api/createcart",
+                    `${VITE_BACKEND_URL}/createcart`,
                     {
                         userId,
                         productId
@@ -57,7 +58,7 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
         else if (cartItems.length > 0 && productQuantity > 0) {
             try {
                 const response = await axios.put(
-                    "/api/updatecart",
+                    `${VITE_BACKEND_URL}/updatecart`,
                     {
                         userId,
                         productId
@@ -85,7 +86,7 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
     const removeFromServerCart = async () => {
         try {
             const response = await axios.delete(
-                "/api/deletecart",
+                `${VITE_BACKEND_URL}/deletecart`,
                 {
                     headers: { 'Authorization': `JWT ${token}` },
                     data: {
@@ -166,7 +167,7 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
         <Card className='my-card-width rounded-1 cursor-pointer' >
             <Img
                 className='object-fit-cover'
-                src={image ? `/static/${sellerId}/${image}` : "/images/PurrStore.svg"}
+                src={image ? `${VITE_STATIC_URL}/${sellerId}/${image}` : "/images/PurrStore.svg"}
                 alt='ImageNotFound'
                 onClick={handleCardClick}
                 width="250em"

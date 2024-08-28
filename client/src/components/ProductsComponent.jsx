@@ -1,9 +1,18 @@
 import { Container, Table } from "react-bootstrap";
 import MyCard from "./MyCard";
 import { Link } from "react-router-dom";
+import Message from "./Message";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 // Component to display the products.
 function ProductsComponent({ products, category, userType, errorDispatch }) {
+    const productsWithCategory = products.reduce((accumu, product) => {
+        if (product.category === category) {
+            const comp = <MyCard {...{ ...product, errorDispatch }} key={product.productId} />;
+            return [...accumu, comp]; // Return the updated accumulator
+        }
+        return accumu;
+    }, [])
     return (
         <>
             {
@@ -70,32 +79,38 @@ function ProductsComponent({ products, category, userType, errorDispatch }) {
                         </Table>
                     </Container >
                     :
-                    < div className="d-flex justify-content-center px-4 py-4" >
-                        < div className="d-flex gap-3 flex-wrap" >
-                            {
-                                category
+                    <>
+                        {
+                            category
+                                ?
+                                productsWithCategory.length
                                     ?
-                                    products.reduce((accumu, product) => {
-                                        if (product.category === category) {
-                                            const comp = <MyCard {...{ ...product, errorDispatch }} key={product.productId} />;
-                                            return [...accumu, comp]; // Return the updated accumulator
-                                        }
-                                        return accumu;
-                                    }, [])
+                                    < div className="d-flex justify-content-center px-4 py-4" >
+                                        < div className="d-flex gap-3 flex-wrap" >
+                                            {productsWithCategory}
+                                        </div>
+                                    </div>
                                     :
-                                    products.map(
-                                        (product, index) => {
-                                            return (
-                                                <MyCard
-                                                    key={product.productId}
-                                                    {...{ ...product, errorDispatch }}
-                                                />
+                                    <Message text='No Products Found.' icon={faCircleExclamation} color="#0dcaf0" size="8x" />
+                                :
+                                < div className="d-flex justify-content-center px-4 py-4" >
+                                    < div className="d-flex gap-3 flex-wrap" >
+                                        {
+                                            products.map(
+                                                (product, index) => {
+                                                    return (
+                                                        <MyCard
+                                                            key={product.productId}
+                                                            {...{ ...product, errorDispatch }}
+                                                        />
+                                                    )
+                                                }
                                             )
                                         }
-                                    )
-                            }
-                        </div>
-                    </div>
+                                    </div>
+                                </div>
+                        }
+                    </>
             }
         </>
 

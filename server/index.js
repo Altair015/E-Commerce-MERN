@@ -1,4 +1,5 @@
 import express, { json } from "express";
+import cors from "cors";
 
 import mongoose, { connect } from "mongoose";
 
@@ -12,12 +13,12 @@ import userRouter from "./routes/userRoutes.js";
 
 config()
 
-const { ATLAS_URL, PORT, HOST_NAMES } = process.env;
+const { MONGODB_URL, PORT } = process.env;
 
 const server = express();
 
 try {
-    const db = connect(ATLAS_URL);
+    const db = connect(MONGODB_URL);
     if (db) {
         const { connection } = mongoose;
         connection.on('connected', () => console.log('MongoDB Server is connected'));
@@ -26,6 +27,8 @@ try {
 catch (error) {
     console.log(error.message)
 }
+
+server.use(cors())
 
 // Parsing the body sent over requests.
 server.use(json())
@@ -47,10 +50,4 @@ server.use('/api', orderRouter);
 // Connecting the payPalRouter to Express Application
 server.use('/api', payPalRouter);
 
-// server.listen(PORT, hostName, () => console.log("Express Server is started."))
-
-HOST_NAMES.split(",").forEach(hostname => {
-    server.listen(PORT, hostname, () => {
-        console.log(`Express Server is started on ${hostname}:${PORT}`);
-    });
-});
+server.listen(PORT, () => console.log(`Express Server is started on :${PORT}`));

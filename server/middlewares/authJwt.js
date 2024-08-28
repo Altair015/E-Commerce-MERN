@@ -20,7 +20,6 @@ function authJwt(req, res, next) {
                 else {
                     try {
                         const user = await UserModel.findById(verifiedToken.id);
-                        console.log(user)
                         if (user) {
                             next()
                         }

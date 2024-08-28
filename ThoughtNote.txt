@@ -1,10 +1,81 @@
 Created the directory structure using CHATGPT.
-Linked the root directory to the GitHub.
+Linked the root directory to the GitHub: https://github.com/Altair015/puresubmission
 Created the directories server and client.
 
-Added the proxy for the backend in vite-config.js file in the client directory.
+My Deployment: https://purrstore.netlify.app/
 
-Backend:
+Execution Instruction:
+Extract the zip file
+===========================LOCAL TESTING=======================
+Go to the "forlocaldevelopment" directory
+
+***SERVER SIDE SETUP******
+
+Go to the "server" directory.
+configure the .env file in the "server" directory with the following
+MONGODB_URL=
+PORT=
+JWT_SECRET=
+JWT_EXPIRY=
+HOST_NAME=
+PAYPAL_CLIENT_ID=
+MONGODB_URL must be generated from MongoDB Atlas and placed here.
+PAYPAL_CLIENT_ID also must be generated from PayPal Developer Dashboard and placed else the payment will not work.
+Remaining fields can be altered or can be used with the default values specified in the .env file.
+
+Open CMD navigate to the server directory and execute these commands:
+npm install
+node index.js
+
+***CLIENT SIDE SETUP******
+
+Go to the "client" directory.
+
+Open CMD navigate to the client directory and execute these commands:
+npm install
+npm run dev
+
+NOTE: The vite.config.js file is configured with backend address http://localhost and port 4000 you can change this if you are using any other address or Port Number.
+
+===========================DEPLOYMENT CONFIGURATION=======================
+Go to the "fordeplomentonrenderandnetlify" directory
+Create a GitHub repository using the client and server directory from the directory"fordeplomentonrenderandnetlify".
+
+***SERVER SIDE SETUP******
+Go to the "render.com" and login.
+
+configure these environment variable on "render.com" using the details from .env file from the "server" directory.
+MONGODB_URL=
+PORT=
+JWT_SECRET=
+JWT_EXPIRY=
+PAYPAL_CLIENT_ID=
+MONGODB_URL must be generated from MongoDB Atlas and placed here.
+PAYPAL_CLIENT_ID also must be generated from PayPal Developer Dashboard and placed else the payment will not work.
+Remaining fields can be altered or can be used with the default values specified in the .env file.
+
+once the backend is deploy obtain the url to server to the front end.
+
+REFERENCE: https://docs.render.com/deploy-node-express-app
+
+***CLIENT SIDE SETUP******
+Go to the "https://www.netlify.com/" and login.
+Deploy the frontend of the application.
+
+configure the .env file in the "client" directory with the backend deployment obtained from render.com.
+VITE_BACKEND_URL= 
+VITE_STATIC_URL=
+
+REFERENCE: https://docs.netlify.com/frameworks/vite/
+
+My Deployment: https://purrstore.netlify.app/
+
+===============================================Details of the creation of the project======================================================
+
+server: NODEJS, EXPRESSJS, MONGODB
+NOTE: Sample product data must only be seeded after seeding the sample user data as the product data requires sellerId i.e., the _id for admin or seller account.
+refer server/utilities/sampledata for more info
+
 Created the package.json file.
 Created the directories models, controllers, routes, middlewares, public and utilites. 
 Installed the libraries: mongoose,nodemon, morgan, multer, nodemon bcrypt, dotenv, express, jsonwebtoken and mongoose.
@@ -53,7 +124,11 @@ Created the getOrders controller to return all the specific orders for user and 
 Created the getOrder controller to return a specific order for user to view.
 Created the updateOrder contorller to update the details in the existing order.
 
-FrontEnd:
+
+client: VITE-REACT
+Provide the Backend server address e.g., http://localhost:4000 as the value for the keys /api and /static.
+
+Added the proxy for the backend in vite-config.js file in the client directory.
 Created the react app using the VITE.
 Removed the existing code from App.jsx and main.jsx.
 Installed the libraries:-

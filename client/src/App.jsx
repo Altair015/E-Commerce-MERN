@@ -33,6 +33,7 @@ function App() {
   const store = useContext(contextStore);
   const { token } = store.tokenStore;
   const { userType } = store.userStore.userData;
+  const { cartItems } = store.cart
 
   return (
     <Routes>
@@ -52,7 +53,7 @@ function App() {
         <Route path='cart' element={<Cart />} />
         <Route path='ship' element={token ? <Shipping /> : <Navigate to={`/login/${userType}`} />} />
         <Route path='pay' element={token && (userType === "user") ? <Payment /> : <Navigate to={`/login/${userType}`} />} />
-        <Route path='summary' element={token ? <OrderSummary /> : <Navigate to={`/login/${userType}`} />} />
+        <Route path='summary' element={token ? cartItems.length ? <OrderSummary /> : <Navigate to="/" /> : <Navigate to={`/login/${userType}`} />} />
         <Route path='placed/:orderId' element={token ? <ThankYou /> : <Navigate to={`/login/${userType}`} />} />
         <Route path='placed' element={token && (userType === "user") ? <ThankYou /> : <Navigate to={`/login/${userType}`} />} />
         <Route path='orders' element={token ? <OrderHistory /> : <Navigate to={`/login/${userType}`} />} />

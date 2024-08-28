@@ -1,18 +1,19 @@
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useContext, useEffect, useReducer } from "react";
 import { Button, Col, Container, Form, Row, Table } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import Loading from "../components/Loading";
-import { orderReducer } from "../reducers/orderReducer";
-import Message from "../components/Message";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
-import { useStateReducer } from "../reducers/reducerFunctions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import CSS for toastify
+import Loading from "../components/Loading";
+import Message from "../components/Message";
 import { contextStore } from "../context/ContextStore";
+import { orderReducer } from "../reducers/orderReducer";
+import { useStateReducer } from "../reducers/reducerFunctions";
 import { stringCapitalize } from "../utils/functions";
 
 const { Group, Control, Label, Select } = Form;
+const { VITE_BACKEND_URL } = import.meta.env;
 
 // Updating Order page.
 function UpdateOrder() {
@@ -26,7 +27,7 @@ function UpdateOrder() {
     async function getOrder() {
         try {
             const orderResponse = await axios.get(
-                `/api/getorder/${userId}/${orderId}`,
+                `${VITE_BACKEND_URL}/getorder/${userId}/${orderId}`,
                 {
                     headers: {
                         'Authorization': `JWT ${token}`
@@ -108,7 +109,7 @@ function UpdateOrder() {
             event.preventDefault()
             try {
                 const response = await axios.put(
-                    `/api/updateorder`,
+                    `${VITE_BACKEND_URL}/updateorder`,
                     {
                         orderId,
                         ...order

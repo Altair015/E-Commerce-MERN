@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { contextStore } from "../context/ContextStore";
 import { useStateReducer } from "../reducers/reducerFunctions";
 import { stringCapitalize } from "../utils/functions";
+const { VITE_BACKEND_URL } = import.meta.env;
 
 const { Group, Label, Control, Text } = Form;
 
@@ -41,7 +42,7 @@ function Login() {
                 )
 
                 cartResponse = await axios.put(
-                    `/api/updatingcart`,
+                    `${VITE_BACKEND_URL}/updatingcart`,
                     {
                         userId,
                         existingCart
@@ -53,7 +54,7 @@ function Login() {
             }
             else {
                 cartResponse = await axios.get(
-                    `/api/getcart/${userId}`,
+                    `${VITE_BACKEND_URL}/getcart/${userId}`,
                     {
                         headers: { 'Authorization': `JWT ${responseToken}` }
                     }
@@ -80,7 +81,7 @@ function Login() {
 
             try {
                 const loginResponse = await axios.post(
-                    "/api/signin",
+                    `${VITE_BACKEND_URL}/signin`,
                     {
                         ...userData,
                         userType: usertype
@@ -117,7 +118,7 @@ function Login() {
         else if (event.target["6"].textContent === "Sign Up") {
             try {
                 const loginResponse = await axios.post(
-                    `/api/signup`,
+                    `${VITE_BACKEND_URL}/signup`,
                     {
                         ...userData,
                         userType: usertype,
