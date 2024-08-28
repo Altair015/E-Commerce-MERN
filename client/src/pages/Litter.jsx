@@ -7,6 +7,7 @@ import ProductsComponent from "../components/ProductsComponent";
 import { contextStore } from "../context/ContextStore";
 import { productReducer } from "../reducers/productReducer";
 import { useStateReducer } from "../reducers/reducerFunctions";
+const { VITE_BACKEND_URL } = import.meta.env;
 
 // Litter products page.
 function Litter() {
@@ -17,7 +18,7 @@ function Litter() {
 
     async function getProducts() {
         try {
-            const response = await axios.get(`/api/getitems/${userType}/${userId}/null`);
+            const response = await axios.get(`${VITE_BACKEND_URL}/getitems/${userType}/${userId}/null`);
             if (response.status === 201) {
                 if (response.data.products.length) {
                     productsDispatch({ type: "LOAD_PRODUCTS", payload: response.data.products })

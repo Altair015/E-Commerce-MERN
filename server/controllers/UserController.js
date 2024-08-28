@@ -2,7 +2,6 @@ import { compareSync, hash, hashSync } from "bcrypt";
 import { config } from "dotenv";
 import jwt from "jsonwebtoken";
 import UserModel from "../models/UserModel.js";
-import { stringCapitalize } from "../utilities/utilities.js";
 config()
 
 const { JWT_SECRET, JWT_EXPIRY } = process.env;
@@ -13,11 +12,6 @@ export const signUp = async (req, res) => {
         return res.status(401).json({ Entries: "The fields cannot be empty." })
     }
 
-    let isActive = true;
-    if (userType === "admin" || userType === "seller") {
-        isActive = false;
-    }
-
     const newUser = new UserModel(
         {
             firstName,
@@ -25,22 +19,18 @@ export const signUp = async (req, res) => {
             phone,
             email,
             userType,
-            isActive,
             password: hashSync(password, 10),
         }
     )
     // Trying to create a new user record.
     try {
-        const userExist = await UserModel.findOne({ email: email, userType: userType })
+        const userExist = await UserModel.findOne({ email: email })
         if (userExist) {
             return res.status(208).json({ Info: "Account already Exist." })
         }
         else {
             const userCreated = await newUser.save();
             if (userCreated) {
-                if (userCreated.userType === "seller" || userCreated.userType === "admin") {
-                    return res.status(201).json({ Success: "Account created successfully. Contact Support to activate the account." })
-                }
                 return res.status(201).json({ Success: "Account created successfully." })
             }
             else {
@@ -56,9 +46,6 @@ export const signUp = async (req, res) => {
 // Controller for loggin in of user and return auto token.
 export const signIn = async (req, res) => {
     const { email, password, userType } = req.body;
-    console.log(req.body)
-    console.log(JWT_SECRET, JWT_EXPIRY)
-    console.log(typeof (JWT_EXPIRY))
 
     if (!email || !password) {
         return res.status(401).json({ Entries: "Email or Password field cannot be empty." })
@@ -69,7 +56,7 @@ export const signIn = async (req, res) => {
     try {
         // checking if the account with the user input email exist in the DB.
         const userExist = await UserModel.findOne({ email: email })
-        console.log(userExist)
+
         // comparing the password input by the user and existing password in the db.
         if (userExist) {
             if (userExist.userType === userType) {

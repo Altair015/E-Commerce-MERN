@@ -1,14 +1,13 @@
 import CartModel from "../models/CartModel.js";
 import OrderModel from "../models/OrderModel.js";
 
-// Creating the very first order.
+// Creating/Inserting order the very first order.
 export async function createOrder(req, res) {
     let { userId, products, shippingAddress, payment, shippingStatus, amount } = req.body;
-    console.log(products, shippingAddress, payment, shippingStatus, amount)
+
     if (products.length > 1) {
         products = products.map(
             (product) => {
-                console.log(product)
                 delete product.reviews
                 delete product.productQuantity
                 return product
@@ -21,83 +20,58 @@ export async function createOrder(req, res) {
     }
 
     try {
-        const createOrder = new OrderModel(
-            {
-                userId,
-                orders: [
-                    {
-                        products,
-                        shippingAddress,
-                        payment,
-                        shippingStatus,
-                        amount
+        const ordersFound = await OrderModel.findOne({ userId });
+        if (ordersFound) {
+            const orderInserted = await OrderModel.findOneAndUpdate(
+                {
+                    userId
+                },
+                {
+                    $push: {
+                        orders: {
+                            products,
+                            shippingAddress,
+                            payment,
+                            amount
+                        }
                     }
-                ]
-            }
-        )
-        const orderCreated = await createOrder.save();
-
-        if (orderCreated) {
-            const cartEmptied = await CartModel.findOneAndDelete({ userId })
-            if (cartEmptied) {
-                return res.status(201).json({ success: "Order Created Successfully", orderCreated })
-            }
-        }
-        else {
-            return res.status(400).json({ Failure: "Something went wrong." })
-
-        }
-    } catch (error) {
-        return res.status(500).send({ message: "Internal Server Error." })
-    }
-}
-
-// Inserting a new order if the Array or order already exist
-export async function insertOrder(req, res) {
-    let { userId, products, shippingAddress, payment, shippingStatus, amount } = req.body;
-
-    const { paymentStatus } = payment;
-    if (products.length > 1) {
-        products = products.map(
-            (product) => {
-                console.log(product)
-                delete product.reviews
-                delete product.productQuantity
-                return product
-            }
-        )
-    }
-    else {
-        delete products[0].reviews
-        delete products[0].productQuantity
-    }
-
-    try {
-        const orderInserted = await OrderModel.findOneAndUpdate(
-            {
-                userId
-            },
-            {
-                $push: {
-                    orders: {
-                        products,
-                        shippingAddress,
-                        payment,
-                        amount
-                    }
+                },
+                {
+                    new: true,
+                    useFindAndModify: false
                 }
-            },
-            {
-                new: true,
-                useFindAndModify: false
-            }
-        )
+            )
 
-        if (orderInserted) {
-            const cartEmptied = await CartModel.findOneAndDelete({ userId })
-            if (cartEmptied) {
-                console.log(cartEmptied)
-                return res.status(201).json({ success: "Order Created Successfully", orderInserted })
+            if (orderInserted) {
+                const cartEmptied = await CartModel.findOneAndDelete({ userId })
+                if (cartEmptied) {
+                    console.log(cartEmptied)
+                    return res.status(201).json({ success: "Order Created Successfully", orderInserted })
+                }
+            }
+        }
+        else if (!ordersFound) {
+            const createOrder = new OrderModel(
+                {
+                    userId,
+                    orders: [
+                        {
+                            products,
+                            shippingAddress,
+                            payment,
+                            shippingStatus,
+                            amount
+                        }
+                    ]
+                }
+            )
+            const orderCreated = await createOrder.save();
+
+            if (orderCreated) {
+                const cartEmptied = await CartModel.findOneAndDelete({ userId })
+                if (cartEmptied) {
+                    return res.status(201).json({ success: "Order Created Successfully", orderCreated })
+                }
             }
         }
         else {
@@ -124,7 +98,6 @@ export async function getOrders(req, res) {
         else if (userType === "user") {
             ordersFound = await OrderModel.findOne({ userId });
             if (ordersFound) {
-                console.log(ordersFound.toJSON())
                 return res.status(201).json({ ...ordersFound.toJSON() })
             }
         }
@@ -141,7 +114,6 @@ export async function getOrders(req, res) {
 // Function returning specific order with specific ID.
 export async function getOrder(req, res) {
     const { orderId } = req.params;
-    console.log(req.params, req.body)
 
     try {
         const orderFound = await OrderModel.findOne(

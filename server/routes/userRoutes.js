@@ -9,6 +9,7 @@ userRouter.post("/signin", signIn);
 userRouter.put("/updateprofile", authJwt, updateUser);
 userRouter.post("/getusers", authJwt, getUsers);
 userRouter.post("/getuser", authJwt, getUser);
-userRouter.post("/sampleusers", authJwt, signUpSampleUsers);
+userRouter.post("/sampleusers", signUpSampleUsers);
+// userRouter.post("/sampleusers", authJwt, signUpSampleUsers);
 
 export default userRouter;

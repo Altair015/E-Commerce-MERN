@@ -1,15 +1,13 @@
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useContext, useEffect, useReducer } from "react";
-import { Container, Table } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
-import MyCard from "../components/MyCard";
+import Loading from "../components/Loading";
+import Message from "../components/Message";
+import ProductsComponent from "../components/ProductsComponent";
 import { contextStore } from "../context/ContextStore";
 import { productReducer } from "../reducers/productReducer";
-import ProductsComponent from "../components/ProductsComponent";
-import Message from "../components/Message";
-import Loading from "../components/Loading";
 import { useStateReducer } from "../reducers/reducerFunctions";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+const { VITE_BACKEND_URL } = import.meta.env;
 
 // Accesories Page
 function Accesories() {
@@ -20,7 +18,7 @@ function Accesories() {
 
     async function getProducts() {
         try {
-            const response = await axios.get(`/api/getitems/${userType}/${userId}/null`);
+            const response = await axios.get(`${VITE_BACKEND_URL}/getitems/${userType}/${userId}/null`);
             if (response.status === 201) {
                 if (response.data.products.length) {
                     productsDispatch({ type: "LOAD_PRODUCTS", payload: response.data.products })

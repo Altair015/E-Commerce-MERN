@@ -10,6 +10,7 @@ import UserReview from "../components/UserReview";
 import { contextStore } from "../context/ContextStore";
 import { productReducer } from "../reducers/productReducer";
 import { useStateReducer } from "../reducers/reducerFunctions";
+const { VITE_BACKEND_URL } = import.meta.env;
 
 function Product() {
     const store = useContext(contextStore);
@@ -20,7 +21,7 @@ function Product() {
     const [error, errorDispatch] = useReducer(useStateReducer, "");
     async function getProduct() {
         try {
-            const response = await axios.get(`/api/getproduct/${productId}`);
+            const response = await axios.get(`${VITE_BACKEND_URL}/getproduct/${productId}`);
             if (response.status === 201) {
                 if (Object.values(response.data).length) {
                     productDispatch({ type: "LOAD_PRODUCT", payload: response.data })

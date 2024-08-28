@@ -8,6 +8,7 @@ import { faMinus, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { checkQuantity } from '../utils/functions';
 import StarRating from './StarRating';
+const { VITE_BACKEND_URL, VITE_STATIC_URL } = import.meta.env;
 
 function MyProduct({ productId, image, title, description, quantity, age, price, rating, category, sellerId, reviews, productDispatch, errorDispatch }) {
     const store = useContext(contextStore);
@@ -31,7 +32,7 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
         if (cartItems.length === 0) {
             try {
                 const response = await axios.post(
-                    "/api/createcart",
+                    `${VITE_BACKEND_URL}/createcart`,
                     {
                         userId,
                         productId
@@ -60,7 +61,7 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
 
             try {
                 const response = await axios.put(
-                    "/api/updatecart",
+                    `${VITE_BACKEND_URL}/updatecart`,
                     {
                         userId,
                         productId
@@ -90,7 +91,7 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
     const removeFromServerCart = async () => {
         try {
             const response = await axios.delete(
-                "/api/deletecart",
+                `${VITE_BACKEND_URL}/deletecart`,
                 {
                     headers: { 'Authorization': `JWT ${token}` },
                     data: {
@@ -172,7 +173,7 @@ function MyProduct({ productId, image, title, description, quantity, age, price,
     return (
         <Card className='w-100 d-flex flex-md-row border-0 flex-wrap align-items-center align-items-lg-start justify-content-center' >
             <Header className='flex-lg-one-third align-self-center bg-transparent border-0 w-min-sm-75 w-min-md-50 w-min-lg-25'>
-                <Img className='object-fit-contain' src={image ? `/static/${sellerId}/${image}` : "/images/PurrStore.svg"} alt='images/PurrStore.svg' />
+                <Img className='object-fit-contain' src={image ? `${VITE_STATIC_URL}/${sellerId}/${image}` : "/images/PurrStore.svg"} alt='images/PurrStore.svg' />
             </Header>
             <Body className='flex-1 flex-lg-one-third w-mx-md-100 align-self-start' >
                 <Text className='display-6'>{title}</Text>

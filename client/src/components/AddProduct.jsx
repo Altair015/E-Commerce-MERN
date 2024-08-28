@@ -7,6 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { contextStore } from "../context/ContextStore";
 import { useStateReducer } from "../reducers/reducerFunctions";
+const { VITE_BACKEND_URL, VITE_STATIC_URL } = import.meta.env;
 
 function AddProduct({ productId, image, title, description, quantity,
     age, price, category, sellerId, sellerEmail, productDispatch, errorDispatch }) {
@@ -25,9 +26,15 @@ function AddProduct({ productId, image, title, description, quantity,
 
     // Function generating the preview for image uploaded and setting it to be sent.
     const handleImageUpload = (event) => {
-        uploadImage.preview = URL.createObjectURL(event.target.files[0]);
-        uploadImage.data = event.target.files[0];
-        uploadImageDispatch({ ...uploadImage });
+        if (event.target.files[0].size > 1000000) {
+            toast.error("Image too large.", { position: "bottom-center" });
+        }
+        else {
+            uploadImage.preview = URL.createObjectURL(event.target.files[0]);
+            uploadImage.data = event.target.files[0];
+            uploadImageDispatch({ ...uploadImage });
+        }
+
     }
 
     function handleSubmit(event) {
@@ -59,7 +66,7 @@ function AddProduct({ productId, image, title, description, quantity,
             async function createProduct() {
                 try {
                     const response = await axios.post(
-                        "/api/createitem",
+                        `${VITE_BACKEND_URL}/createitem`,
                         formData,
                         {
                             headers: { 'Authorization': `JWT ${token}` }
@@ -125,7 +132,7 @@ function AddProduct({ productId, image, title, description, quantity,
             async function updateProduct() {
                 try {
                     const response = await axios.put(
-                        "/api/updateitem",
+                        `${VITE_BACKEND_URL}/updateitem`,
                         formData,
                         {
                             headers: { 'Authorization': `JWT ${token}` }
@@ -142,6 +149,7 @@ function AddProduct({ productId, image, title, description, quantity,
                     }
                 }
                 catch (error) {
+                    console.log(error)
                     if (Object.values(error.response.data)[0].length) {
                         if (Object.values(error.response.data)[0] === "Invalid Token") {
                             errorDispatch(Object.values(error.response.data)[0]);
@@ -175,7 +183,7 @@ function AddProduct({ productId, image, title, description, quantity,
                                             :
                                             image
                                                 ?
-                                                `/api/uploads/${sellerId}/${image}`
+                                                `${VITE_STATIC_URL}/${sellerId}/${image}`
                                                 :
                                                 "/images/PurrStore.svg"
                                     }

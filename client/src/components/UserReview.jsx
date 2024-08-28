@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useContext, useReducer } from "react";
 import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { contextStore } from "../context/ContextStore";
 import { useStateReducer } from "../reducers/reducerFunctions";
 import StarRating from "./StarRating";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+const { VITE_BACKEND_URL } = import.meta.env;
 
 // Review component
 function UserReview({ reviews, productId, productDispatch, errorDispatch }) {
@@ -28,7 +29,7 @@ function UserReview({ reviews, productId, productDispatch, errorDispatch }) {
         if (event.target[1].value.trim()) {
             try {
                 const response = await axios.put(
-                    "/api/addRating",
+                    `${VITE_BACKEND_URL}/addRating`,
                     {
                         productId,
                         review

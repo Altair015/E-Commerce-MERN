@@ -7,6 +7,7 @@ import "./MyCard.css";
 import { faCircleMinus, faCirclePlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
+const { VITE_BACKEND_URL, VITE_STATIC_URL } = import.meta.env;
 
 function MyCartProduct({ productId, image, title, description, quantity, cartProductQuantity, productQuantity, age, price, rating, category, sellerId, displayActions, errorDispatch }) {
     cartProductQuantity = quantity;
@@ -24,7 +25,7 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
 
             try {
                 const response = await axios.put(
-                    "/api/updatecart",
+                    `${VITE_BACKEND_URL}/updatecart`,
                     {
                         userId,
                         productId
@@ -53,7 +54,7 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
     const removeFromServerCart = async () => {
         try {
             const response = await axios.delete(
-                "/api/deletecart",
+                `${VITE_BACKEND_URL}/deletecart`,
                 {
                     headers: { 'Authorization': `JWT ${token}` }
                     ,
@@ -81,7 +82,7 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
     const removeProductFromServerCart = async () => {
         try {
             const response = await axios.delete(
-                "/api/deletecart",
+                `${VITE_BACKEND_URL}/deletecart`,
                 {
                     headers: { 'Authorization': `JWT ${token}` }
                     ,
@@ -186,7 +187,7 @@ function MyCartProduct({ productId, image, title, description, quantity, cartPro
         <Row className='mb-4 mb-sm-3' >
             <Col onClick={handleCardClick} className='d-none d-sm-flex align-items-center justify-content-center p-0'>
                 <div className='h-75 w-75'>
-                    <Img className='' src={image ? `/static/${sellerId}/${image}` : "/images/PurrStore.svg"} alt='images/PurrStore.svg' />
+                    <Img className='' src={image ? `${VITE_STATIC_URL}/${sellerId}/${image}` : "/images/PurrStore.svg"} alt='images/PurrStore.svg' />
                 </div>
             </Col>
             <Col onClick={handleCardClick} className=' d-sm-flex text-truncate align-items-center justify-content-center p-0'>

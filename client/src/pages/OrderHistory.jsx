@@ -9,6 +9,7 @@ import Message from "../components/Message";
 import { contextStore } from "../context/ContextStore";
 import { orderReducer } from "../reducers/orderReducer";
 import { useStateReducer } from "../reducers/reducerFunctions";
+const { VITE_BACKEND_URL } = import.meta.env;
 
 // List of orders
 function OrderHistory() {
@@ -21,7 +22,7 @@ function OrderHistory() {
     async function getOrders(userId, userType) {
         try {
             const orderResponse = await axios.get(
-                `/api/getorders/${userId}/${userType}`,
+                `${VITE_BACKEND_URL}/getorders/${userId}/${userType}`,
                 {
                     headers: { 'Authorization': `JWT ${token}` }
                 }

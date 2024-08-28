@@ -1,14 +1,15 @@
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import React, { useContext, useEffect, useReducer } from 'react';
 import { Button, Container, Form } from "react-bootstrap";
-import { contextStore } from "../context/ContextStore";
 import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useStateReducer } from "../reducers/reducerFunctions";
 import Loading from "../components/Loading";
 import Message from "../components/Message";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { contextStore } from "../context/ContextStore";
+import { useStateReducer } from "../reducers/reducerFunctions";
+const { VITE_BACKEND_URL } = import.meta.env;
 
 // Single user's data page.
 function Profile() {
@@ -26,7 +27,7 @@ function Profile() {
     async function getUser(userId) {
         try {
             const loginResponse = await axios.post(
-                "/api/getuser",
+                `${VITE_BACKEND_URL}/getuser`,
                 { userId },
                 {
                     headers: { 'Authorization': `JWT ${token}` }
@@ -104,7 +105,7 @@ function Profile() {
             async function updateUserData() {
                 try {
                     const response = await axios.put(
-                        "/api/updateprofile",
+                        `${VITE_BACKEND_URL}/updateprofile`,
                         dataToBeUpdated,
                         {
                             headers: { 'Authorization': `JWT ${token}` }

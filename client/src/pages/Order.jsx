@@ -1,14 +1,15 @@
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useContext, useEffect, useReducer } from "react";
 import { Col, Container, ListGroup, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import Loading from "../components/Loading";
+import Message from "../components/Message";
 import MyCartProduct from "../components/MyCartProduct";
+import { contextStore } from "../context/ContextStore";
 import { orderReducer } from "../reducers/orderReducer";
 import { useStateReducer } from "../reducers/reducerFunctions";
-import Message from "../components/Message";
-import { contextStore } from "../context/ContextStore";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+const { VITE_BACKEND_URL } = import.meta.env;
 
 // specific order page
 function Order() {
@@ -23,7 +24,7 @@ function Order() {
     async function getOrder() {
         try {
             const orderResponse = await axios.get(
-                `/api/getorder/${userId}/${orderId}`,
+                `${VITE_BACKEND_URL}/getorder/${userId}/${orderId}`,
                 {
                     headers: { 'Authorization': `JWT ${token}` }
                 }

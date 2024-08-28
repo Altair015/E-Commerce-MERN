@@ -1,48 +1,25 @@
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import axios from "axios";
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { contextStore } from "../context/ContextStore";
+const { VITE_BACKEND_URL } = import.meta.env;
 
 function PayPalApp({ show, cartTotal, error, errorDispatch }) {
     const store = useContext(contextStore);
-    const { token, getToken } = store.tokenStore;
+    const { token } = store.tokenStore;
     const [{ isPending }] = usePayPalScriptReducer();
     const navigate = useNavigate();
-    const { userId, userType, shippingAddress } = store.userStore.userData;
+    const { userId, shippingAddress } = store.userStore.userData;
     const { cartItems, cartDispatch } = store.cart;
 
-    // function to return the length of the order
-    async function getOrders() {
-        try {
-            const orderResponse = await axios.get(
-                `/api/getorders/${userId}/${userType}`,
-                {
-                    headers: { 'Authorization': `JWT ${token}` }
-                }
-            )
-            if (orderResponse.status === 201) {
-                return orderResponse.data.orders.length
-            }
-        }
-        catch (error) {
-            if (Object.values(error.response.data)[0]) {
-                errorDispatch(Object.values(error.response.data)[0])
-            }
-            else {
-                errorDispatch(error.response.statusText)
-            }
-        }
-    }
-
     const onCreateOrder = (data, actions) => {
-        getOrders()
         if (!error) {
             return actions.order.create({
                 purchase_units: [
                     {
                         amount: {
-                            value: parseFloat(cartTotal / 83.51).toFixed(1),
+                            value: parseFloat(cartTotal / 83.51).toFixed(2),
                         },
                     },
                 ],
@@ -57,54 +34,30 @@ function PayPalApp({ show, cartTotal, error, errorDispatch }) {
     const onApproveOrder = async (data, actions) => {
         try {
             const details = await actions.order.capture();
-            let response = null;
             if (details.status === "COMPLETED") {
-                const ordersLength = await getOrders();
-                if (!ordersLength || ordersLength === 0) {
-                    response = await axios.post(
-                        "/api/createorder",
-                        {
-                            userId,
-                            products: cartItems,
-                            shippingAddress,
-                            payment: {
-                                paymentMethod: "PayPal",
-                                paymentStatus: "Paid"
-                            },
-                            amount: cartTotal
+                const response = await axios.post(
+                    `${VITE_BACKEND_URL}/createorder`,
+                    {
+                        userId,
+                        products: cartItems,
+                        shippingAddress,
+                        payment: {
+                            paymentMethod: "PayPal",
+                            paymentStatus: "Paid"
                         },
-                        {
-                            headers: { 'Authorization': `JWT ${token}` }
-                        }
-                    )
-                }
-                else if (ordersLength > 0) {
-                    response = await axios.put(
-                        "/api/insertorder",
-                        {
-                            userId,
-                            products: cartItems,
-                            shippingAddress,
-                            payment: {
-                                paymentMethod: "PayPal",
-                                paymentStatus: "Paid"
-                            },
-                            amount: cartTotal
-                        },
-                        {
-                            headers: { 'Authorization': `JWT ${token}` }
-                        }
-                    )
-                }
-            }
-            if (response.status === 201) {
-                const { userId, orders } = Object.values(response.data)[1]
-                cartDispatch({ type: "EMPTY_CART" })
+                        amount: cartTotal
+                    },
+                    {
+                        headers: { 'Authorization': `JWT ${token}` }
+                    }
+                )
+                if (response.status === 201) {
+                    const { orders } = Object.values(response.data)[1]
+                    cartDispatch({ type: "EMPTY_CART" })
 
-                // extracting the order id from response and sending it to the next
-                setTimeout(() => {
+                    // extracting the order id from response and sending it to the next
                     navigate(`/placed/${orders.slice(-1)[0]["orderId"]}`)
-                }, 2000);
+                }
             }
         }
         catch (error) {

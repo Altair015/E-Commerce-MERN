@@ -1,12 +1,13 @@
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useContext, useEffect, useReducer } from "react";
 import { Container, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Loading from "../components/Loading";
+import Message from "../components/Message";
 import { contextStore } from "../context/ContextStore";
 import { useStateReducer } from "../reducers/reducerFunctions";
-import Message from "../components/Message";
-import Loading from "../components/Loading";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+const { VITE_BACKEND_URL } = import.meta.env;
 
 // All users page for Admin
 function Users() {
@@ -18,7 +19,7 @@ function Users() {
     async function getUsers() {
         try {
             const response = await axios.post(
-                "/api/getusers",
+                `${VITE_BACKEND_URL}/getusers`,
                 {
                     userId,
                     userType
