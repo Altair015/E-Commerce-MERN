@@ -6,8 +6,12 @@ export default defineConfig(
     plugins: [react()],
     server: {
       proxy: {
-        "/api": "http://10.0.0.1:4000",
-        "/api": "http://192.168.0.105:4000",
+        // Provide the Backend server address e.g., http://localhost:4000 as the value for the keys /api and target for /static.
+        "/api": "http://localhost:4000",
+        '/static': {
+          target: 'http://localhost:4000',
+          rewrite: (path) => path.replace(/^\/static/, '/uploads'),
+        },
       }
     }
   }

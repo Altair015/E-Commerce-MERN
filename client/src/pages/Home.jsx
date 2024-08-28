@@ -19,7 +19,7 @@ function Home() {
         indexDispatch(selectedIndex);
     };
 
-    const [products, productsDispatch] = useReducer(productReducer, []);
+    const [products, productsDispatch] = useReducer(productReducer, null);
     const [error, errorDispatch] = useReducer(useStateReducer, "");
 
 
@@ -47,7 +47,7 @@ function Home() {
 
     useEffect(
         () => {
-            if ((userType === "user" || !userType) && !products.length) {
+            if ((userType === "user" || !userType) && !products?.length) {
                 getProducts();
             }
         }, []
@@ -74,19 +74,24 @@ function Home() {
                         :
                         // Standard User Page
                         <>
+
+
                             {
-                                products.length >= 12
-                                    ?
-                                    <>
-                                        <section
-                                            className="display-4 fw-semibold text-shadow text-center bg-secondary-subtle py-3">
-                                            Featured Products
-                                        </section>
-                                        <Crousel {...{ products, productsDispatch, errorDispatch, index, handleSelect }} increment={1} carouselClass="d-sm-none" />
-                                        <Crousel {...{ products, productsDispatch, errorDispatch, index, handleSelect }} increment={2} carouselClass="d-none d-sm-block d-md-none" />
-                                        <Crousel {...{ products, productsDispatch, errorDispatch, index, handleSelect }} increment={3} carouselClass="d-none d-md-block d-lg-none" />
-                                        <Crousel {...{ products, productsDispatch, errorDispatch, index, handleSelect }} increment={4} carouselClass="d-none d-lg-block" />
-                                    </>
+                                (products !== null)
+                                    ? products.length >= 12
+                                        ?
+                                        <>
+                                            <section
+                                                className="display-4 fw-semibold text-shadow text-center bg-secondary-subtle py-3">
+                                                Featured Products
+                                            </section>
+                                            <Crousel {...{ products, productsDispatch, errorDispatch, index, handleSelect }} increment={1} carouselClass="d-sm-none" />
+                                            <Crousel {...{ products, productsDispatch, errorDispatch, index, handleSelect }} increment={2} carouselClass="d-none d-sm-block d-md-none" />
+                                            <Crousel {...{ products, productsDispatch, errorDispatch, index, handleSelect }} increment={3} carouselClass="d-none d-md-block d-lg-none" />
+                                            <Crousel {...{ products, productsDispatch, errorDispatch, index, handleSelect }} increment={4} carouselClass="d-none d-lg-block" />
+                                        </>
+                                        :
+                                        ""
                                     :
                                     < Loading variant="info" loadingMessage="Loading..." containerClassName="h-100 d-flex align-items-center justify-content-center gap-3" />
                             }

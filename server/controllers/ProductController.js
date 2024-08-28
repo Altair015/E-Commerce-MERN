@@ -145,7 +145,7 @@ export const getProduct = async (req, res) => {
 // Updating the product details.
 export const updateProduct = async (req, res) => {
     const { productId, sellerId, ...rest } = req.body;
-    console.log(productId, sellerId, rest, req.file)
+
     if (req.file) {
         rest.image = req.file.filename
     }

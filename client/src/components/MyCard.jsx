@@ -166,7 +166,7 @@ function MyCard({ productId, image, title, description, quantity, age, price, ra
         <Card className='my-card-width rounded-1 cursor-pointer' >
             <Img
                 className='object-fit-cover'
-                src={image ? `/api/uploads/${sellerId}/${image}` : "/images/PurrStore.svg"}
+                src={image ? `/static/${sellerId}/${image}` : "/images/PurrStore.svg"}
                 alt='ImageNotFound'
                 onClick={handleCardClick}
                 width="250em"

@@ -161,10 +161,6 @@ function OrderSummary() {
                                         <Col className="px-0 fw-bold">Order Total</Col>
                                         <Col className="px-0 fw-bold">₹ {total}.00</Col>
                                     </Row>
-                                    {/* <Button variant="info" type="submit" className="fw-medium rounded-1 w-100 pt-2 my-3" hidden={!show}>
-                                        Proceed to Payment
-                                    </Button> */}
-                                    {/* <PayPalApp show={show} cartTotal={total} /> */}
                                     <PayPalApp cartTotal={total} {...{ error, errorDispatch, token, getToken }} />
                                 </Col>
                             </Row>

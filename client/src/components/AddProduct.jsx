@@ -25,9 +25,15 @@ function AddProduct({ productId, image, title, description, quantity,
 
     // Function generating the preview for image uploaded and setting it to be sent.
     const handleImageUpload = (event) => {
-        uploadImage.preview = URL.createObjectURL(event.target.files[0]);
-        uploadImage.data = event.target.files[0];
-        uploadImageDispatch({ ...uploadImage });
+        if (event.target.files[0].size > 1000000) {
+            toast.error("Image too large.", { position: "bottom-center" });
+        }
+        else {
+            uploadImage.preview = URL.createObjectURL(event.target.files[0]);
+            uploadImage.data = event.target.files[0];
+            uploadImageDispatch({ ...uploadImage });
+        }
+
     }
 
     function handleSubmit(event) {
@@ -142,6 +148,7 @@ function AddProduct({ productId, image, title, description, quantity,
                     }
                 }
                 catch (error) {
+                    console.log(error)
                     if (Object.values(error.response.data)[0].length) {
                         if (Object.values(error.response.data)[0] === "Invalid Token") {
                             errorDispatch(Object.values(error.response.data)[0]);
@@ -175,7 +182,7 @@ function AddProduct({ productId, image, title, description, quantity,
                                             :
                                             image
                                                 ?
-                                                `/api/uploads/${sellerId}/${image}`
+                                                `/static/${sellerId}/${image}`
                                                 :
                                                 "/images/PurrStore.svg"
                                     }

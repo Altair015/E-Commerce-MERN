@@ -2,24 +2,93 @@ ecomern/
 │
 ├── client/                   # Frontend (React.js) folder
 │   ├── public/               # Public assets (HTML, images, etc.)
-│   │   └── images/  
+│   │   └── images/           # Image assets
+│   │       ├── favicon.svg
+│   │       ├── PurrStore.svg
+│   │       └── PurrStoreBanner.webp
 │   └── src/                  # React application source code
 │       ├── components/       # React components
+│       │   ├── AccordionDropdown.jsx
+│       │   ├── AddProduct.jsx
+│       │   ├── AdSeller.jsx
+│       │   ├── Brand.jsx
+│       │   ├── Crousel.jsx
+│       │   ├── Footer.jsx
+│       │   ├── Layout.jsx
+│       │   ├── Loading.jsx
+│       │   ├── Main.jsx
+│       │   ├── Message.jsx
+│       │   ├── MyCard.jsx
+│       │   ├── MyCartProduct.jsx
+│       │   ├── MyProduct.jsx
+│       │   ├── NavBar.jsx
+│       │   ├── NavigationLinks.jsx
+│       │   ├── PayPal.jsx
+│       │   ├── ProductsComponent.jsx
+│       │   ├── SideBar.jsx
+│       │   ├── StarRating.jsx
+│       │   └── UserReview.jsx
 │       ├── pages/            # Different pages or route components
+│       │   ├── AboutUs.jsx
+│       │   ├── Accessories.jsx
+│       │   ├── Cart.jsx
+│       │   ├── ContactUs.jsx
+│       │   ├── Food.jsx
+│       │   ├── Home.jsx
+│       │   ├── Litter.jsx
+│       │   ├── Login.jsx
+│       │   ├── Order.jsx
+│       │   ├── OrderHistory.jsx
+│       │   ├── OrderSummary.jsx
+│       │   ├── Payment.jsx
+│       │   ├── Product.jsx
+│       │   ├── Products.jsx
+│       │   ├── Profile.jsx
+│       │   ├── Search.jsx
+│       │   ├── Shipping.jsx
+│       │   ├── ThankYou.jsx
+│       │   ├── Toys.jsx
+│       │   ├── UpdateOrder.jsx
+│       │   └── Users.jsx
 │       ├── styles/           # CSS or other styling files
+│       │   ├── App.css
+│       │   ├── Brand.css
+│       │   ├── LayOut.css
+│       │   ├── MyCard.css
+│       │   └── NavBar.css
 │       ├── utils/            # Utility functions
+│       │   ├── functions.js
+│       │   └── InitialData.js
 │       ├── App.js            # Main React component
-│       └── main.js          # Entry point for React app
+│       └── main.js           # Entry point for React app
 │
 ├── server/                   # Backend (Node.js with Express.js) folder
 │   ├── controllers/          # Request handlers (controller functions)
+│   │   ├── CartController.js
+│   │   ├── OrderController.js
+│   │   ├── PayPalController.js
+│   │   ├── ProductController.js
+│   │   └── UserController.js
 │   ├── models/               # Database models (Mongoose schemas)
+│   │   ├── CartModel.js
+│   │   ├── OrderModel.js
+│   │   ├── ProductModel.js
+│   │   └── UserModel.js
 │   ├── routes/               # API routes
+│   │   ├── cartRoutes.js
+│   │   ├── orderRoutes.js
+│   │   ├── payPalRoutes.js
+│   │   ├── productRoutes.js
+│   │   └── userRoutes.js
 │   ├── services/             # Business logic (service functions)
 │   ├── middleware/           # Middleware functions
+│   │   ├── authJwt.js
+│   │   └── imageUpload.js
 │   ├── utils/                # Utility functions
+│   │   ├── sampleData.js
+│   │   └── utilities.js
 │   ├── app.js                # Express application setup
-│   └── index.js             # Entry point for Node.js server
+│   └── index.js              # Entry point for Node.js server
 │
 ├── node_modules/             # Node.js dependencies (auto-generated)
 │

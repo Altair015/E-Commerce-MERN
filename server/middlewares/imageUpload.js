@@ -8,10 +8,10 @@ const fileStorage = diskStorage(
             const { sellerId } = req.body;
 
             // Creating the directory for the seller to save the images
-            const sellerPath = `public/images/${sellerId}`
+            const sellerPath = `./public/images/${sellerId}`
             try {
                 if (!existsSync(sellerPath)) {
-                    mkdirSync(sellerPath);
+                    mkdirSync(sellerPath, { recursive: true });
                 }
             }
             catch (error) {
@@ -33,7 +33,6 @@ const uploadImage = multer(
             fileSize: 1920 * 1080 * 1
         },
         fileFilter: (req, file, next) => {
-            // console.log("imageUpload", req.body, file)
             // If file is of png, jpeg, or jpg accept the file
             if (file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg" || file.mimetype === "image/webp") {
                 next(null, true);

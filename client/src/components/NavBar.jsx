@@ -85,7 +85,13 @@ function MyNavBar({ searchDispatch, sideShow, sideShowDispatch }) {
                 <Link to="/" className='fw-bold fs-2 flex-one-third text-decoration-none text-dark'>PurrStore</Link>
                 {/* Cart Icon for Screen Size < 576 px */}
                 <div className='d-flex flex-fill d-sm-none justify-content-end'>
-                    <FontAwesomeIcon onClick={() => navigate('/cart')} icon={faShoppingCart} size='2x' />
+                    {
+                        (userType === "admin" || userType === "seller")
+                            ?
+                            ""
+                            :
+                            <FontAwesomeIcon onClick={() => navigate('/cart')} icon={faShoppingCart} size='2x' />
+                    }
                 </div>
                 <div className='d-sm-flex order-sm-1 flex-sm-one-third'>
                     {/* Cart Icon for Screen Size > 576 px */}
